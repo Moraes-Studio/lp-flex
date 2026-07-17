@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { IBM_Plex_Mono, Inter, Oswald } from 'next/font/google';
+import { Header } from '@/components/layout/header';
 import './globals.css';
 
 const oswald = Oswald({
@@ -33,7 +34,10 @@ export default function RootLayout({
       lang="pt-BR"
       className={`${oswald.variable} ${inter.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
