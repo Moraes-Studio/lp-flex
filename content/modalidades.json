@@ -1,0 +1,11 @@
+[
+  { "nome": "Flex Training", "icone": "flex-training" },
+  { "nome": "FitDance", "icone": "fitdance" },
+  { "nome": "Jump Funcional", "icone": "jump-funcional" },
+  { "nome": "Musculação", "icone": "musculacao" },
+  { "nome": "Pilates", "icone": "pilates" },
+  { "nome": "Step Funcional", "icone": "step-funcional" },
+  { "nome": "Yoga", "icone": "yoga" },
+  { "nome": "Zumba", "icone": "zumba" },
+  { "nome": "Cross Training", "icone": "cross-training" }
+]

@@ -1,0 +1,63 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { z } from 'zod';
+
+export const planoSchema = z
+  .object({
+    id: z.string().min(1),
+    nome: z.string().min(1),
+    descricao: z.string().min(1),
+    precoBase: z.number().positive().nullable(),
+    periodo: z.string(),
+    beneficios: z.array(z.string().min(1)).min(1),
+    destaque: z.boolean(),
+    badge: z.string().min(1).optional(),
+    campanhaAtiva: z.boolean(),
+    discountPct: z.number().min(0).max(1),
+    obs: z.string().optional(),
+  })
+  .superRefine((plano, ctx) => {
+    if (plano.badge && !plano.destaque) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'badge só pode existir quando destaque é true (SDD.md §5).',
+        path: ['badge'],
+      });
+    }
+  });
+
+export type Plano = z.infer<typeof planoSchema>;
+
+const planosSchema = z
+  .array(planoSchema)
+  .min(1)
+  .superRefine((planos, ctx) => {
+    const destacados = planos.filter((p) => p.destaque);
+    if (destacados.length > 1) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `No máximo 1 plano com destaque:true por vez (SDD.md §5) — encontrados ${destacados.length}.`,
+      });
+    }
+  });
+
+export function parsePlanos(raw: unknown): Plano[] {
+  return planosSchema.parse(raw);
+}
+
+export function getPlanos(): Plano[] {
+  const filePath = path.join(process.cwd(), 'content', 'planos.json');
+  const raw: unknown = JSON.parse(readFileSync(filePath, 'utf-8'));
+  return parsePlanos(raw);
+}
+
+/**
+ * Preço final = precoBase * (1 - discountPct), calculado em runtime (RULES.md #2).
+ * Nunca copiar esse cálculo em outro componente — importar e recalcular aqui.
+ */
+export function calcularPrecoFinal(plano: Plano, campanhaAtiva: boolean): number | null {
+  if (plano.precoBase === null) return null;
+  const aplicaDesconto = campanhaAtiva && plano.campanhaAtiva && plano.discountPct > 0;
+  if (!aplicaDesconto) return plano.precoBase;
+  return Number((plano.precoBase * (1 - plano.discountPct)).toFixed(2));
+}

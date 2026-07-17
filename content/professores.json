@@ -1,0 +1,83 @@
+[
+  {
+    "id": "professor-01",
+    "num": "01",
+    "nome": "Professor 01",
+    "papel": "Musculação",
+    "desde": "na equipe desde 2016",
+    "bio": "Bio pendente de questionário com o professor.",
+    "fotoUrl": null
+  },
+  {
+    "id": "professor-02",
+    "num": "02",
+    "nome": "Professor 02",
+    "papel": "Jump Funcional",
+    "desde": "na equipe desde 2019",
+    "bio": "Bio pendente de questionário com o professor.",
+    "fotoUrl": null
+  },
+  {
+    "id": "professor-03",
+    "num": "03",
+    "nome": "Professor 03",
+    "papel": "Zumba",
+    "desde": "na equipe desde 2014",
+    "bio": "Bio pendente de questionário com o professor.",
+    "fotoUrl": null
+  },
+  {
+    "id": "professor-04",
+    "num": "04",
+    "nome": "Professor 04",
+    "papel": "Pilates",
+    "desde": "na equipe desde 2021",
+    "bio": "Bio pendente de questionário com o professor.",
+    "fotoUrl": null
+  },
+  {
+    "id": "professor-05",
+    "num": "05",
+    "nome": "Professor 05",
+    "papel": "Yoga",
+    "desde": "na equipe desde 2018",
+    "bio": "Bio pendente de questionário com o professor.",
+    "fotoUrl": null
+  },
+  {
+    "id": "professor-06",
+    "num": "06",
+    "nome": "Professor 06",
+    "papel": "FitDance",
+    "desde": "na equipe desde 2020",
+    "bio": "Bio pendente de questionário com o professor.",
+    "fotoUrl": null
+  },
+  {
+    "id": "professor-07",
+    "num": "07",
+    "nome": "Professor 07",
+    "papel": "Step Funcional",
+    "desde": "na equipe desde 2017",
+    "bio": "Bio pendente de questionário com o professor.",
+    "fotoUrl": null
+  },
+  {
+    "id": "professor-08",
+    "num": "08",
+    "nome": "Professor 08",
+    "papel": "Flex Training",
+    "desde": "na equipe desde 2022",
+    "bio": "Bio pendente de questionário com o professor.",
+    "fotoUrl": null
+  },
+  {
+    "id": "professor-09",
+    "num": "09",
+    "nome": "Professor 09",
+    "papel": "Cross Training",
+    "desde": "na equipe desde 2023",
+    "bio": "Bio pendente de questionário com o professor.",
+    "fotoUrl": null
+  }
+]
