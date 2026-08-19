@@ -1,4 +1,8 @@
 {
-  "active": false,
-  "season": "outubroRosa"
+  "active": true,
+  "season": "diaDosPais",
+  "tag": "Campanha Dia dos Pais",
+  "titulo": "Primeiro mês por R$ 9,90",
+  "sub": "Depois 11x de R$ 129,90 — ou R$ 1.300,00 à vista no Pix.",
+  "terminaEm": "2026-08-31"
 }

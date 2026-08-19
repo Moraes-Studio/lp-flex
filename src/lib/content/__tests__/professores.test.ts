@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { getProfessores, parseProfessores } from '@/lib/content/professores';
+import {
+  contarConfirmados,
+  getProfessores,
+  isProfessorConfirmado,
+  parseProfessores,
+} from '@/lib/content/professores';
 
 const professorValido = {
   id: 'professor-01',
@@ -35,5 +40,30 @@ describe('getProfessores (arquivo real)', () => {
   it('content/professores.json é válido', () => {
     expect(() => getProfessores()).not.toThrow();
     expect(getProfessores().length).toBeGreaterThan(0);
+  });
+});
+
+describe('isProfessorConfirmado', () => {
+  it('nome real conta como confirmado', () => {
+    expect(isProfessorConfirmado({ nome: 'Vanessa Fukazawa' })).toBe(true);
+  });
+
+  it('nome placeholder "Professor 0X" não conta como confirmado', () => {
+    expect(isProfessorConfirmado({ nome: 'Professor 04' })).toBe(false);
+  });
+
+  it('nome com dois dígitos ainda casa com o padrão placeholder (edge case)', () => {
+    expect(isProfessorConfirmado({ nome: 'Professor 11' })).toBe(false);
+  });
+});
+
+describe('contarConfirmados', () => {
+  it('conta só os confirmados, ignorando placeholders', () => {
+    const lista = [professorValido, { ...professorValido, id: 'x', nome: 'Ana Souza' }];
+    expect(contarConfirmados(lista)).toBe(1);
+  });
+
+  it('retorna 0 pra lista vazia (edge case)', () => {
+    expect(contarConfirmados([])).toBe(0);
   });
 });

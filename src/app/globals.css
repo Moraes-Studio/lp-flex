@@ -8,7 +8,7 @@
   --color-background-alt: var(--background-alt);
   --color-foreground: var(--foreground);
   --color-heading: var(--heading-foreground);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-barlow);
   --font-heading: var(--font-oswald);
   --font-mono: var(--font-ibm-plex-mono);
 
@@ -62,54 +62,63 @@
 }
 
 :root {
-  /* Escala Flex Blue — validada no protótipo aprovado (docs/design-reference) */
-  --flex-blue-50: #edf7ff;
-  --flex-blue-100: #d9edff;
-  --flex-blue-200: #b9deff;
-  --flex-blue-300: #8cc9ff;
-  --flex-blue-400: #5daef6;
-  --flex-blue-500: #3685c5;
-  --flex-blue-600: #2a6ea7;
-  --flex-blue-700: #1e557f;
-  --flex-blue-800: #153b58;
-  --flex-blue-900: #0d2437;
-  --flex-blue-950: #07131d;
-  --flex-ice: #8edbff;
-  --flex-bright: #47c9ff; /* acento ativo — botões, links, glow, ícones (nunca trocado por campanha) */
-  --flex-glow-rgb: 71, 201, 255;
+  /* Escala Flex Blue institucional — ancorada no azul real do logo (#0B4DA2 = 600).
+     Pivô pro tema claro (papel/quadro de avisos) aprovado em 2026-08-18: substitui a
+     escala escura anterior. Ver RULES.md #3 — este azul nunca muda com campanha ativa. */
+  --flex-blue-50: #f0f6fd;
+  --flex-blue-100: #dceafb;
+  --flex-blue-200: #b9d6f7;
+  --flex-blue-300: #8cbcef;
+  --flex-blue-400: #5a9ee3;
+  --flex-blue-500: #2c79ce;
+  --flex-blue-600: #0b4da2; /* institucional — extraído do logo real */
+  --flex-blue-700: #083a7c;
+  --flex-blue-800: #062c60;
+  --flex-blue-900: #041d40;
+  --flex-blue-950: #020f22;
+  --flex-ice: #e7f0fc; /* wash — chips de status, hover sutil */
+  --flex-bright: #1e7ae0; /* acento ativo — links, foco, selo "agora" (nunca trocado por campanha) */
+  --flex-glow-rgb: 11, 77, 162;
 
-  /* superfícies (tema único, sem toggle claro/escuro) */
-  --background: #050608;
-  --background-alt: #090c10;
-  --card: #0d1117;
+  /* superfícies — papel de quadro de avisos, tema único (sem toggle claro/escuro) */
+  --background: #ffffff;
+  --background-alt: #f1f5fa;
+  --card: #ffffff;
   --card-foreground: var(--foreground);
-  --popover: #0d1117;
+  --popover: #ffffff;
   --popover-foreground: var(--foreground);
-  --border: #2c3948;
+  --border: #dce4ee;
 
   /* texto */
-  --foreground: #e6edf3;
-  --heading-foreground: #ffffff;
-  --muted-foreground: #8a98a8;
+  --foreground: #15202c;
+  --heading-foreground: #0e1822;
+  --muted-foreground: #5c6c7d;
 
-  /* feedback semântico */
-  --warning: #f59e0b;
-  --destructive: #ef4444;
-  --success: #22c55e;
-  --info: #38bdf8;
+  /* feedback semântico — recalibrado pra contraste em fundo branco */
+  --warning: #b45309;
+  --destructive: #dc2626;
+  --success: #15803d;
+  --info: #0369a1;
 
-  /* acento de campanha sazonal — isolado, ver nota acima */
-  --campaign-accent: #ffb703;
+  /* acento de campanha sazonal — isolado (token próprio, nunca --primary/
+   * --accent/--ring — RULES.md Regra Absoluta 3). Valor trocado de amarelo
+   * (#ffb703) pra um azul royal mais vibrante a pedido do cliente pra
+   * campanha do Dia dos Pais (amarelo não combinava); propositalmente mais
+   * saturado/arroxeado que o institucional (#0b4da2) pra continuar
+   * distinguível dele à primeira vista, mesmo sendo os dois "azuis". Trocar
+   * esse valor de novo (ou por outra cor) na próxima campanha sazonal —
+   * SDD.md §9 já prevê isso como "tabela de acentos sazonais". */
+  --campaign-accent: #2540d6;
 
-  --primary: var(--flex-bright);
-  --primary-foreground: #04121f;
-  --secondary: var(--card);
+  --primary: var(--flex-blue-600);
+  --primary-foreground: #ffffff;
+  --secondary: var(--background-alt);
   --secondary-foreground: var(--foreground);
-  --muted: var(--card);
+  --muted: var(--background-alt);
   --accent: var(--flex-blue-500);
-  --accent-foreground: #04121f;
-  --ring: var(--flex-bright);
-  --input: oklch(1 0 0 / 15%);
+  --accent-foreground: #ffffff;
+  --ring: var(--flex-blue-600);
+  --input: oklch(0 0 0 / 8%);
   --radius: 1.125rem;
 }
 
@@ -120,6 +129,27 @@
   to {
     transform: translateX(-50%);
   }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Entrada orquestrada do hero, uma vez, no carregamento — CSS puro (não
+ * espera JS/hidratação, então nunca deixa conteúdo acima da dobra invisível
+ * "esperando" script rodar). `prefers-reduced-motion` já neutraliza isto
+ * globalmente (bloco abaixo: duração cai pra 0.01ms, termina no estado
+ * final igual). Delay incremental via `--enter-delay` por elemento. */
+.enter {
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--enter-delay, 0ms);
 }
 
 @layer base {

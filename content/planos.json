@@ -1,48 +1,36 @@
 [
   {
-    "id": "mensal",
-    "nome": "Plano Mensal",
-    "descricao": "Sem fidelidade, professor presente na sala em todo treino.",
-    "precoBase": 129,
+    "id": "6-meses",
+    "nome": "6 meses",
+    "precoBase": 159,
     "periodo": "/mês",
-    "beneficios": ["Professor presente na sala", "Todas as modalidades", "Sem taxa de matrícula"],
-    "destaque": false,
-    "campanhaAtiva": true,
-    "discountPct": 0.1,
-    "obs": ""
-  },
-  {
-    "id": "anual",
-    "nome": "Plano Anual",
-    "descricao": "Melhor custo por mês, ideal pra quem já decidiu ficar.",
-    "precoBase": 99.9,
-    "periodo": "/mês",
-    "beneficios": [
-      "Professor presente na sala",
-      "Todas as modalidades",
-      "Congelamento de 30 dias/ano",
-      "Prioridade em eventos e palestras"
-    ],
-    "destaque": true,
-    "badge": "Mais vantajoso",
-    "campanhaAtiva": true,
-    "discountPct": 0.1,
-    "obs": "12x no cartão ou à vista no pix"
-  },
-  {
-    "id": "familia",
-    "nome": "Plano Família",
-    "descricao": "Pra treinar com quem você já convive.",
-    "precoBase": null,
-    "periodo": "",
-    "beneficios": [
-      "2 ou mais integrantes da mesma casa",
-      "Professor presente na sala",
-      "Desconto por pessoa"
-    ],
     "destaque": false,
     "campanhaAtiva": false,
     "discountPct": 0,
-    "obs": "Valor sob consulta — depende do número de integrantes"
+    "obs": "ou 4x de R$ 238,50"
+  },
+  {
+    "id": "12-meses",
+    "nome": "12 meses",
+    "precoBase": 129,
+    "periodo": "/mês",
+    "destaque": true,
+    "badge": "Mais escolhido",
+    "badgeExtra": "Clube+",
+    "campanhaAtiva": true,
+    "discountPct": 0,
+    "obs": "ou 6x de R$ 258,00",
+    "badgeCampanha": "Na promoção",
+    "beneficiosCampanha": ["Sem taxa de matrícula"]
+  },
+  {
+    "id": "mensal",
+    "nome": "Mensal",
+    "precoBase": 189,
+    "periodo": "/mês",
+    "destaque": false,
+    "campanhaAtiva": false,
+    "discountPct": 0,
+    "obs": "à vista"
   }
 ]

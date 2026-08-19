@@ -1,83 +1,122 @@
 [
   {
-    "id": "professor-01",
+    "id": "flavio-augusto-alves",
     "num": "01",
-    "nome": "Professor 01",
+    "nome": "Flávio Augusto Alves",
     "papel": "Musculação",
-    "desde": "na equipe desde 2016",
-    "bio": "Bio pendente de questionário com o professor.",
+    "desde": "na equipe desde 2023",
+    "bio": "Oriento cada aluno na execução do movimento, cuidando da técnica e do bem-estar. Gosto de corrigir detalhe por detalhe até o exercício sair certo.",
+    "formacao": "Educação Física",
     "fotoUrl": null
   },
   {
-    "id": "professor-02",
+    "id": "vanessa-fukazawa",
     "num": "02",
-    "nome": "Professor 02",
-    "papel": "Jump Funcional",
-    "desde": "na equipe desde 2019",
-    "bio": "Bio pendente de questionário com o professor.",
+    "nome": "Vanessa Fukazawa",
+    "papel": "Musculação",
+    "desde": "na equipe desde 2024",
+    "bio": "Priorizo a execução correta, a segurança e o incentivo para cada aluno evoluir no seu ritmo. Musculação vai além da estética: é saúde e qualidade de vida.",
+    "formacao": "Educação Física (UNIP) · Pós em Fisiologia do Exercício (FAVENI)",
     "fotoUrl": null
   },
   {
-    "id": "professor-03",
+    "id": "gustavo-barboza",
     "num": "03",
-    "nome": "Professor 03",
-    "papel": "Zumba",
-    "desde": "na equipe desde 2014",
-    "bio": "Bio pendente de questionário com o professor.",
+    "nome": "Gustavo Barboza",
+    "papel": "Musculação",
+    "desde": "na equipe desde 2023",
+    "bio": "Acolho o aluno e ajudo no dia a dia a buscar a melhor versão dele.",
+    "formacao": "Bacharel em Educação Física (UNIP Anchieta) · Licenciatura (FAVENI) · Vice-campeão paulista de Taekwondo 2026",
     "fotoUrl": null
   },
   {
     "id": "professor-04",
     "num": "04",
     "nome": "Professor 04",
-    "papel": "Pilates",
-    "desde": "na equipe desde 2021",
-    "bio": "Bio pendente de questionário com o professor.",
+    "papel": "Jump Funcional",
+    "desde": "na equipe desde 2019",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
     "fotoUrl": null
   },
   {
     "id": "professor-05",
     "num": "05",
     "nome": "Professor 05",
-    "papel": "Yoga",
-    "desde": "na equipe desde 2018",
-    "bio": "Bio pendente de questionário com o professor.",
+    "papel": "Zumba",
+    "desde": "na equipe desde 2014",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
     "fotoUrl": null
   },
   {
     "id": "professor-06",
     "num": "06",
     "nome": "Professor 06",
-    "papel": "FitDance",
-    "desde": "na equipe desde 2020",
-    "bio": "Bio pendente de questionário com o professor.",
+    "papel": "Pilates",
+    "desde": "na equipe desde 2021",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
     "fotoUrl": null
   },
   {
     "id": "professor-07",
     "num": "07",
     "nome": "Professor 07",
-    "papel": "Step Funcional",
-    "desde": "na equipe desde 2017",
-    "bio": "Bio pendente de questionário com o professor.",
+    "papel": "Yoga",
+    "desde": "na equipe desde 2018",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
     "fotoUrl": null
   },
   {
     "id": "professor-08",
     "num": "08",
     "nome": "Professor 08",
-    "papel": "Flex Training",
-    "desde": "na equipe desde 2022",
-    "bio": "Bio pendente de questionário com o professor.",
+    "papel": "Fit Dance",
+    "desde": "na equipe desde 2020",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
     "fotoUrl": null
   },
   {
     "id": "professor-09",
     "num": "09",
     "nome": "Professor 09",
+    "papel": "Step Funcional",
+    "desde": "na equipe desde 2017",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
+    "fotoUrl": null
+  },
+  {
+    "id": "professor-10",
+    "num": "10",
+    "nome": "Professor 10",
+    "papel": "Flex Training",
+    "desde": "na equipe desde 2022",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
+    "fotoUrl": null
+  },
+  {
+    "id": "professor-11",
+    "num": "11",
+    "nome": "Professor 11",
     "papel": "Cross Training",
     "desde": "na equipe desde 2023",
-    "bio": "Bio pendente de questionário com o professor.",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
+    "fotoUrl": null
+  },
+  {
+    "id": "professor-12",
+    "num": "12",
+    "nome": "Professor 12",
+    "papel": "GAP",
+    "desde": "na equipe desde 2018",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
+    "fotoUrl": null
+  },
+  {
+    "id": "professor-13",
+    "num": "13",
+    "nome": "Professor 13",
+    "papel": "Ritbox",
+    "desde": "na equipe desde 2021",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
     "fotoUrl": null
   }
 ]

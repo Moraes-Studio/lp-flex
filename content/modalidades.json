@@ -1,11 +1,13 @@
 [
-  { "nome": "Flex Training", "icone": "flex-training" },
-  { "nome": "FitDance", "icone": "fitdance" },
-  { "nome": "Jump Funcional", "icone": "jump-funcional" },
   { "nome": "Musculação", "icone": "musculacao" },
   { "nome": "Pilates", "icone": "pilates" },
-  { "nome": "Step Funcional", "icone": "step-funcional" },
   { "nome": "Yoga", "icone": "yoga" },
   { "nome": "Zumba", "icone": "zumba" },
+  { "nome": "Fit Dance", "icone": "fitdance" },
+  { "nome": "Jump Funcional", "icone": "jump-funcional" },
+  { "nome": "Step Funcional", "icone": "step-funcional" },
+  { "nome": "GAP", "icone": "gap" },
+  { "nome": "Ritbox", "icone": "ritbox" },
+  { "nome": "Flex Training", "icone": "flex-training" },
   { "nome": "Cross Training", "icone": "cross-training" }
 ]

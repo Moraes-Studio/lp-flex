@@ -6,6 +6,7 @@ import { Menu, X } from 'lucide-react';
 import { navigation } from '@/config/navigation';
 import { siteConfig, whatsappUrl } from '@/config/site';
 import { Button } from '@/components/ui/button';
+import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
 
 export function MobileMenu() {
   const [open, setOpen] = React.useState(false);
@@ -55,6 +56,7 @@ export function MobileMenu() {
               target="_blank"
               rel="noopener noreferrer"
             >
+              <WhatsappGlyph className="h-4 w-4" />
               Quero treinar agora
             </a>
           </Button>

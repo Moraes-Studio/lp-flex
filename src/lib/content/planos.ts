@@ -6,15 +6,28 @@ export const planoSchema = z
   .object({
     id: z.string().min(1),
     nome: z.string().min(1),
-    descricao: z.string().min(1),
+    /** Opcionais — o layout de referência do cliente mostra só nome/preço/parcelamento
+     * pro plano, sem subtítulo nem checklist de benefícios. Continuam aceitos pra
+     * planos que quiserem essa versão mais detalhada, sem forçar todo mundo a ter. */
+    descricao: z.string().min(1).optional(),
     precoBase: z.number().positive().nullable(),
     periodo: z.string(),
-    beneficios: z.array(z.string().min(1)).min(1),
+    beneficios: z.array(z.string().min(1)).optional(),
     destaque: z.boolean(),
     badge: z.string().min(1).optional(),
+    /** Selo permanente adicional (ex: "Clube+") — independente de campanha,
+     * não some quando a campanha sazonal desligar. */
+    badgeExtra: z.string().min(1).optional(),
     campanhaAtiva: z.boolean(),
     discountPct: z.number().min(0).max(1),
     obs: z.string().optional(),
+    /** Selo e benefícios exclusivos da campanha sazonal (ex: "Na promoção",
+     * "Sem taxa de matrícula") — só aparecem quando `campaign.active` E
+     * `campanhaAtiva` do plano forem `true`; somem 100% quando a campanha
+     * desligar (SDD.md §9, Regra Absoluta 3). Nunca confundir com
+     * `discountPct`, que já cuida do preço — estes campos são conteúdo. */
+    badgeCampanha: z.string().min(1).optional(),
+    beneficiosCampanha: z.array(z.string().min(1)).optional(),
   })
   .superRefine((plano, ctx) => {
     if (plano.badge && !plano.destaque) {
@@ -22,6 +35,13 @@ export const planoSchema = z
         code: z.ZodIssueCode.custom,
         message: 'badge só pode existir quando destaque é true (SDD.md §5).',
         path: ['badge'],
+      });
+    }
+    if ((plano.badgeCampanha || plano.beneficiosCampanha) && !plano.campanhaAtiva) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'badgeCampanha/beneficiosCampanha só podem existir quando campanhaAtiva é true.',
+        path: ['campanhaAtiva'],
       });
     }
   });
