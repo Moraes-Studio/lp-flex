@@ -23,7 +23,7 @@ export function Horarios() {
   const dom = funcionamento[0];
 
   return (
-    <section id="horarios" className="bg-background-alt border-border border-y px-[6%] py-16 md:py-20">
+    <section id="horarios" className="border-border border-y px-[6%] py-16 md:py-20">
       <div className="mx-auto max-w-[1180px]">
         <SectionHeading
           eyebrow="Grade de aulas coletivas"

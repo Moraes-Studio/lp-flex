@@ -11,7 +11,7 @@ export function Professores() {
   const confirmados = professores.filter(isProfessorConfirmado);
 
   return (
-    <section id="professores" className="px-[6%] py-16 md:py-20">
+    <section id="professores" className="bg-background-alt border-border border-y px-[6%] py-16 md:py-20">
       <div className="mx-auto max-w-[1180px]">
         <SectionHeading
           eyebrow="Equipe"

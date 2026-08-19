@@ -12,7 +12,7 @@ export function Contato() {
   const abrirNoMapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapaQuery}`;
 
   return (
-    <section id="contato" className="px-[6%] py-16 md:py-20">
+    <section id="contato" className="bg-background-alt border-border border-y px-[6%] py-16 md:py-20">
       <div className="mx-auto max-w-[1180px]">
         <SectionHeading eyebrow="Contato" title="Venha conhecer." />
 
