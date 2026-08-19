@@ -24,80 +24,79 @@ function FacebookGlyph({ className }: { className?: string }) {
   );
 }
 
+/**
+ * Rodapé compacto — texto pequeno/discreto do mesmo peso visual da barra de
+ * copyright embaixo, sem blocos com título grande ("NAVEGAÇÃO"/"CONTATO").
+ * Terceira versão desta seção na sessão: foi 2 colunas → 3 colunas → 2
+ * colunas de novo → isto (rodapé inteiro no estilo enxuto da barra final).
+ */
 export function Footer() {
   const ano = new Date().getFullYear();
   const endereco = `${siteConfig.address.street}, ${siteConfig.address.city} — ${siteConfig.address.state}`;
 
   return (
     <footer className="bg-flex-blue-700 text-white">
-      <div className="mx-auto grid max-w-[1180px] gap-12 px-[6%] py-14 md:grid-cols-[1.6fr_1fr]">
-        <div>
-          {/* logo nas cores originais (sem inverter pra branco) — bem maior
-           * pra ter destaque, sem esticar a altura do rodapé: espaçamentos
-           * dos itens abaixo foram enxutos pra compensar. */}
-          <Image
-            src="/logo.png"
-            alt={siteConfig.name}
-            width={124}
-            height={116}
-            className="mb-2 h-[116px] w-[124px]"
-            priority={false}
-          />
-          <p className="max-w-[380px] text-sm text-white/75">{siteConfig.tagline}</p>
-          <p className="mt-1.5 text-xs text-white/60">CNPJ {siteConfig.cnpj}</p>
+      <div className="mx-auto max-w-[1180px] px-[6%] py-10">
+        <div className="flex items-center gap-3">
+          {/* Arquivo fonte (public/logo.png) só tem 102×96px — abaixo disso
+           * fica borrado por falta de resolução, não por CSS. Pendência
+           * real: pedir um arquivo de logo maior (ideal: vetor/SVG). */}
+          <Image src="/logo.png" alt="" width={34} height={32} className="h-8 w-[34px]" priority={false} />
+          <span className="font-heading text-sm tracking-wide">{siteConfig.name}</span>
+        </div>
 
-          <p className="mt-3 flex max-w-[420px] flex-wrap items-center gap-x-2 text-sm text-white/75">
-            <span>{endereco}</span>
-            <span className="text-white/35">·</span>
-            <a
-              href={whatsappUrl('Olá! Vim pelo site e quero saber mais sobre os planos.')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-white/75 hover:text-white hover:underline"
-            >
-              <WhatsappGlyph className="h-3.5 w-3.5" />
-              Falar no WhatsApp
-            </a>
-          </p>
+        <p className="mt-3 text-xs text-white/60">
+          {siteConfig.tagline} · CNPJ {siteConfig.cnpj}
+        </p>
 
-          <div className="mt-3 flex gap-2.5">
-            <a
-              href={siteConfig.instagramUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Academia Flex no Instagram"
-              className="flex h-10 w-10 items-center justify-center rounded-[10px] border border-white/25 transition-colors hover:bg-white/10"
-            >
-              <InstagramGlyph className="h-[18px] w-[18px]" />
+        <nav
+          className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-white/70"
+          aria-label="Navegação do rodapé"
+        >
+          {navigation.map((item) => (
+            <a key={item.href} href={item.href} className="hover:text-white hover:underline">
+              {item.label}
             </a>
-            {siteConfig.facebookUrl ? (
+          ))}
+        </nav>
+
+        <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-white/60">
+          <span>{endereco}</span>
+          <span className="text-white/30">·</span>
+          <a
+            href={whatsappUrl('Olá! Vim pelo site e quero saber mais sobre os planos.')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 hover:text-white hover:underline"
+          >
+            <WhatsappGlyph className="h-3 w-3" />
+            Falar no WhatsApp
+          </a>
+          <span className="text-white/30">·</span>
+          <a
+            href={siteConfig.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 hover:text-white hover:underline"
+          >
+            <InstagramGlyph className="h-3 w-3" />
+            Instagram
+          </a>
+          {siteConfig.facebookUrl ? (
+            <>
+              <span className="text-white/30">·</span>
               <a
                 href={siteConfig.facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Academia Flex no Facebook"
-                className="flex h-10 w-10 items-center justify-center rounded-[10px] border border-white/25 transition-colors hover:bg-white/10"
+                className="inline-flex items-center gap-1 hover:text-white hover:underline"
               >
-                <FacebookGlyph className="h-[18px] w-[18px]" />
+                <FacebookGlyph className="h-3 w-3" />
+                Facebook
               </a>
-            ) : null}
-          </div>
-        </div>
-
-        <div>
-          <h4 className="font-heading mb-4 text-sm font-medium tracking-[0.1em] uppercase">
-            Navegação
-          </h4>
-          <ul className="space-y-2.5 text-sm text-white/80">
-            {navigation.map((item) => (
-              <li key={item.href}>
-                <a href={item.href} className="hover:text-white hover:underline">
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+            </>
+          ) : null}
+        </p>
       </div>
 
       <div className="border-t border-white/15">
