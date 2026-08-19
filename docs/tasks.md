@@ -8,21 +8,32 @@
 - [x] Etapa 2 — Design tokens (Flex Blue institucional extraída do logo real, tipografia Oswald/Inter/IBM Plex Mono, tema único) + primitivos do design system (Button, Badge, Eyebrow, SectionHeading, Panel, Marquee)
 - [x] Etapa 3 — Camada de conteúdo (`content/*.json` + validadores Zod em `lib/content/`, 38 testes, integridade referencial modalidade↔professor)
 
+> **Realinhamento com o layout do cliente (2026-08-18, segunda rodada):** o cliente pediu explicitamente pra seguir o `index_1.html`/`privacidade.html` originais como fonte de verdade de estrutura, não a versão reorganizada pelo SDD. Mudanças feitas:
+> - Ordem da home voltou a ser Hero → Marquee → **Promo** → Planos → Modalidades → Horários → Professores → Sobre → Contato (Planos antes de Professores) — desvio deliberado do `SDD.md §4`, decidido pelo cliente depois de ver as duas versões.
+> - Seção **Comunidade** removida (não existia no layout do cliente; era exigência do SDD, cliente decidiu não incluir agora).
+> - **Botão flutuante de WhatsApp** adicionado (`WhatsappFloat`, em todas as páginas) — existia no protótipo, tinha ficado de fora.
+> - **Faixa de campanha** (`Promo`) implementada e ativada com os dados reais do protótipo (Dia dos Pais, R$9,90) — schema de `content/campaign.json` expandido pra guardar o texto da faixa. Cor isolada (`--campaign-accent`), não o gradiente azul institucional do protótipo original — SDD.md §9 registra esse gradiente como bug já corrigido antes, então essa parte não foi revertida.
+> - **Bug achado ao ativar a campanha**: `content/planos.json` já tinha `campanhaAtiva:true`/`discountPct:0.1` nos planos Mensal/Anual de uma sessão anterior — isso ficou invisível enquanto a campanha estava desligada, e ao ligar a campanha da Promo passou a aplicar 10% de desconto nos cards de plano, o que não existe no protótipo (preço fixo) nem tem relação com a oferta real da faixa (R$9,90 no primeiro mês, não 10% recorrente). Desliguei `campanhaAtiva` nos dois planos pra não aplicar desconto não-confirmado.
+> - **Pendência não resolvida**: os nomes/preços dos planos em `content/planos.json` (Mensal R$129/Anual R$99,90/Família) **não batem** com os 3 planos do protótipo original (12 meses R$129, 6 meses R$159, Mensal R$189) — não mexi nisso porque é dado de preço real, não decido sozinho qual dos dois é o vigente (RULES.md #2 e #7). Confirmar qual estrutura de planos é a atual antes de publicar.
+
 ## Etapa 4 — Componentes de seção
 
 Ordem da home fixada no `SDD.md §4`. Cada seção só é commitada depois de passar Playwright nos 3 targets (Desktop Chrome, Mobile Chrome, Mobile Safari) e do checklist do `RULES.md` ("Antes de abrir PR"). Um commit por seção, não um commit gigante.
 
-- [x] **Header** — sticky, nav com âncoras, logo, CTA WhatsApp. Menu mobile via Radix Dialog (drawer lateral, fecha por toque/Escape/seleção de item), testado nos 2 targets Chromium (WebKit bloqueado neste ambiente por libs de sistema faltando, ver nota no fim do arquivo).
-- [ ] **Hero** — H1 + copy + CTA duplo + colagem de fotos (placeholders explícitos, `fotoUrl: null` em todo `content/*.json` por enquanto — política de fotografia do `CLAUDE.md`) + stats (30+ anos, 9 modalidades, 9 professores, lidos de `content/`, nunca hardcoded).
-- [ ] **Marquee de modalidades** — usa o componente `Marquee` já pronto, alimentado por `getModalidades()`.
-- [ ] **Professores** — carousel em loop infinito escalável (`content/professores.json`, hoje 9, precisa aguentar 50+ sem mudar código). Hover-reveal com alternativa por toque/foco (Regra Absoluta 5 do `RULES.md` — já causou bug real em produção neste projeto). Modal com bio completa.
-- [ ] **Comunidade** — grid de eventos reais do Instagram (fotos pendentes — placeholder explícito até existir arquivo real).
-- [ ] **Planos** — usa `getPlanos()` + `calcularPrecoFinal()` (já testado). Card em destaque (`destaque:true`), badge de campanha só aparece com `campaign.active`.
-- [ ] **Modalidades** — grid com ícone próprio por modalidade (`content/modalidades.json` já valida ícone não-reaproveitado). Falta desenhar/escolher o set de ícones SVG real — hoje só existe a *key* (`"flex-training"`, `"zumba"` etc.), não o SVG.
-- [ ] **Horários** — grade filtrável por dia clicando no cabeçalho (`getHorarios()` já resolve `profId` pela modalidade). Testar explicitamente em touch — filtro por clique no `<th>` precisa ter equivalente tocável.
-- [ ] **Sobre** — citação + texto institucional + foto de equipe (placeholder até existir foto real).
-- [ ] **Contato** — endereço, horário, mapa, CTA WhatsApp. **BLOQUEADO parcialmente**: endereço e horário de funcionamento precisam confirmação do cliente antes de publicar (`RULES.md` #7 — já houve dois números de WhatsApp conflitantes achados em fontes diferentes neste projeto). O protótipo trouxe um número (`5511939182762`) e um endereço (Rua das Hortênsias, 104 — Vila Helena) como candidatos; usar como placeholder de desenvolvimento, não publicar em produção sem confirmação explícita.
-- [ ] **Footer** — mapa do site, dúvidas/contato, crédito "Desenvolvido por MoraesStudio".
+> **Pivô de tema (2026-08-18):** todo o design system migrou de tema escuro pra tema claro ("papel", quadro de avisos) — ver nota em `CLAUDE.md`. As seções abaixo foram implementadas nesse pivô, todas de uma vez (fora do ritmo "um commit por seção" original) porque vieram como conversão de um protótipo HTML de referência já pronto. Rodado nesta sessão: `lint` + `typecheck` + `vitest` (47 testes) + `next build`, todos verdes, e `e2e/` (36 testes: header + `home.spec.ts` novo cobrindo scroll horizontal, presença de todas as seções, filtro de horários por toque, navegação pra `/privacidade`) nos 3 targets. **O que `home.spec.ts` cobre é o essencial de regressão, não é cobertura seção-a-seção completa** — Planos (cálculo de preço na tela), Professores, Modalidades e Contato ainda não têm teste E2E dedicado; tratar como pendência antes de considerar cada seção "pronta" pelo checklist do `RULES.md`.
+
+- [x] **Header** — sticky, topbar institucional (desde 1992 · cidade), nav com âncoras (agora inclui Contato, que faltava), logo, chip "aberto agora" (`content/funcionamento.json`, novo), CTA WhatsApp. Menu mobile via Radix Dialog.
+- [x] **Hero** — H1 + copy + CTA duplo + quadro "Hoje" (elemento de assinatura: aulas de hoje com destaque pra que está rolando agora) + stats (anos, nº de modalidades, nº de professores — todos lidos de `content/`, nunca hardcoded). Colagem de fotos do brief original virou o quadro de horário; segue sem foto real (placeholder explícito).
+- [x] **Marquee de modalidades** — componente `Marquee` já pronto, alimentado por `getModalidades()`.
+- [x] **Professores** — **desvio do spec, sinalizando aqui:** em vez de carousel em loop infinito + modal, virou grid responsivo simples. Motivo: hoje só há 3 profissionais confirmados (Flávio, Vanessa, Gustavo — todos Musculação) e um loop infinito com 3 itens fica visualmente quebrado; um modal pra 3 bios curtas era complexidade sem ganho. `content/professores.json` ficou com 11 entradas (3 reais + 8 placeholder cobrindo as outras modalidades, necessário pra `integrity.test.ts` continuar passando — SDD §5) mas a home só renderiza os 3 confirmados, com nota textual sobre o resto. **Revisitar carousel/modal quando o roster passar de ~6-8 pessoas confirmadas.**
+- [x] **Comunidade** — sem fotos/eventos reais ainda (nada levantado do Instagram), então a seção ficou honesta sobre isso em vez de inventar legenda/evento: 3 placeholders de foto + link pro Instagram real.
+- [x] **Planos** — usa `getPlanos()` + `calcularPrecoFinal()`. Badge de campanha só aparece com `campaign.active` (hoje `false`).
+- [x] **Modalidades** — grid com ícone próprio por modalidade via `lucide-react` (Dumbbell, Flower2, Music4, Disc3, Zap, Footprints, Waves, Activity, PersonStanding — 9 ícones distintos, nenhum reaproveitado).
+- [x] **Horários** — desktop mostra a grade completa da semana sempre (coluna de hoje destacada); mobile filtra por abas de dia tocáveis (não só clique no `<th>` como o `SDD.md` descrevia — abas full-touch cobrem melhor a Regra Absoluta 5 do `RULES.md`).
+- [x] **Sobre** — selo "fundada em 1992" + texto institucional + placeholder de foto (fachada/equipe).
+- [x] **Contato** — endereço, horário completo, mapa (embed Google Maps sem API key), CTA WhatsApp. Endereço/CNPJ/WhatsApp continuam como candidatos de dev não confirmados (ver `.env.local`, `src/config/site.ts`) — **não publicar em produção sem confirmação explícita do cliente** (`RULES.md` #7).
+- [x] **Footer** — navegação, contato, CNPJ, redes sociais, crédito "Desenvolvido por MoraesStudio", link pra `/privacidade`.
+- [x] **Privacidade** — página própria em `/privacidade` (antes era HTML solto fora do Next), lê dados de `siteConfig` em vez de duplicar.
 
 ## Etapa 5 — Sistema de campanhas sazonais
 
@@ -57,12 +68,25 @@ Quando desbloqueado: `lib/payments/` isola a chamada atrás de `criarLinkDePagam
 
 ## Pendências transversais (não travam etapa, mas precisam de decisão do cliente antes de produção)
 
+- [x] ~~WhatsApp~~ — confirmado pelo cliente em 2026-08-18 (+55 11 93918-2762), `.env.local`/`.env.example` atualizados.
+- [x] ~~CNPJ~~ — confirmado pelo cliente em 2026-08-18.
+- [ ] Endereço (R. das Hortênsias, 104 — Vila Helena) segue como candidato do protótipo, **ainda não confirmado**.
 - [ ] Data exata de fundação — bio do Instagram cita 1992, `SDD.md §1` pede confirmação antes de publicar.
-- [ ] Bio + foto real de cada um dos 9 professores (hoje 100% placeholder em `content/professores.json`).
-- [ ] Fotos reais de: hero (colagem), comunidade (eventos), sobre (equipe), mapa. Nenhuma gerada por IA nem banco de imagem (`CLAUDE.md`).
-- [ ] WhatsApp e endereço — confirmação final antes de publicar (ver Etapa 4 → Contato acima).
+- [ ] Bio + foto real dos professores confirmados sem foto ainda (Flávio, Vanessa, Gustavo) e dos 8 pendentes de questionário em `content/professores.json`.
+- [ ] Fotos reais: `src/config/media.ts` (hero, sobre, comunidade) e `professor.fotoUrl` em `content/professores.json` são os únicos lugares a editar quando as fotos chegarem — nenhum componente precisa mudar (`<Photo>` alterna sozinho entre placeholder e imagem real, mesma moldura, zero layout shift). Nenhuma gerada por IA nem banco de imagem (`CLAUDE.md`).
 - [ ] Confirmar se a limitação da API Next Fit (só leitura) continua válida antes de qualquer feature que dependa dela (`SDD.md §11` portão 5).
+
+### Passe de SEO/deploy-readiness (2026-08-18)
+
+Motivado por: site sendo usado como prova de "negócio ativo" pro Meta Business Manager — precisa aparecer bem quando o link é compartilhado/verificado, não só funcionar.
+
+- [x] Metadata completa no `layout.tsx` raiz: title template, OG (`type`, `locale`, `siteName`, imagem), Twitter card, `robots`, `canonical` via `metadataBase`.
+- [x] `opengraph-image.tsx` — gráfico de marca gerado em runtime (Satori/`next/og`), não foto — usa cores institucionais + wordmark, é o preview que aparece ao compartilhar o link no WhatsApp/Instagram.
+- [x] `robots.ts` + `sitemap.ts` (convenção App Router).
+- [x] Slot pra tag de verificação de domínio do Meta Business Manager (`NEXT_PUBLIC_META_DOMAIN_VERIFICATION`, opcional) — só preencher quando o domínio real for cadastrado lá.
+- [ ] **Pendente do usuário antes do deploy**: `NEXT_PUBLIC_SITE_URL` em produção precisa ser o domínio real (hoje `academiaflex.com.br` é placeholder em `.env.example`) — `metadataBase`, OG e sitemap todos dependem dela pra gerar URL absoluta correta.
+- [ ] Deploy em si continua bloqueado por falta de acesso à conta Vercel do cliente (Etapa 8) — igual antes, esse agente não deve ter essa credencial.
 
 ## Nota de ambiente
 
-Este ambiente de desenvolvimento não tem as libs de sistema que o WebKit do Playwright precisa (`libgtk-4`, `libmanette` etc.) e instalá-las exige `sudo` interativo, que o agente não tem aqui. Todo `test:e2e` rodado durante o desenvolvimento até agora cobriu só Desktop Chrome + Mobile Chrome; Mobile Safari (WebKit) precisa ser confirmado em CI (Etapa 7) ou localmente por alguém com acesso a `sudo`, antes de qualquer seção ser considerada realmente "pronta" nos 3 targets exigidos pelo `RULES.md`.
+Atualização 2026-08-18: WebKit (Mobile Safari) **já roda neste ambiente** — a limitação de libs de sistema (`libgtk-4`, `libmanette`) descrita aqui antes não se confirmou mais; os 36 testes de `e2e/` passaram nos 3 targets (Desktop Chrome, Mobile Chrome, Mobile Safari) nesta sessão. Se isso voltar a falhar em outra máquina/CI, tratar como configuração de ambiente, não reintroduzir a suposição de bloqueio permanente sem checar de novo.
