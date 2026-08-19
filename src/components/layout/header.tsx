@@ -23,7 +23,7 @@ export function Header() {
         </div>
       </div>
 
-      <header className="bg-background/90 border-border flex items-center justify-between gap-4 border-b px-[6%] py-3 backdrop-blur-lg">
+      <header className="bg-background border-border flex items-center justify-between gap-4 border-b px-[6%] py-3">
         <Link href="/" aria-label={`${siteConfig.name} — página inicial`} className="shrink-0">
           <Image
             src="/logo.png"

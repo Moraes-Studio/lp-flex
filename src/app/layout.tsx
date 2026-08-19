@@ -5,6 +5,7 @@ import { siteConfig } from '@/config/site';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { WhatsappFloat } from '@/components/shared/whatsapp-float';
+import { AnchorScrollHandler } from '@/components/shared/anchor-scroll-handler';
 import './globals.css';
 
 const oswald = Oswald({
@@ -72,10 +73,10 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      data-scroll-behavior="smooth"
       className={`${oswald.variable} ${barlow.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        <AnchorScrollHandler />
         <Header />
         {children}
         <Footer />
