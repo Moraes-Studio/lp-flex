@@ -3,12 +3,12 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const eyebrowVariants = cva(
-  'mb-4 flex items-center gap-2.5 font-mono text-[12.5px] font-medium tracking-[0.13em] uppercase before:h-px before:w-5 before:content-[""]',
+  'mb-4 flex items-center gap-3 font-mono text-[13.5px] font-semibold tracking-[0.16em] uppercase before:h-[3px] before:w-7 before:rounded-full before:content-[""]',
   {
     variants: {
       variant: {
-        bright: 'text-flex-bright before:bg-flex-bright',
-        ice: 'text-flex-ice before:bg-flex-ice',
+        bright: 'text-flex-blue-600 before:bg-flex-blue-600',
+        ice: 'text-muted-foreground before:bg-border',
       },
     },
     defaultVariants: {

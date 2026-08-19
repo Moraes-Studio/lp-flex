@@ -35,7 +35,9 @@ Este projeto usa **fotografia documental real**, não imagem gerada por IA e nã
 
 ## Padrão de frontend/UX/UI
 
-Antes de criar ou alterar qualquer componente visual, usar a skill `frontend-design` disponível no ambiente — ela cobre os tokens deste projeto (paleta Flex Blue institucional, tipografia Oswald/Inter/IBM Plex Mono, regras de glass/glow) e evita cair em template genérico de IA (hero com gradiente + 3 cards, glassmorphism em excesso, ícones fora de contexto). Esse padrão de qualidade é não-negociável: o site compete visualmente com SmartFit, Panobianco, Bluefit e Red Target, que têm equipe de design própria — "parece feito à mão" não é aceitável aqui.
+Antes de criar ou alterar qualquer componente visual, usar a skill `frontend-design` disponível no ambiente — ela cobre os tokens deste projeto (paleta Flex Blue institucional em tema claro — "papel", ancorada no azul real do logo `#0B4DA2`; tipografia Oswald/Barlow/IBM Plex Mono; motivo de assinatura "quadro de avisos" — quadro de horário de hoje no hero, cartões com hairline e header azul sólido, nunca glass/glow/gradiente) e evita cair em template genérico de IA (hero com gradiente + 3 cards, glassmorphism em excesso, ícones fora de contexto). Esse padrão de qualidade é não-negociável: o site compete visualmente com SmartFit, Panobianco, Bluefit e Red Target, que têm equipe de design própria — "parece feito à mão" não é aceitável aqui.
+
+> Nota de histórico (2026-08-18): o tema visual pivotou de um esquema escuro (`#050608`, glow ciano) pra este tema claro — decisão do cliente/dev, documentada porque a Etapa 2 original descrevia o tema escuro como "validado". Ver `docs/tasks.md` e o commit que introduziu o pivô.
 
 Todo componente novo passa pelo mesmo crivo que já filtrou o protótipo em HTML: funciona em touch sem hover, não introduz scroll horizontal, respeita `prefers-reduced-motion`, usa os ícones certos por contexto (nunca reaproveitar ícone de uma modalidade em outra diferente).
 

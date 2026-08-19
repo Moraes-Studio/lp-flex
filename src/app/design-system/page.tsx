@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -5,6 +6,11 @@ import { Eyebrow } from '@/components/shared/eyebrow';
 import { SectionHeading } from '@/components/shared/section-heading';
 import { Panel } from '@/components/shared/panel';
 import { Marquee } from '@/components/shared/marquee';
+
+export const metadata: Metadata = {
+  title: 'Design System',
+  robots: { index: false, follow: false },
+};
 
 const blueScale = [
   { step: 50, className: 'bg-flex-blue-50' },
@@ -23,7 +29,7 @@ const blueScale = [
 function Swatch({ label, className }: { label: string; className: string }) {
   return (
     <div className="flex flex-col gap-2">
-      <div className={`h-16 w-full rounded-lg border border-white/10 ${className}`} />
+      <div className={`border-border h-16 w-full rounded-lg border ${className}`} />
       <span className="text-muted-foreground font-mono text-[11px]">{label}</span>
     </div>
   );
@@ -33,7 +39,7 @@ export default function DesignSystemPage() {
   return (
     <main className="mx-auto max-w-5xl space-y-20 px-6 py-16">
       <header className="flex items-center gap-4">
-        <Image src="/logo.png" alt="Academia Flex" width={64} height={60} />
+        <Image src="/logo.png" alt="Academia Flex" width={64} height={60} className="h-[60px] w-16" />
         <div>
           <h1 className="text-3xl">Design System</h1>
           <p className="text-muted-foreground font-mono text-xs">
@@ -58,7 +64,7 @@ export default function DesignSystemPage() {
       </section>
 
       <section>
-        <SectionHeading eyebrow="Tipografia" title="Oswald / Inter / IBM Plex Mono" />
+        <SectionHeading eyebrow="Tipografia" title="Oswald / Barlow / IBM Plex Mono" />
         <Panel className="space-y-4 p-8">
           <p className="font-heading text-4xl">Treinar é só o começo.</p>
           <p className="font-sans text-base">
