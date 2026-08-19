@@ -36,6 +36,13 @@ describe('parsePlanos', () => {
   it('rejeita precoBase negativo (JSON malformado)', () => {
     expect(() => parsePlanos([{ ...planoBase, precoBase: -10 }])).toThrow();
   });
+
+  it('aceita plano sem descricao/beneficios (layout de referência do cliente, edge case)', () => {
+    const semDetalhe: Plano = { ...planoBase };
+    delete semDetalhe.descricao;
+    delete semDetalhe.beneficios;
+    expect(parsePlanos([semDetalhe])).toHaveLength(1);
+  });
 });
 
 describe('calcularPrecoFinal', () => {

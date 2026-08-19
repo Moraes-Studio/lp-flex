@@ -1,0 +1,9 @@
+[
+  { "dia": "Domingo e feriados", "diaCurto": "Dom", "abre": "09:30", "fecha": "12:30" },
+  { "dia": "Segunda", "diaCurto": "Seg", "abre": "05:00", "fecha": "23:00" },
+  { "dia": "Terça", "diaCurto": "Ter", "abre": "05:00", "fecha": "23:00" },
+  { "dia": "Quarta", "diaCurto": "Qua", "abre": "05:00", "fecha": "23:00" },
+  { "dia": "Quinta", "diaCurto": "Qui", "abre": "05:00", "fecha": "23:00" },
+  { "dia": "Sexta", "diaCurto": "Sex", "abre": "05:00", "fecha": "22:00" },
+  { "dia": "Sábado", "diaCurto": "Sáb", "abre": "09:00", "fecha": "15:00" }
+]

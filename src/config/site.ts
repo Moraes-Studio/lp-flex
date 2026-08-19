@@ -1,11 +1,28 @@
 import { env } from '@/config/env';
 
+/**
+ * Dados institucionais estáticos (endereço, CNPJ, fundação). Diferente de
+ * `content/*.json`, isto muda raramente e não é editado por quem não é dev.
+ * CNPJ e WhatsApp (env) confirmados pelo cliente em 2026-08-18. Endereço
+ * segue como candidato do protótipo de referência, ainda não confirmado —
+ * RULES.md #7, não publicar sem checar (SDD.md §11.4).
+ */
 export const siteConfig = {
   name: 'Academia Flex',
-  tagline: 'Academia de bairro na Vila Helena, Santo André, desde 1992.',
+  tagline: 'Musculação e aulas coletivas desde 1992.',
   url: env.NEXT_PUBLIC_SITE_URL,
   whatsappNumber: env.NEXT_PUBLIC_WHATSAPP_NUMBER,
   instagramUrl: env.NEXT_PUBLIC_INSTAGRAM_URL,
+  facebookUrl: null as string | null,
+  foundedYear: 1992,
+  cnpj: '68.934.850/0001-09',
+  razaoSocial: null as string | null,
+  address: {
+    street: 'R. das Hortênsias, 104 — Vila Helena',
+    city: 'Santo André',
+    state: 'SP',
+    zip: '09175-500',
+  },
 };
 
 export function whatsappUrl(message: string): string {

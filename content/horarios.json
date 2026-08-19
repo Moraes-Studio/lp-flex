@@ -2,38 +2,38 @@
   { "time": "07:00", "day": "Ter", "aula": "Pilates" },
   { "time": "07:00", "day": "Qui", "aula": "Pilates" },
 
-  { "time": "08:00", "day": "Seg", "aula": "Jump Funcional" },
+  { "time": "08:00", "day": "Seg", "aula": "GAP" },
   { "time": "08:00", "day": "Ter", "aula": "Zumba" },
   { "time": "08:00", "day": "Qua", "aula": "Step Funcional" },
-  { "time": "08:00", "day": "Qui", "aula": "Zumba" },
+  { "time": "08:00", "day": "Qui", "aula": "Ritbox" },
   { "time": "08:00", "day": "Sex", "aula": "Jump Funcional" },
 
   { "time": "09:15", "day": "Ter", "aula": "Yoga" },
   { "time": "09:15", "day": "Qui", "aula": "Yoga" },
-  { "time": "09:15", "day": "Sáb", "aula": "Zumba" },
 
   { "time": "10:15", "day": "Sáb", "aula": "Jump Funcional" },
 
   { "time": "15:00", "day": "Seg", "aula": "Jump Funcional" },
-  { "time": "15:00", "day": "Ter", "aula": "FitDance" },
+  { "time": "15:00", "day": "Ter", "aula": "Fit Dance" },
   { "time": "15:00", "day": "Qua", "aula": "Jump Funcional" },
-  { "time": "15:00", "day": "Qui", "aula": "FitDance" },
+  { "time": "15:00", "day": "Qui", "aula": "Fit Dance" },
   { "time": "15:00", "day": "Sex", "aula": "Jump Funcional" },
+
+  { "time": "17:45", "day": "Seg", "aula": "Yoga" },
 
   { "time": "18:00", "day": "Ter", "aula": "Pilates" },
   { "time": "18:00", "day": "Qua", "aula": "Pilates" },
   { "time": "18:00", "day": "Qui", "aula": "Pilates" },
   { "time": "18:00", "day": "Sex", "aula": "Jump Funcional" },
 
-  { "time": "19:00", "day": "Seg", "aula": "Jump Funcional" },
+  { "time": "19:00", "day": "Seg", "aula": "GAP" },
   { "time": "19:00", "day": "Ter", "aula": "Flex Training" },
   { "time": "19:00", "day": "Qua", "aula": "Step Funcional" },
   { "time": "19:00", "day": "Qui", "aula": "Cross Training" },
   { "time": "19:00", "day": "Sex", "aula": "Jump Funcional" },
 
   { "time": "20:00", "day": "Seg", "aula": "Jump Funcional" },
-  { "time": "20:00", "day": "Ter", "aula": "FitDance" },
+  { "time": "20:00", "day": "Ter", "aula": "Fit Dance" },
   { "time": "20:00", "day": "Qua", "aula": "Jump Funcional" },
-  { "time": "20:00", "day": "Qui", "aula": "Zumba" },
-  { "time": "20:00", "day": "Sex", "aula": "FitDance" }
+  { "time": "20:00", "day": "Qui", "aula": "Fit Dance" }
 ]

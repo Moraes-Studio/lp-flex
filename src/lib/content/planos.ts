@@ -6,10 +6,13 @@ export const planoSchema = z
   .object({
     id: z.string().min(1),
     nome: z.string().min(1),
-    descricao: z.string().min(1),
+    /** Opcionais — o layout de referência do cliente mostra só nome/preço/parcelamento
+     * pro plano, sem subtítulo nem checklist de benefícios. Continuam aceitos pra
+     * planos que quiserem essa versão mais detalhada, sem forçar todo mundo a ter. */
+    descricao: z.string().min(1).optional(),
     precoBase: z.number().positive().nullable(),
     periodo: z.string(),
-    beneficios: z.array(z.string().min(1)).min(1),
+    beneficios: z.array(z.string().min(1)).optional(),
     destaque: z.boolean(),
     badge: z.string().min(1).optional(),
     campanhaAtiva: z.boolean(),
