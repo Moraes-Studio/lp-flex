@@ -100,8 +100,15 @@
   --success: #15803d;
   --info: #0369a1;
 
-  /* acento de campanha sazonal — isolado, inalterado no pivô (ver nota acima) */
-  --campaign-accent: #ffb703;
+  /* acento de campanha sazonal — isolado (token próprio, nunca --primary/
+   * --accent/--ring — RULES.md Regra Absoluta 3). Valor trocado de amarelo
+   * (#ffb703) pra um azul royal mais vibrante a pedido do cliente pra
+   * campanha do Dia dos Pais (amarelo não combinava); propositalmente mais
+   * saturado/arroxeado que o institucional (#0b4da2) pra continuar
+   * distinguível dele à primeira vista, mesmo sendo os dois "azuis". Trocar
+   * esse valor de novo (ou por outra cor) na próxima campanha sazonal —
+   * SDD.md §9 já prevê isso como "tabela de acentos sazonais". */
+  --campaign-accent: #2540d6;
 
   --primary: var(--flex-blue-600);
   --primary-foreground: #ffffff;

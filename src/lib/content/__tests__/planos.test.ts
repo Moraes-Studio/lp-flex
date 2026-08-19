@@ -43,6 +43,27 @@ describe('parsePlanos', () => {
     delete semDetalhe.beneficios;
     expect(parsePlanos([semDetalhe])).toHaveLength(1);
   });
+
+  it('aceita badgeExtra, badgeCampanha e beneficiosCampanha quando campanhaAtiva é true', () => {
+    const planoComCampanha: Plano = {
+      ...planoBase,
+      badgeExtra: 'Clube+',
+      badgeCampanha: 'Na promoção',
+      beneficiosCampanha: ['Sem taxa de matrícula'],
+    };
+    expect(parsePlanos([planoComCampanha])).toHaveLength(1);
+  });
+
+  it('rejeita badgeCampanha/beneficiosCampanha quando campanhaAtiva é false (SDD.md §9)', () => {
+    expect(() =>
+      parsePlanos([{ ...planoBase, campanhaAtiva: false, badgeCampanha: 'Na promoção' }])
+    ).toThrow(/badgeCampanha\/beneficiosCampanha só podem existir/);
+    expect(() =>
+      parsePlanos([
+        { ...planoBase, campanhaAtiva: false, beneficiosCampanha: ['Sem taxa de matrícula'] },
+      ])
+    ).toThrow(/badgeCampanha\/beneficiosCampanha só podem existir/);
+  });
 });
 
 describe('calcularPrecoFinal', () => {

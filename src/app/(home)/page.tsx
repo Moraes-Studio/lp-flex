@@ -1,7 +1,6 @@
 import { getModalidades } from '@/lib/content/modalidades';
 import { Marquee } from '@/components/shared/marquee';
 import { Hero } from './_components/hero';
-import { Promo } from './_components/promo';
 import { Planos } from './_components/planos';
 import { Modalidades } from './_components/modalidades';
 import { Horarios } from './_components/horarios';
@@ -16,7 +15,6 @@ export default function Home() {
     <main>
       <Hero />
       <Marquee items={modalidades.map((m) => m.nome)} />
-      <Promo />
       <Planos />
       <Modalidades />
       <Horarios />

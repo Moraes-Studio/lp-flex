@@ -25,8 +25,14 @@ test.describe('Home — layout geral', () => {
     await expect(float).toBeVisible();
   });
 
-  test('faixa de campanha ativa aparece com CTA', async ({ page }) => {
+  test('condição da campanha ativa aparece no card do plano em promoção, com CTA', async ({
+    page,
+  }) => {
+    // A campanha não tem mais faixa própria — a condição (SDD.md §9) aparece
+    // dentro do card do plano que participa dela (content/planos.json,
+    // campanhaAtiva:true), substituindo o preço normal enquanto durar.
     await page.goto('/');
+    await page.locator('#planos').scrollIntoViewIfNeeded();
     await expect(page.getByText('Primeiro mês por R$ 9,90')).toBeVisible();
     await expect(page.getByRole('link', { name: 'Quero essa condição' })).toBeVisible();
   });

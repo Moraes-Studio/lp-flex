@@ -16,9 +16,12 @@
     "periodo": "/mês",
     "destaque": true,
     "badge": "Mais escolhido",
-    "campanhaAtiva": false,
+    "badgeExtra": "Clube+",
+    "campanhaAtiva": true,
     "discountPct": 0,
-    "obs": "ou 6x de R$ 258,00"
+    "obs": "ou 6x de R$ 258,00",
+    "badgeCampanha": "Na promoção",
+    "beneficiosCampanha": ["Sem taxa de matrícula"]
   },
   {
     "id": "mensal",
