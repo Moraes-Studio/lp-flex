@@ -7,7 +7,7 @@
     "destaque": false,
     "campanhaAtiva": false,
     "discountPct": 0,
-    "obs": "ou 4x de R$ 238,50"
+    "obs": "ou 4x de R$ 238,50 + taxa de matrícula R$ 99,00"
   },
   {
     "id": "12-meses",
@@ -19,7 +19,7 @@
     "badgeExtra": "Clube+",
     "campanhaAtiva": true,
     "discountPct": 0,
-    "obs": "ou 6x de R$ 258,00",
+    "obs": "ou 6x de R$ 258,00 + taxa de matrícula R$ 99,00",
     "badgeCampanha": "Na promoção",
     "beneficiosCampanha": ["Sem taxa de matrícula"]
   },
@@ -31,6 +31,6 @@
     "destaque": false,
     "campanhaAtiva": false,
     "discountPct": 0,
-    "obs": "à vista"
+    "obs": "à vista + taxa de matrícula R$ 99,00"
   }
 ]
