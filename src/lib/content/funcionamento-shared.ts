@@ -1,27 +1,22 @@
-import { z } from 'zod';
-
-/** Tipos e funções puras — sem `node:fs`, importável por Client Component
- * (ex: `status-chip.tsx`). Ver nota equivalente em `horarios-shared.ts`. */
-
-const horaSchema = z.string().regex(/^\d{2}:\d{2}$/, 'deve estar no formato HH:MM');
-
-export const diaFuncionamentoSchema = z.object({
-  dia: z.string().min(1),
-  diaCurto: z.string().min(1),
-  abre: horaSchema.nullable(),
-  fecha: horaSchema.nullable(),
-});
-
-export type DiaFuncionamento = z.infer<typeof diaFuncionamentoSchema>;
-
 /**
- * Exatamente 7 entradas, índice 0 = domingo .. 6 = sábado, pra bater com
- * `Date.prototype.getDay()` sem tradução em runtime.
+ * Tipos e funções puras — sem `node:fs` e, de propósito, sem `zod` — pra
+ * ser seguro importar de um Client Component (ex: `status-chip.tsx`).
+ *
+ * `zod` fica só em `funcionamento-schema.ts`: um `z.object({...})` real
+ * aciona o compilador JIT do Zod v4 (`$ZodObjectJIT`) assim que o módulo é
+ * avaliado — não só quando `.parse()` roda — e esse JIT usa `Function(...)`
+ * internamente, bloqueado pela CSP do site (`script-src` sem `unsafe-eval`
+ * em produção, ver `next.config.ts`). Isso é invisível em dev (sem CSP) e
+ * só aparece rodando Lighthouse/DevTools de verdade contra o build de
+ * produção — achado real fazendo o gate de Lighthouse 95+ do SDD.md §10.
+ * Ver nota equivalente em `horarios-shared.ts`.
  */
-export const funcionamentoSchema = z.array(diaFuncionamentoSchema).length(7);
 
-export function parseFuncionamento(raw: unknown): DiaFuncionamento[] {
-  return funcionamentoSchema.parse(raw);
+export interface DiaFuncionamento {
+  dia: string;
+  diaCurto: string;
+  abre: string | null;
+  fecha: string | null;
 }
 
 function toMinutes(hhmm: string): number {
