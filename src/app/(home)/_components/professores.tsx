@@ -1,14 +1,19 @@
-import { getProfessores, isProfessorConfirmado } from '@/lib/content/professores';
+import { getProfessores, temPerfilCompleto } from '@/lib/content/professores';
 import { SectionHeading } from '@/components/shared/section-heading';
 import { Photo } from '@/components/shared/photo';
 
 /** content/professores.json guarda vaga placeholder (nome genérico
  * "Professor 0X") pra cada modalidade sem profissional confirmado ainda —
- * necessário pra checagem de cobertura modalidade↔professor (SDD.md §5),
- * mas só o time confirmado ganha card na home. */
+ * necessário pra checagem de cobertura modalidade↔professor (SDD.md §5).
+ * Só ganha card na home quem já tem perfil de verdade preenchido
+ * (`temPerfilCompleto`) — nome real sozinho (sem bio/foto) já foi tentado e
+ * ficou feio (7 cards iguais com "perfil completo em breve"), por isso não
+ * basta ter saído do nome genérico. Esses "nome confirmado, perfil pendente"
+ * ainda contam no stat "professores confirmados" do Hero (via
+ * `contarConfirmados`/`isProfessorConfirmado`) — só não aparecem aqui. */
 export function Professores() {
   const professores = getProfessores();
-  const confirmados = professores.filter(isProfessorConfirmado);
+  const confirmados = professores.filter(temPerfilCompleto);
 
   return (
     <section id="professores" className="bg-background-alt border-border border-y px-[6%] py-16 md:py-20">

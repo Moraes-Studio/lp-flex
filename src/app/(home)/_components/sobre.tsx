@@ -34,7 +34,7 @@ export function Sobre() {
         <div>
           <Eyebrow>Sobre a Flex</Eyebrow>
           <h2 className="text-[clamp(28px,3.6vw,42px)] leading-[1.1]">
-            Academia de bairro,
+            Academia completa,
             <br />
             desde {siteConfig.foundedYear}.
           </h2>

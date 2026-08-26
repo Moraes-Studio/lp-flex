@@ -167,8 +167,7 @@ export function Planos() {
         </div>
 
         <p className="text-muted-foreground mt-6 text-sm normal-case">
-          Musculação e todas as modalidades inclusas. Matrícula R$ 99,00 e mapeamento R$ 50,00 à
-          parte.
+          Mapeamento R$ 50,00 à parte.
         </p>
       </div>
     </section>

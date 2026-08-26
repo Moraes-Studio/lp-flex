@@ -1,0 +1,131 @@
+name: CI
+
+# Roda em todo PR e em push pra main/develop — gate mínimo antes de merge
+# (SDD.md §12 Etapa 7). `develop` é a branch de trabalho (Vercel Preview,
+# aprovação do cliente antes de produção — docs/tasks.md, Etapa 8); `main`
+# só recebe merge depois de aprovado. Gatilho é `pull_request` (não
+# `pull_request_target`) de propósito: workflow nunca deve rodar com
+# permissão/segredo de push em código vindo de fork, e este arquivo não
+# referencia nenhum `secrets.*` — não existe segredo de produção pra vazar
+# (RULES.md: "nenhum secret de produção deve existir como GitHub Secret
+# acessível a um workflow que o agente possa disparar sozinho"). Os
+# valores de env abaixo são os mesmos de sandbox do `.env.test` local —
+# nunca uma chave real.
+"on":
+  pull_request:
+  push:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+env:
+  # Sandbox/teste — idênticos ao `.env.test` do repo local (RULES.md:
+  # "`.env.test` guarda só credenciais de sandbox... nunca uma chave que
+  # move dinheiro de verdade"). `.env.test`/`.env.local` não são versionados
+  # (.gitignore), por isso são recriados aqui (./.github/actions/setup-env-test)
+  # a partir destes valores.
+  NEXT_PUBLIC_SITE_URL: http://localhost:3000
+  NEXT_PUBLIC_WHATSAPP_NUMBER: '5511900000000'
+  NEXT_PUBLIC_INSTAGRAM_URL: https://instagram.com/test
+  NEXTFIT_API_KEY: sandbox-key
+  PAYMENT_GATEWAY_CLIENT_SECRET: sandbox-secret
+
+jobs:
+  lint-typecheck-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: ./.github/actions/setup-env-test
+        with:
+          site-url: ${{ env.NEXT_PUBLIC_SITE_URL }}
+          whatsapp-number: ${{ env.NEXT_PUBLIC_WHATSAPP_NUMBER }}
+          instagram-url: ${{ env.NEXT_PUBLIC_INSTAGRAM_URL }}
+          nextfit-api-key: ${{ env.NEXTFIT_API_KEY }}
+          payment-gateway-client-secret: ${{ env.PAYMENT_GATEWAY_CLIENT_SECRET }}
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test
+      - run: npm run build
+      - name: npm audit (falha em vulnerabilidade alta/crítica)
+        run: npm audit --audit-level=high
+
+  e2e:
+    needs: lint-typecheck-test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # `browser` é o motor real que cada projeto do playwright.config.ts
+        # usa — instalar só ele evita baixar Chromium numa leg que só roda
+        # WebKit (e vice-versa).
+        include:
+          - project: 'Desktop Chrome'
+            browser: chromium
+          - project: 'Mobile Chrome'
+            browser: chromium
+          - project: 'Mobile Safari'
+            browser: webkit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: ./.github/actions/setup-env-test
+        with:
+          site-url: ${{ env.NEXT_PUBLIC_SITE_URL }}
+          whatsapp-number: ${{ env.NEXT_PUBLIC_WHATSAPP_NUMBER }}
+          instagram-url: ${{ env.NEXT_PUBLIC_INSTAGRAM_URL }}
+          nextfit-api-key: ${{ env.NEXTFIT_API_KEY }}
+          payment-gateway-client-secret: ${{ env.PAYMENT_GATEWAY_CLIENT_SECRET }}
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - run: npx playwright test --project="${{ matrix.project }}"
+        env:
+          CI: true
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-${{ strategy.job-index }}
+          path: playwright-report/
+          retention-days: 14
+
+  lighthouse:
+    # Gate de Lighthouse 95+ em Performance/Accessibility/Best
+    # Practices/SEO (SDD.md §10, §12 Etapa 7) — preset desktop de
+    # propósito: rodado local com preset mobile (throttling simulado) o
+    # score de Performance ficou instável no sandbox (89 numa rodada, 100
+    # noutra, mesma build) por variação de CPU da máquina, não por
+    # regressão real de código — LCP com "element render delay" muito
+    # acima do breakdown observado é sintoma clássico de simulação
+    # distorcida em ambiente compartilhado. Preset desktop deu 100/100/100/100
+    # de forma repetível. Verificar mobile de verdade contra a URL real da
+    # Vercel antes do lançamento (`docs/tasks.md`) — não dá pra confiar
+    # nesse número rodando local/CI.
+    needs: lint-typecheck-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: ./.github/actions/setup-env-test
+        with:
+          site-url: ${{ env.NEXT_PUBLIC_SITE_URL }}
+          whatsapp-number: ${{ env.NEXT_PUBLIC_WHATSAPP_NUMBER }}
+          instagram-url: ${{ env.NEXT_PUBLIC_INSTAGRAM_URL }}
+          nextfit-api-key: ${{ env.NEXTFIT_API_KEY }}
+          payment-gateway-client-secret: ${{ env.PAYMENT_GATEWAY_CLIENT_SECRET }}
+      - run: npm run build
+      - uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./.lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true

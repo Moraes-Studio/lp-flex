@@ -30,38 +30,38 @@
     "fotoUrl": null
   },
   {
-    "id": "professor-04",
+    "id": "josue",
     "num": "04",
-    "nome": "Professor 04",
+    "nome": "Josué",
     "papel": "Jump Funcional",
-    "desde": "na equipe desde 2019",
+    "desde": "na equipe",
     "bio": "Professor de Educação Física — perfil completo em breve.",
     "fotoUrl": null
   },
   {
-    "id": "professor-05",
+    "id": "tom",
     "num": "05",
-    "nome": "Professor 05",
+    "nome": "Tom",
     "papel": "Zumba",
-    "desde": "na equipe desde 2014",
+    "desde": "na equipe",
     "bio": "Professor de Educação Física — perfil completo em breve.",
     "fotoUrl": null
   },
   {
-    "id": "professor-06",
+    "id": "rose",
     "num": "06",
-    "nome": "Professor 06",
+    "nome": "Rose",
     "papel": "Pilates",
-    "desde": "na equipe desde 2021",
+    "desde": "na equipe",
     "bio": "Professor de Educação Física — perfil completo em breve.",
     "fotoUrl": null
   },
   {
-    "id": "professor-07",
+    "id": "giovana",
     "num": "07",
-    "nome": "Professor 07",
+    "nome": "Giovana",
     "papel": "Yoga",
-    "desde": "na equipe desde 2018",
+    "desde": "na equipe",
     "bio": "Professor de Educação Física — perfil completo em breve.",
     "fotoUrl": null
   },
@@ -116,6 +116,33 @@
     "nome": "Professor 13",
     "papel": "Ritbox",
     "desde": "na equipe desde 2021",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
+    "fotoUrl": null
+  },
+  {
+    "id": "rafael",
+    "num": "14",
+    "nome": "Rafael",
+    "papel": "Musculação",
+    "desde": "na equipe",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
+    "fotoUrl": null
+  },
+  {
+    "id": "joab",
+    "num": "15",
+    "nome": "Joab",
+    "papel": "Musculação",
+    "desde": "na equipe",
+    "bio": "Professor de Educação Física — perfil completo em breve.",
+    "fotoUrl": null
+  },
+  {
+    "id": "douglas",
+    "num": "16",
+    "nome": "Douglas",
+    "papel": "Musculação",
+    "desde": "na equipe",
     "bio": "Professor de Educação Física — perfil completo em breve.",
     "fotoUrl": null
   }
