@@ -1,17 +1,20 @@
 name: CI
 
-# Roda em todo PR e em push pra main — gate mínimo antes de merge (SDD.md
-# §12 Etapa 7). Gatilho é `pull_request` (não `pull_request_target`) de
-# propósito: workflow nunca deve rodar com permissão/segredo de push em
-# código vindo de fork, e este arquivo não referencia nenhum `secrets.*` —
-# não existe segredo de produção pra vazar (RULES.md: "nenhum secret de
-# produção deve existir como GitHub Secret acessível a um workflow que o
-# agente possa disparar sozinho"). Os valores de env abaixo são os mesmos
-# de sandbox do `.env.test` local — nunca uma chave real.
+# Roda em todo PR e em push pra main/develop — gate mínimo antes de merge
+# (SDD.md §12 Etapa 7). `develop` é a branch de trabalho (Vercel Preview,
+# aprovação do cliente antes de produção — docs/tasks.md, Etapa 8); `main`
+# só recebe merge depois de aprovado. Gatilho é `pull_request` (não
+# `pull_request_target`) de propósito: workflow nunca deve rodar com
+# permissão/segredo de push em código vindo de fork, e este arquivo não
+# referencia nenhum `secrets.*` — não existe segredo de produção pra vazar
+# (RULES.md: "nenhum secret de produção deve existir como GitHub Secret
+# acessível a um workflow que o agente possa disparar sozinho"). Os
+# valores de env abaixo são os mesmos de sandbox do `.env.test` local —
+# nunca uma chave real.
 "on":
   pull_request:
   push:
-    branches: [main]
+    branches: [main, develop]
 
 permissions:
   contents: read

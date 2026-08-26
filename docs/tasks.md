@@ -70,8 +70,8 @@ Quando desbloqueado: `lib/payments/` isola a chamada atrás de `criarLinkDePagam
 
 **BLOQUEADO** — precisa de acesso à conta Vercel do cliente/estúdio (credencial que este agente não tem e não deve ter, por política do próprio `RULES.md`: agente só toca `.env.local`/`.env.test`, nunca ambiente de produção).
 
-- [x] Fluxo de branch decidido (2026-08-25, pedido do cliente): trabalho sobe pra branch `dev` (não direto pra `main`) — vira PR/preview deploy da Vercel pra aprovação visual antes de qualquer coisa ir pra produção. `main` só recebe merge depois de aprovado.
-- [ ] Configurar na Vercel: `main` = Production Branch, `dev` (e demais branches/PRs) = Preview — isso é ajuste no painel Vercel, não no repo; precisa da conta do cliente/estúdio (mesmo bloqueio de sempre).
+- [x] Fluxo de branch decidido (2026-08-25, pedido do cliente): trabalho sobe pra branch `develop` (não direto pra `main`) — vira PR/preview deploy da Vercel pra aprovação visual antes de qualquer coisa ir pra produção. `main` só recebe merge depois de aprovado — o cliente controla esse merge, não o agente.
+- [ ] Configurar na Vercel: `main` = Production Branch, `develop` (e demais branches/PRs) = Preview — isso é ajuste no painel Vercel, não no repo; precisa da conta do cliente/estúdio (mesmo bloqueio de sempre).
 - [ ] Deploy inicial na Vercel.
 - [ ] Variáveis de ambiente de produção configuradas direto no painel Vercel (nunca no repo) — `NEXT_PUBLIC_SITE_URL=https://academiaflex.com.br` (domínio já confirmado, ver Pendências transversais).
 
