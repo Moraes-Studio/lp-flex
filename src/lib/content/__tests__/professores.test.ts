@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+  BIO_PENDENTE,
   contarConfirmados,
   getProfessores,
   isProfessorConfirmado,
   parseProfessores,
+  temPerfilCompleto,
 } from '@/lib/content/professores';
 
 const professorValido = {
@@ -65,5 +67,25 @@ describe('contarConfirmados', () => {
 
   it('retorna 0 pra lista vazia (edge case)', () => {
     expect(contarConfirmados([])).toBe(0);
+  });
+});
+
+describe('temPerfilCompleto', () => {
+  it('nome real + bio de verdade conta como perfil completo', () => {
+    expect(temPerfilCompleto({ nome: 'Vanessa Fukazawa', bio: 'Bio de verdade.' })).toBe(true);
+  });
+
+  it('nome real mas bio ainda pendente NÃO conta como perfil completo', () => {
+    expect(temPerfilCompleto({ nome: 'Rafael', bio: BIO_PENDENTE })).toBe(false);
+  });
+
+  it('nome placeholder "Professor 0X" NÃO conta como perfil completo, mesmo com bio real (edge case)', () => {
+    expect(temPerfilCompleto({ nome: 'Professor 04', bio: 'Bio de verdade.' })).toBe(false);
+  });
+
+  it('diverge de isProfessorConfirmado pro caso "nome real + bio pendente" — é exatamente essa diferença que existe pra não mostrar card feio (ver professores.tsx)', () => {
+    const professor = { nome: 'Rafael', bio: BIO_PENDENTE };
+    expect(isProfessorConfirmado(professor)).toBe(true);
+    expect(temPerfilCompleto(professor)).toBe(false);
   });
 });

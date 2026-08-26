@@ -42,3 +42,20 @@ export function isProfessorConfirmado(professor: Pick<Professor, 'nome'>): boole
 export function contarConfirmados(professores: Professor[]): number {
   return professores.filter(isProfessorConfirmado).length;
 }
+
+/** Bio genérica usada quando já se sabe o nome real do professor (confirmado
+ * na grade/WhatsApp) mas o formulário de perfil ainda não voltou preenchido.
+ * Compartilhada com `content/professores.json` — nunca duplicar essa string
+ * em outro lugar, senão a checagem de "perfil completo" abaixo perde o par. */
+export const BIO_PENDENTE = 'Professor de Educação Física — perfil completo em breve.';
+
+/** Nome real ≠ perfil pronto pra virar card público: um professor recém-
+ * confirmado (só o nome, bio ainda genérica) conta no stat de "professores
+ * confirmados" (via `contarConfirmados`) mas não deve virar card na seção
+ * Professores — card sem bio de verdade e sem foto (7 iguais lado a lado)
+ * ficou feio o bastante pro cliente pedir pra esconder. Card só aparece
+ * quando o formulário de fato voltou preenchido (bio deixou de ser a
+ * genérica `BIO_PENDENTE`). */
+export function temPerfilCompleto(professor: Pick<Professor, 'nome' | 'bio'>): boolean {
+  return isProfessorConfirmado(professor) && professor.bio !== BIO_PENDENTE;
+}
