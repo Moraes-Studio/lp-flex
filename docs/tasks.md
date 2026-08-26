@@ -31,7 +31,7 @@ Ordem da home fixada no `SDD.md §4`. Cada seção só é commitada depois de pa
 - [x] **Modalidades** — grid com ícone próprio por modalidade via `lucide-react` (Dumbbell, Flower2, Music4, Disc3, Zap, Footprints, Waves, Activity, PersonStanding — 9 ícones distintos, nenhum reaproveitado).
 - [x] **Horários** — desktop mostra a grade completa da semana sempre (coluna de hoje destacada); mobile filtra por abas de dia tocáveis (não só clique no `<th>` como o `SDD.md` descrevia — abas full-touch cobrem melhor a Regra Absoluta 5 do `RULES.md`).
 - [x] **Sobre** — selo "fundada em 1992" + texto institucional + placeholder de foto (fachada/equipe).
-- [x] **Contato** — endereço, horário completo, mapa (embed Google Maps sem API key), CTA WhatsApp. Endereço/CNPJ/WhatsApp continuam como candidatos de dev não confirmados (ver `.env.local`, `src/config/site.ts`) — **não publicar em produção sem confirmação explícita do cliente** (`RULES.md` #7).
+- [x] **Contato** — endereço, horário completo, mapa (embed Google Maps sem API key), CTA WhatsApp. Endereço/CNPJ/WhatsApp — todos confirmados pelo cliente (WhatsApp e CNPJ em 2026-08-18, endereço em 2026-08-25, ver `.env.local`, `src/config/site.ts`).
 - [x] **Footer** — navegação, contato, CNPJ, redes sociais, crédito "Desenvolvido por MoraesStudio", link pra `/privacidade`.
 - [x] **Privacidade** — página própria em `/privacidade` (antes era HTML solto fora do Next), lê dados de `siteConfig` em vez de duplicar.
 
@@ -54,25 +54,35 @@ Quando desbloqueado: `lib/payments/` isola a chamada atrás de `criarLinkDePagam
 
 ## Etapa 7 — CI/CD
 
-- [ ] GitHub Actions: `lint` + `typecheck` + `test` + `test:e2e` (3 targets) em todo PR.
-- [ ] Gate de Lighthouse 95+ em Performance/Accessibility/Best Practices/SEO antes de merge pra `main` (`SDD.md §3`).
-- [ ] `.env.test` injetado só nos jobs de teste — nenhum secret de produção acessível a workflow que o agente possa disparar sozinho (`RULES.md`).
+> **Fechada em 2026-08-25**, motivada por: repositório vai ficar aberto/acessível pra subir na Vercel — pedido explícito de reforçar segurança antes disso. `.github/workflows/ci.yml` (+ `.github/actions/setup-env-test/`, composite action pra não duplicar o passo entre jobs).
+
+- [x] GitHub Actions: `lint` + `typecheck` + `test` + `build` + `npm audit --audit-level=high` (job `lint-typecheck-test`) + `test:e2e` nos 3 targets, cada um só instalando o motor de browser que usa (job `e2e`, matrix).
+- [x] Gate de Lighthouse 95+ em Performance/Accessibility/Best Practices/SEO antes de merge (`SDD.md §10`, job `lighthouse`, `.lighthouserc.json`, `treosh/lighthouse-ci-action`). Rodado de verdade contra o build de produção local (não só configurado às cegas) — resultado abaixo.
+- [x] `.env.test`/`.env.local` recriados dentro do workflow a partir de valores de sandbox fixos (iguais ao `.env.test` local) — nenhum `secrets.*` no arquivo, de propósito: workflow roda em `pull_request` (não `pull_request_target`), então mesmo um PR de fork malicioso não tem acesso a nenhum segredo real, porque não existe segredo real aqui pra vazar (`RULES.md`).
+- [x] `npm audit`: 11 vulnerabilidades (9 altas) encontradas no Next.js 16.2.4 — incluindo SSRF em Server Actions/rewrites e divulgação não-autenticada de endpoint de Server Function — corrigidas atualizando pra **16.3.3** (`eslint-config-next` junto). `npm audit` limpo (0) depois.
+- [x] Headers de segurança + CSP em `next.config.ts` (CSP sem `unsafe-eval` em produção, `X-Frame-Options: DENY`, `nosniff`, `Referrer-Policy`, `Permissions-Policy`). Preset **sem nonce** de propósito — nonce exigiria renderização dinâmica em toda página e quebraria a geração estática (comentário no arquivo linka a doc oficial).
+- [x] `config/env.ts` separado em `env.public.ts` (client-safe) / `env.server.ts` (segredo de servidor, guardado por `import 'server-only'` — build quebra se algum Client Component importar por engano). Adianta o portão 3 do `SDD.md §11` antes da integração de pagamento/Next Fit começar.
+- [x] **Achado rodando Lighthouse de verdade** (não só lendo o audit): `env.public.ts` e os módulos `*-shared.ts` de conteúdo (`horarios-shared.ts`, `funcionamento-shared.ts`) tinham `z.object(...)` de nível de módulo — construído também no bundle do navegador (porque são importados por Client Component), o que aciona o compilador JIT do Zod v4 (`$ZodObjectJIT`, usa `Function(...)`) e violava a CSP nova em produção (audit `inspector-issues` do Lighthouse, best-practices caindo de 100). Corrigido: `env.public.ts` virou validação manual sem zod; `horarios-shared.ts`/`funcionamento-shared.ts` perderam o zod, que foi pra `horarios-schema.ts`/`funcionamento-schema.ts` novos (só importados pelos loaders server-only `horarios.ts`/`funcionamento.ts`).
+- [x] **Resultado do Lighthouse local** (preset desktop, build de produção): `/` → 99–100 / 100 / 100 / 100, `/privacidade` → 100 / 96 / 100 / 100 (Performance/Accessibility/Best Practices/SEO). Dois bugs reais de acessibilidade corrigidos no processo: contraste insuficiente no chip do marquee de modalidades (`text-flex-bright` → `text-flex-blue-600`) e um `<dl>` com filho `<p>` não permitido nas stats do Hero (virou `<dt>`/`<dd>` corretos, ordem visual mantida via `flex-col-reverse`).
+- [ ] **Pendência**: o gate de CI usa preset **desktop** — rodando com preset mobile (throttling simulado) localmente o score de Performance ficou instável (89 numa rodada, 100 noutra, mesmo build), aparentando ser ruído do ambiente sandbox (CPU compartilhada) e não regressão real de código. **Verificar mobile de verdade contra a URL real da Vercel antes do lançamento** — não confiar nesse número rodando local/CI.
 
 ## Etapa 8 — Deploy
 
 **BLOQUEADO** — precisa de acesso à conta Vercel do cliente/estúdio (credencial que este agente não tem e não deve ter, por política do próprio `RULES.md`: agente só toca `.env.local`/`.env.test`, nunca ambiente de produção).
 
+- [x] Fluxo de branch decidido (2026-08-25, pedido do cliente): trabalho sobe pra branch `dev` (não direto pra `main`) — vira PR/preview deploy da Vercel pra aprovação visual antes de qualquer coisa ir pra produção. `main` só recebe merge depois de aprovado.
+- [ ] Configurar na Vercel: `main` = Production Branch, `dev` (e demais branches/PRs) = Preview — isso é ajuste no painel Vercel, não no repo; precisa da conta do cliente/estúdio (mesmo bloqueio de sempre).
 - [ ] Deploy inicial na Vercel.
-- [ ] Variáveis de ambiente de produção configuradas direto no painel Vercel (nunca no repo).
-- [ ] Confirmar domínio (`academiaflex.com.br`, hoje só placeholder em `.env.example`).
+- [ ] Variáveis de ambiente de produção configuradas direto no painel Vercel (nunca no repo) — `NEXT_PUBLIC_SITE_URL=https://academiaflex.com.br` (domínio já confirmado, ver Pendências transversais).
 
 ## Pendências transversais (não travam etapa, mas precisam de decisão do cliente antes de produção)
 
 - [x] ~~WhatsApp~~ — confirmado pelo cliente em 2026-08-18 (+55 11 93918-2762), `.env.local`/`.env.example` atualizados.
 - [x] ~~CNPJ~~ — confirmado pelo cliente em 2026-08-18.
-- [ ] Endereço (R. das Hortênsias, 104 — Vila Helena) segue como candidato do protótipo, **ainda não confirmado**.
+- [x] ~~Endereço~~ — confirmado pelo cliente em 2026-08-25 (R. das Hortênsias, 104 — Vila Helena).
+- [x] ~~Domínio~~ — confirmado pelo cliente em 2026-08-25: `academiaflex.com.br` (print do painel de registro mostrando "Publicado"). Já era o valor em `.env.example`, então nenhum código mudou — só deixou de ser "placeholder" e virou dado real; `NEXT_PUBLIC_SITE_URL` de produção ainda precisa ser configurada assim direto no painel da Vercel (agente não tem/não deve ter acesso a isso, ver Etapa 8).
 - [ ] Data exata de fundação — bio do Instagram cita 1992, `SDD.md §1` pede confirmação antes de publicar.
-- [ ] Bio + foto real dos professores confirmados sem foto ainda (Flávio, Vanessa, Gustavo) e dos 8 pendentes de questionário em `content/professores.json`.
+- [ ] Bio + foto real dos 3 professores com perfil completo mas sem foto (Flávio, Vanessa, Gustavo) e dos 13 pendentes em `content/professores.json` — 7 já com nome real confirmado (Josué, Tom, Rose, Giovana, Rafael, Joab, Douglas) esperando só o formulário voltar, 6 ainda sem nome (vagas Fit Dance/Step Funcional/Flex Training/Cross Training/GAP/Ritbox). Card só aparece na home quando a bio deixa de ser a genérica (`temPerfilCompleto`, `professores.ts`) — até lá, o nome já conta no stat "professores confirmados" do Hero mas fica sem card (pedido do cliente, 2026-08-25: card sem bio/foto "ficava feio").
 - [ ] Fotos reais: `src/config/media.ts` (hero, sobre, comunidade) e `professor.fotoUrl` em `content/professores.json` são os únicos lugares a editar quando as fotos chegarem — nenhum componente precisa mudar (`<Photo>` alterna sozinho entre placeholder e imagem real, mesma moldura, zero layout shift). Nenhuma gerada por IA nem banco de imagem (`CLAUDE.md`).
 - [ ] Confirmar se a limitação da API Next Fit (só leitura) continua válida antes de qualquer feature que dependa dela (`SDD.md §11` portão 5).
 
@@ -84,7 +94,7 @@ Motivado por: site sendo usado como prova de "negócio ativo" pro Meta Business 
 - [x] `opengraph-image.tsx` — gráfico de marca gerado em runtime (Satori/`next/og`), não foto — usa cores institucionais + wordmark, é o preview que aparece ao compartilhar o link no WhatsApp/Instagram.
 - [x] `robots.ts` + `sitemap.ts` (convenção App Router).
 - [x] Slot pra tag de verificação de domínio do Meta Business Manager (`NEXT_PUBLIC_META_DOMAIN_VERIFICATION`, opcional) — só preencher quando o domínio real for cadastrado lá.
-- [ ] **Pendente do usuário antes do deploy**: `NEXT_PUBLIC_SITE_URL` em produção precisa ser o domínio real (hoje `academiaflex.com.br` é placeholder em `.env.example`) — `metadataBase`, OG e sitemap todos dependem dela pra gerar URL absoluta correta.
+- [x] `NEXT_PUBLIC_SITE_URL`: domínio confirmado pelo cliente em 2026-08-25 (`academiaflex.com.br`) — já é o valor em `.env.example`; falta só configurar essa env de verdade no painel da Vercel em produção (`metadataBase`, OG e sitemap dependem dela pra gerar URL absoluta correta), ver Etapa 8.
 - [ ] Deploy em si continua bloqueado por falta de acesso à conta Vercel do cliente (Etapa 8) — igual antes, esse agente não deve ter essa credencial.
 
 ## Nota de ambiente
