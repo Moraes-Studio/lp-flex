@@ -75,15 +75,20 @@ export function Hero() {
             className="enter border-border mt-10 grid grid-cols-3 gap-4 border-t pt-6 sm:max-w-[440px]"
             style={{ '--enter-delay': '280ms' } as React.CSSProperties}
           >
+            {/* dt antes de dd (ordem semântica correta) + `flex-col-reverse`
+             * pra manter o número grande visualmente em cima do rótulo —
+             * antes tinha um `<p>` como terceiro filho da div junto de
+             * dt/dd, e `<dl>` só aceita dt/dd (+script/template) como
+             * filho direto (ou dentro de div): achado real de Lighthouse
+             * (audit "definition-list", SDD.md §10 gate de 95+). */}
             {stats.map((stat) => (
-              <div key={stat.label}>
-                <dt className="sr-only">{stat.label}</dt>
+              <div key={stat.label} className="flex flex-col-reverse">
+                <dt className="text-muted-foreground mt-1.5 text-[12px] leading-snug normal-case">
+                  {stat.label}
+                </dt>
                 <dd className="font-heading text-flex-blue-700 text-[28px] leading-none normal-case sm:text-[32px]">
                   {stat.valor}
                 </dd>
-                <p className="text-muted-foreground mt-1.5 text-[12px] leading-snug normal-case">
-                  {stat.label}
-                </p>
               </div>
             ))}
           </dl>
