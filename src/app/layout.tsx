@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Barlow, IBM_Plex_Mono, Oswald } from 'next/font/google';
-import { env } from '@/config/env';
+import { publicEnv } from '@/config/env.public';
 import { siteConfig } from '@/config/site';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
@@ -56,8 +56,8 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   // Cadastro de domínio no Meta Business Manager (opcional, ver .env.example) —
   // sem a env, a tag simplesmente não é renderizada.
-  verification: env.NEXT_PUBLIC_META_DOMAIN_VERIFICATION
-    ? { other: { 'facebook-domain-verification': env.NEXT_PUBLIC_META_DOMAIN_VERIFICATION } }
+  verification: publicEnv.NEXT_PUBLIC_META_DOMAIN_VERIFICATION
+    ? { other: { 'facebook-domain-verification': publicEnv.NEXT_PUBLIC_META_DOMAIN_VERIFICATION } }
     : undefined,
 };
 
