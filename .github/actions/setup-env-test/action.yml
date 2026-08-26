@@ -1,0 +1,28 @@
+name: Recria .env de sandbox
+description: >
+  Recria .env.test/.env.local a partir dos valores de sandbox definidos no
+  workflow chamador (nunca um segredo real — RULES.md). Usado pelos dois
+  jobs de ci.yml pra não duplicar o mesmo bloco de shell.
+inputs:
+  site-url:
+    required: true
+  whatsapp-number:
+    required: true
+  instagram-url:
+    required: true
+  nextfit-api-key:
+    required: true
+  payment-gateway-client-secret:
+    required: true
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        printf '%s\n' \
+          "NEXT_PUBLIC_SITE_URL=${{ inputs.site-url }}" \
+          "NEXT_PUBLIC_WHATSAPP_NUMBER=${{ inputs.whatsapp-number }}" \
+          "NEXT_PUBLIC_INSTAGRAM_URL=${{ inputs.instagram-url }}" \
+          "NEXTFIT_API_KEY=${{ inputs.nextfit-api-key }}" \
+          "PAYMENT_GATEWAY_CLIENT_SECRET=${{ inputs.payment-gateway-client-secret }}" \
+          | tee .env.test .env.local > /dev/null
