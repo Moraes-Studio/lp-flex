@@ -25,12 +25,16 @@ export function Header() {
 
       <header className="bg-background border-border flex items-center justify-between gap-4 border-b px-[6%] py-3">
         <Link href="/" aria-label={`${siteConfig.name} — página inicial`} className="shrink-0">
+          {/* 102×96 = tamanho nativo do arquivo-fonte (public/logo.png) —
+           * teto sem ficar borrado. Já aumentado uma vez (68×64) e o cliente
+           * ainda achou pequeno; isto é o máximo que dá pra crescer sem pedir
+           * um arquivo de logo maior/vetor (ver mesma pendência em footer.tsx). */}
           <Image
             src="/logo.png"
             alt=""
-            width={68}
-            height={64}
-            className="h-16 w-[68px]"
+            width={102}
+            height={96}
+            className="h-24 w-[102px]"
             priority
           />
         </Link>
