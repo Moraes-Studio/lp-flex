@@ -31,6 +31,11 @@
      fundo de faixa de seção pra dar ritmo (ex: Horários) — nunca em texto,
      botão ou CTA. */
   --color-flex-graphite: var(--flex-graphite);
+  /* Tom de grafite levemente mais claro que --flex-graphite — não é cor
+     nova, é o mesmo grafite com uma pitada de luz, só pra dar uma diferença
+     sutil de superfície (topo levemente mais claro que a base) em painéis
+     flutuantes escuros, ex: cookie-consent.tsx. */
+  --color-flex-graphite-surface: var(--flex-graphite-surface);
 
   /* Acento de campanha — token isolado, só pode ser usado por banner/badge/faixa/selo de campanha.
      Nunca referenciado por --primary/--accent/--ring (RULES.md #3: campanha nunca sobrescreve institucional). */
@@ -70,6 +75,16 @@
   --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-card-hover: 0 24px 48px -24px rgba(11, 77, 162, 0.32);
   --shadow-panel: 0 18px 44px -30px rgba(11, 77, 162, 0.55);
+  /* Sombra própria pra overlay flutuante (cookie-consent.tsx) — não
+     reaproveita shadow-panel de propósito: painéis de card ficam embutidos
+     na página (sempre sobre fundo claro), o overlay é fixed por cima de
+     QUALQUER fundo (branco, grafite, azul do rodapé), precisa de mais
+     alcance/contraste pra realmente parecer "acima" da página em todos.
+     Duas camadas: sombra neutra grande (profundidade real, funciona sobre
+     qualquer fundo) + sombra azul sutil (glow de marca, mais visível sobre
+     fundo claro). */
+  --shadow-overlay:
+    0 24px 48px -12px rgba(2, 6, 16, 0.45), 0 8px 20px -6px rgba(11, 77, 162, 0.22);
 }
 
 :root {
@@ -95,6 +110,7 @@
      fundo "grafite" pedida na lapidação de ritmo visual, usada só em fundo
      de seção (Horários) pra alternar com as faixas azuis. */
   --flex-graphite: #1a212c;
+  --flex-graphite-surface: #232c39; /* mesmo grafite, um pouco mais claro — ver @theme inline acima */
 
   /* superfícies — papel de quadro de avisos, tema único (sem toggle claro/escuro) */
   --background: #ffffff;
@@ -185,6 +201,64 @@
   .reveal-hidden {
     opacity: 0;
     transform: translateY(10px);
+  }
+}
+
+/* Card de consentimento de cookies (ver cookie-consent.tsx): 100% overlay,
+ * `position: fixed`, nunca reserva espaço na página — sem padding/margin
+ * no body, sem tocar document flow/height. (Uma versão anterior usava
+ * `body:has(#cookie-consent) { padding-bottom: ... }` e isso empurrava o
+ * fim da página pra baixo, sobrando uma faixa vazia depois do rodapé —
+ * removido de propósito, não reintroduzir.)
+ *
+ * O único ajuste real é o WhatsApp (também fixed) convivendo com o banner,
+ * que agora fica no mesmo canto (inferior direito) no desktop:
+ * - mobile: WhatsApp some temporariamente enquanto o banner está aberto —
+ *   com os dois no mesmo canto e a tela pequena, empilhar os dois adicionaria
+ *   obstrução em vez de resolver; a decisão é rápida, ele volta em seguida.
+ * - desktop (sm+): banner e WhatsApp têm espaço de sobra — o WhatsApp só
+ *   sobe pra ficar acima do card, com respiro de ~18px.
+ * Nenhum dos dois casos altera document flow: só posição/visibilidade de
+ * elementos já `fixed`. */
+/* As 4 propriedades (transform/bottom/opacity/visibility) do WhatsApp
+ * precisam de timing coordenado entre os dois estados (visibility com
+ * delay diferente ao entrar vs. sair — trocando de visível pra escondido
+ * ela só aplica depois do fade, na volta é instantânea, senão o link fica
+ * focável-mas-invisível por um instante), então ficam juntas aqui em vez
+ * de espalhadas em utilities do Tailwind no componente. */
+#whatsapp-float {
+  transition:
+    transform 0.3s ease,
+    bottom 0.3s ease,
+    opacity 0.25s ease,
+    visibility 0s linear 0s;
+}
+body:has(#cookie-consent) #whatsapp-float {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    transform 0.3s ease,
+    bottom 0.3s ease,
+    opacity 0.2s ease,
+    visibility 0s linear 0.2s;
+}
+@media (min-width: 640px) {
+  body:has(#cookie-consent) #whatsapp-float {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    /* Medido de verdade (banner real, largura 400px, conteúdo atual):
+       ≈241px de altura + 24px de offset da viewport (bottom-6) + ~25px de
+       respiro. Não é JS medindo em runtime — é um valor fixo com folga,
+       conferido visualmente; reajustar aqui se o conteúdo do banner mudar
+       o bastante pra afetar sua altura. */
+    bottom: 290px;
+    transition:
+      transform 0.3s ease,
+      bottom 0.25s ease,
+      opacity 0.2s ease,
+      visibility 0s linear 0s;
   }
 }
 

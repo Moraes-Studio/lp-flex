@@ -11,6 +11,12 @@ const buttonVariants = cva(
         primary:
           'bg-primary text-primary-foreground shadow-[0_10px_28px_-10px_rgba(var(--flex-glow-rgb),0.55)] hover:bg-flex-blue-700 hover:-translate-y-0.5',
         ghost: 'border border-border bg-transparent text-foreground hover:border-flex-blue-600 hover:text-flex-blue-600',
+        /** Equivalente ao `ghost`, mas pra superfície escura (grafite/azul
+         * institucional) — `ghost` (texto escuro, borda cinza-claro) fica
+         * ilegível em fundo escuro. Mesmo idioma "ghost" já usado nos pills
+         * do Marquee escuro (border-white/25 bg-white/10 text-white). */
+        secondaryOnDark:
+          'border border-white/30 bg-white/12 text-white hover:border-white/45 hover:bg-white/22',
       },
       size: {
         default: 'px-[26px] py-[14px]',

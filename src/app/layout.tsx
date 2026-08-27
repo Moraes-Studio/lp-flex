@@ -5,6 +5,7 @@ import { siteConfig } from '@/config/site';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { WhatsappFloat } from '@/components/shared/whatsapp-float';
+import { CookieConsent } from '@/components/shared/cookie-consent';
 import { AnchorScrollHandler } from '@/components/shared/anchor-scroll-handler';
 import './globals.css';
 
@@ -81,6 +82,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <WhatsappFloat />
+        <CookieConsent />
       </body>
     </html>
   );
