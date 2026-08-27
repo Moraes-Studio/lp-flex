@@ -9,6 +9,9 @@ const eyebrowVariants = cva(
       variant: {
         bright: 'text-flex-blue-600 before:bg-flex-blue-600',
         ice: 'text-muted-foreground before:bg-border',
+        /** Sobre fundo escuro (ex: seção Horários em grafite) — mesma família
+         * azul, só mais clara pra manter contraste em cima de fundo escuro. */
+        inverted: 'text-flex-blue-300 before:bg-flex-blue-300',
       },
     },
     defaultVariants: {

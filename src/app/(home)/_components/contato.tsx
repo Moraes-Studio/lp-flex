@@ -48,7 +48,7 @@ export function Contato() {
             </Button>
           </div>
 
-          <div className="border-border flex flex-col overflow-hidden rounded-2xl border bg-white shadow-[0_18px_44px_-30px_rgba(11,77,162,0.55)]">
+          <div className="border-border shadow-panel flex flex-col overflow-hidden rounded-2xl border bg-white">
             <div className="bg-flex-blue-600 flex items-center gap-2 px-5 py-3.5 text-white">
               <MapPin className="h-4 w-4" aria-hidden="true" />
               <span className="font-mono text-[11px] tracking-[0.16em] uppercase">Como chegar</span>

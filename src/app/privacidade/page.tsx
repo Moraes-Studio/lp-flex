@@ -98,7 +98,10 @@ export default function PrivacidadePage() {
             </p>
           </section>
 
-          <section>
+          {/* scroll-mt: link "Personalizar preferências" do banner de cookies
+           * aponta pra cá (/privacidade#cookies) — sem isso o header sticky
+           * cobre o topo da seção ao pular direto pra ela. */}
+          <section id="cookies" className="scroll-mt-28">
             <h2>Cookies</h2>
             <p>
               Este site não usa cookies próprios de rastreamento ou publicidade. Recursos
