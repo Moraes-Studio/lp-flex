@@ -26,6 +26,11 @@
   --color-flex-blue-950: var(--flex-blue-950);
   --color-flex-ice: var(--flex-ice);
   --color-flex-bright: var(--flex-bright);
+  /* Grafite — variação cinza-escura (não é o azul institucional escurecido,
+     é a família "grafite" citada no briefing de lapidação), usada só como
+     fundo de faixa de seção pra dar ritmo (ex: Horários) — nunca em texto,
+     botão ou CTA. */
+  --color-flex-graphite: var(--flex-graphite);
 
   /* Acento de campanha — token isolado, só pode ser usado por banner/badge/faixa/selo de campanha.
      Nunca referenciado por --primary/--accent/--ring (RULES.md #3: campanha nunca sobrescreve institucional). */
@@ -59,6 +64,12 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.22);
   --radius-2xl: calc(var(--radius) * 1.44);
+
+  /* Sombras reutilizadas em card (Planos/Professores) e painel (HeroBoard/
+     Contato) — antes repetidas como arbitrary value idêntico em 4 arquivos. */
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-card-hover: 0 24px 48px -24px rgba(11, 77, 162, 0.32);
+  --shadow-panel: 0 18px 44px -30px rgba(11, 77, 162, 0.55);
 }
 
 :root {
@@ -79,6 +90,11 @@
   --flex-ice: #e7f0fc; /* wash — chips de status, hover sutil */
   --flex-bright: #1e7ae0; /* acento ativo — links, foco, selo "agora" (nunca trocado por campanha) */
   --flex-glow-rgb: 11, 77, 162;
+  /* Grafite — cinza-carvão com leve matiz frio, deliberadamente diferente do
+     azul institucional (não é flex-blue-900 escurecido): é a variação de
+     fundo "grafite" pedida na lapidação de ritmo visual, usada só em fundo
+     de seção (Horários) pra alternar com as faixas azuis. */
+  --flex-graphite: #1a212c;
 
   /* superfícies — papel de quadro de avisos, tema único (sem toggle claro/escuro) */
   --background: #ffffff;
@@ -150,6 +166,26 @@
 .enter {
   animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: var(--enter-delay, 0ms);
+}
+
+/* Reveal-once (ver components/shared/reveal.tsx) — pra conteúdo abaixo da
+ * dobra que só deve "entrar" quando o visitante rola até ele. Diferente da
+ * tentativa anterior (animation-timeline: view()): aqui o estado escondido
+ * só existe se o JavaScript rodar e confirmar via IntersectionObserver, e
+ * uma vez revelado nunca volta (é troca de classe por state do React, não
+ * ligado à posição de scroll) — rolar de volta pra cima não faz sumir de
+ * novo. Sem JS (ou antes de hidratar), nenhuma das duas classes abaixo é
+ * aplicada: o elemento é HTML/CSS normal, 100% visível. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    transition:
+      opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+  }
+  .reveal-hidden {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
 
 @layer base {

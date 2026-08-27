@@ -10,15 +10,19 @@ export function Sobre() {
     <section id="sobre" className="px-[6%] py-16 md:py-20">
       <div className="mx-auto grid max-w-[1180px] items-center gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
         <div className="flex flex-col items-start gap-6">
-          <div className="border-flex-blue-600 inline-block rounded-[6px] border-2 bg-white px-7 py-6">
-            <p className="text-flex-blue-600 font-mono text-[10.5px] tracking-[0.26em] uppercase">
+          {/* Preenchimento azul sólido em vez de caixa branca com borda: mesmo
+           * princípio das faixas de seção (Marquee/Horários), aplicado num
+           * bloco contido em vez da seção inteira — a seção Sobre continua
+           * clara, só este bloco vira "cor cheia". */}
+          <div className="bg-flex-blue-700 inline-block rounded-[6px] px-7 py-6">
+            <p className="text-flex-blue-200 font-mono text-[10.5px] tracking-[0.26em] uppercase">
               Fundada em
             </p>
-            <p className="font-heading text-flex-blue-700 my-1.5 text-[64px] leading-[0.9] normal-case sm:text-[76px]">
+            <p className="font-heading my-1.5 text-[64px] leading-[0.9] text-white normal-case sm:text-[76px]">
               {siteConfig.foundedYear}
             </p>
-            <div className="bg-flex-blue-600 mb-3 h-0.5 w-full" />
-            <p className="text-muted-foreground font-mono text-[11px] tracking-[0.1em] uppercase">
+            <div className="mb-3 h-0.5 w-full bg-white/25" />
+            <p className="font-mono text-[11px] tracking-[0.1em] text-white/70 uppercase">
               {anos}+ anos na Vila Helena
             </p>
           </div>

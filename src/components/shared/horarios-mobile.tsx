@@ -33,22 +33,39 @@ export function HorariosMobile({ slots, diasComAula }: { slots: AulaSlot[]; dias
   return (
     <div className="lg:hidden">
       <div className="mb-5 flex flex-wrap gap-2" role="group" aria-label="Dias da semana">
-        {diasComAula.map((dia) => (
-          <button
-            key={dia}
-            type="button"
-            aria-pressed={selecionado === dia}
-            onClick={() => setSelecionado(dia)}
-            className={cn(
-              'border-border rounded-pill border px-4 py-2 font-mono text-[12px] tracking-[0.08em] uppercase transition-colors',
-              selecionado === dia
-                ? 'bg-flex-blue-600 border-flex-blue-600 text-white'
-                : 'text-muted-foreground bg-white'
-            )}
-          >
-            {dia}
-          </button>
-        ))}
+        {diasComAula.map((dia) => {
+          const ehHoje = dia === hoje;
+          return (
+            <button
+              key={dia}
+              type="button"
+              aria-pressed={selecionado === dia}
+              // aria-current além da cor: mesmo sinal textual/semântico do "hoje"
+              // do cabeçalho desktop, não só visual.
+              aria-current={ehHoje ? 'date' : undefined}
+              onClick={() => setSelecionado(dia)}
+              className={cn(
+                'border-border rounded-pill inline-flex items-center gap-1.5 border px-4 py-2 font-mono text-[12px] tracking-[0.08em] uppercase transition-colors',
+                selecionado === dia
+                  ? 'bg-flex-blue-600 border-flex-blue-600 text-white'
+                  : ehHoje
+                    ? 'border-flex-blue-600/50 text-flex-blue-700 bg-white'
+                    : 'text-muted-foreground bg-white'
+              )}
+            >
+              {ehHoje ? (
+                <span
+                  className={cn(
+                    'h-1.5 w-1.5 shrink-0 rounded-full',
+                    selecionado === dia ? 'bg-white' : 'bg-flex-blue-600'
+                  )}
+                  aria-hidden="true"
+                />
+              ) : null}
+              {dia}
+            </button>
+          );
+        })}
       </div>
 
       <div className="border-border overflow-hidden rounded-2xl border bg-white">

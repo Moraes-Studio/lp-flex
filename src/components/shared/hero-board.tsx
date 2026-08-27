@@ -36,7 +36,7 @@ export function HeroBoard({ slots }: { slots: AulaSlot[] }) {
     .sort((a, b) => paraMinutos(a.time) - paraMinutos(b.time));
 
   return (
-    <div className="border-border overflow-hidden rounded-2xl border bg-white shadow-[0_18px_44px_-30px_rgba(11,77,162,0.55)]">
+    <div className="border-border shadow-panel overflow-hidden rounded-2xl border bg-white">
       <div className="bg-flex-blue-600 flex items-baseline gap-2.5 px-5 py-3.5 font-mono text-[11px] tracking-[0.16em] text-white uppercase">
         <strong className="font-heading text-[17px] tracking-[0.02em]">Hoje</strong>
         <span suppressHydrationWarning>{estado ? DIA_NOME_COMPLETO[diaHoje] : ''}</span>

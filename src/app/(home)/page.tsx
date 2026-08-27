@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <Marquee items={modalidades.map((m) => m.nome)} />
+      <Marquee items={modalidades.map((m) => m.nome)} tone="dark" />
       <Planos />
       <Modalidades />
       <Horarios />

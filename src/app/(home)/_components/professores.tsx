@@ -1,6 +1,7 @@
 import { getProfessores, temPerfilCompleto } from '@/lib/content/professores';
 import { SectionHeading } from '@/components/shared/section-heading';
 import { Photo } from '@/components/shared/photo';
+import { Reveal } from '@/components/shared/reveal';
 
 /** content/professores.json guarda vaga placeholder (nome genérico
  * "Professor 0X") pra cada modalidade sem profissional confirmado ainda —
@@ -30,11 +31,11 @@ export function Professores() {
           description="Todos formados em Educação Física."
         />
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <Reveal className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {confirmados.map((professor) => (
             <article
               key={professor.id}
-              className="border-border border-t-flex-blue-600 flex flex-col rounded-[4px] border border-t-4 bg-white p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-24px_rgba(11,77,162,0.32)]"
+              className="border-border border-t-flex-blue-600 shadow-card hover:shadow-card-hover flex flex-col rounded-[4px] border border-t-4 bg-white p-6 transition-[transform,box-shadow] duration-300 hover:-translate-y-1"
             >
               <Photo
                 src={professor.fotoUrl}
@@ -57,7 +58,7 @@ export function Professores() {
               ) : null}
             </article>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

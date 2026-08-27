@@ -8,6 +8,7 @@ import { Eyebrow } from '@/components/shared/eyebrow';
 import { HeroBoard } from '@/components/shared/hero-board';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
 import { StatusChip } from '@/components/layout/status-chip';
+import { cn } from '@/lib/utils';
 
 export function Hero() {
   const horarios = getHorarios();
@@ -41,9 +42,9 @@ export function Hero() {
             className="enter text-muted-foreground mt-5 max-w-[500px] text-[17px] font-normal normal-case"
             style={{ '--enter-delay': '140ms' } as React.CSSProperties}
           >
-            Na Flex o treino é montado por um professor de Educação Física, e sempre há professor
-            em sala durante o horário de funcionamento para orientar a execução dos exercícios e
-            tirar dúvidas.
+            Na Flex, seu treino é montado por um professor de Educação Física. Durante todo o
+            horário de funcionamento, há sempre um professor em sala para orientar a execução dos
+            exercícios e tirar dúvidas.
           </p>
 
           <div
@@ -71,22 +72,29 @@ export function Hero() {
             style={{ '--enter-delay': '250ms' } as React.CSSProperties}
           />
 
-          <dl
-            className="enter border-border mt-10 grid grid-cols-3 gap-4 border-t pt-6 sm:max-w-[440px]"
-            style={{ '--enter-delay': '280ms' } as React.CSSProperties}
-          >
+          <dl className="border-border divide-border mt-10 grid grid-cols-3 divide-x border-t pt-6 sm:max-w-[460px]">
             {/* dt antes de dd (ordem semântica correta) + `flex-col-reverse`
              * pra manter o número grande visualmente em cima do rótulo —
              * antes tinha um `<p>` como terceiro filho da div junto de
              * dt/dd, e `<dl>` só aceita dt/dd (+script/template) como
              * filho direto (ou dentro de div): achado real de Lighthouse
-             * (audit "definition-list", SDD.md §10 gate de 95+). */}
-            {stats.map((stat) => (
-              <div key={stat.label} className="flex flex-col-reverse">
-                <dt className="text-muted-foreground mt-1.5 text-[12px] leading-snug normal-case">
+             * (audit "definition-list", SDD.md §10 gate de 95+).
+             * Números maiores + divisores verticais (`divide-x`): tratamento
+             * de "placar" pedido na lapidação — o número é o elemento
+             * visual, não só um dado dentro de texto. `.enter` por item (não
+             * no `<dl>` inteiro) pra escalonar levemente a entrada dos 3
+             * números — mesmo mecanismo em CSS puro do resto do Hero, só com
+             * um delay incremental por stat. */}
+            {stats.map((stat, i) => (
+              <div
+                key={stat.label}
+                className={cn('enter flex flex-col-reverse', i > 0 && 'pl-4')}
+                style={{ '--enter-delay': `${280 + i * 60}ms` } as React.CSSProperties}
+              >
+                <dt className="text-muted-foreground mt-1.5 text-[11.5px] leading-snug normal-case">
                   {stat.label}
                 </dt>
-                <dd className="font-heading text-flex-blue-700 text-[28px] leading-none normal-case sm:text-[32px]">
+                <dd className="font-heading text-flex-blue-700 text-[36px] leading-none normal-case sm:text-[42px]">
                   {stat.valor}
                 </dd>
               </div>

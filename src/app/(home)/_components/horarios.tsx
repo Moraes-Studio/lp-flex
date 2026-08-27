@@ -23,9 +23,10 @@ export function Horarios() {
   const dom = funcionamento[0];
 
   return (
-    <section id="horarios" className="border-border border-y px-[6%] py-16 md:py-20">
+    <section id="horarios" className="bg-flex-graphite px-[6%] py-16 md:py-20">
       <div className="mx-auto max-w-[1180px]">
         <SectionHeading
+          tone="dark"
           eyebrow="Grade de aulas coletivas"
           title="Horários"
           description="A grade completa da semana. No celular, escolha o dia."
@@ -57,7 +58,7 @@ export function Horarios() {
               </thead>
               <tbody>
                 {horas.map((hora, i) => (
-                  <tr key={hora} className={i % 2 === 1 ? 'bg-background-alt/60' : undefined}>
+                  <tr key={hora} className={i % 2 === 1 ? 'bg-background-alt' : undefined}>
                     {colunas.map((dia) => {
                       const aula = buscar(dia, hora);
                       const ehHoje = dia === hojeLabel;
@@ -65,17 +66,40 @@ export function Horarios() {
                         <td
                           key={dia}
                           className={cn(
-                            'border-border text-muted-foreground border-r border-b px-3 py-3 text-center align-middle text-[13.5px] last:border-r-0',
-                            ehHoje && 'bg-flex-ice'
+                            // border-flex-blue-600/10 em vez de border-border: linhas de
+                            // grade com um fio de azul institucional (identidade), não
+                            // cinza neutro — parte do que tirava a "cara de planilha".
+                            'border-flex-blue-600/10 border-r border-b px-3 py-3 text-center align-middle text-[13.5px] last:border-r-0',
+                            // Coluna de hoje: wash azul mais presente + borda esquerda
+                            // sólida (indicador vertical, não só cor) — border-l porque
+                            // border-r já tem `last:border-r-0` (se "hoje" cair na última
+                            // coluna, um acento na direita sumiria; na esquerda nunca).
+                            ehHoje && 'border-l-flex-blue-600/50 bg-flex-blue-100/60 border-l-2'
                           )}
                         >
                           {aula ? (
                             <>
-                              <span className="text-flex-blue-600 font-mono text-[12px]">{hora}</span>
-                              <span className="text-foreground block font-semibold">{aula.aula}</span>
+                              <span
+                                className={cn(
+                                  'block font-mono text-[12px] tabular-nums',
+                                  ehHoje ? 'text-flex-blue-700' : 'text-flex-blue-600'
+                                )}
+                              >
+                                {hora}
+                              </span>
+                              <span
+                                className={cn(
+                                  'block font-semibold',
+                                  ehHoje ? 'text-flex-blue-800' : 'text-foreground'
+                                )}
+                              >
+                                {aula.aula}
+                              </span>
                             </>
                           ) : (
-                            <span aria-hidden="true">—</span>
+                            <span className="text-border" aria-hidden="true">
+                              —
+                            </span>
                           )}
                         </td>
                       );
@@ -85,7 +109,7 @@ export function Horarios() {
               </tbody>
             </table>
           </div>
-          <p className="text-muted-foreground mt-3.5 font-mono text-[11.5px] tracking-[0.06em] uppercase">
+          <p className="mt-3.5 font-mono text-[11.5px] tracking-[0.06em] text-white/55 uppercase">
             Funcionamento: seg a qui {seg.abre}–{seg.fecha} · sex {sex.abre}–{sex.fecha} · sáb {sab.abre}
             –{sab.fecha} · dom e feriados {dom.abre ?? 'fechado'}
             {dom.fecha ? `–${dom.fecha}` : ''}

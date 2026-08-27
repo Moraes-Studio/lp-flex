@@ -60,6 +60,7 @@ export default function DesignSystemPage() {
           <Swatch label="flex-ice (hover)" className="bg-flex-ice" />
           <Swatch label="campaign-accent (isolado)" className="bg-campaign-accent" />
           <Swatch label="destructive" className="bg-destructive" />
+          <Swatch label="flex-graphite (fundo de faixa, ex: Horários)" className="bg-flex-graphite" />
         </div>
       </section>
 
@@ -102,6 +103,24 @@ export default function DesignSystemPage() {
         <div className="flex flex-col gap-3">
           <Eyebrow variant="bright">Vila Helena · Santo André · desde 1992</Eyebrow>
           <Eyebrow variant="ice">O que nos diferencia</Eyebrow>
+          <div className="bg-flex-graphite inline-block w-fit rounded-lg p-4">
+            <Eyebrow variant="inverted">Sobre fundo escuro (Horários)</Eyebrow>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <SectionHeading eyebrow="Tokens" title="Sombras" />
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="border-border shadow-card rounded-2xl border bg-white p-6">
+            <p className="text-sm">shadow-card</p>
+          </div>
+          <div className="border-border shadow-card-hover rounded-2xl border bg-white p-6">
+            <p className="text-sm">shadow-card-hover</p>
+          </div>
+          <div className="border-border shadow-panel rounded-2xl border bg-white p-6">
+            <p className="text-sm">shadow-panel</p>
+          </div>
         </div>
       </section>
 
@@ -122,6 +141,11 @@ export default function DesignSystemPage() {
           <SectionHeading eyebrow="Componentes" title="Marquee" className="mb-0" />
         </div>
         <Marquee
+          items={['FLEX TRAINING', 'FITDANCE', 'JUMP FUNCIONAL', 'MUSCULAÇÃO', 'PILATES', 'ZUMBA']}
+        />
+        <Marquee
+          tone="dark"
+          className="mt-3"
           items={['FLEX TRAINING', 'FITDANCE', 'JUMP FUNCIONAL', 'MUSCULAÇÃO', 'PILATES', 'ZUMBA']}
         />
       </section>
