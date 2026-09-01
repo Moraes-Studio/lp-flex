@@ -4,7 +4,9 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-pill text-sm font-bold transition-[transform,background-color,border-color] duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50',
+  // rounded-lg (não rounded-pill): V1.5 pede CTAs "mais geométricos, menos
+  // cápsula" — pill fica reservado pra badge/tag (ver badge.tsx), não botão.
+  'focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-[transform,background-color,border-color] duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {

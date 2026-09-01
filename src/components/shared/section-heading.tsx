@@ -8,7 +8,12 @@ interface SectionHeadingProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
   eyebrowVariant?: EyebrowProps['variant'];
   title: React.ReactNode;
   description?: React.ReactNode;
-  size?: 'default' | 'large';
+  /** Escala como narrativa (V2 — direção de arte): 'compact' pras seções de
+   * dado/precisão (Horários), 'default' pras de conversão/leitura rápida
+   * (Planos, Modalidades, Contato), 'large' pro único momento que precisa
+   * pesar mais que os outros sem virar 1992 (Professores). Ver docs desta
+   * rodada — contraste de escala small/medium/LARGE em vez de tudo igual. */
+  size?: 'compact' | 'default' | 'large';
   /** 'light' (padrão, texto escuro sobre fundo claro) ou 'dark' (seção com
    * fundo escuro, ex: Horários em grafite) — troca título/descrição/eyebrow
    * pra tons claros automaticamente, sem precisar sobrescrever cada um. */
@@ -32,8 +37,10 @@ function SectionHeading({
       </Eyebrow>
       <h2
         className={cn(
-          'leading-[1.12]',
-          size === 'large' ? 'text-[clamp(34px,4.4vw,56px)]' : 'text-[clamp(28px,3.1vw,42px)]',
+          'heading-reveal leading-[1.12]',
+          size === 'large' && 'text-[clamp(34px,4.4vw,56px)]',
+          size === 'default' && 'text-[clamp(28px,3.1vw,42px)]',
+          size === 'compact' && 'text-[clamp(22px,2.3vw,30px)]',
           tone === 'dark' && 'text-white'
         )}
       >
