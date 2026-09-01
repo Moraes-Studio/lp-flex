@@ -2,7 +2,8 @@ import { expect, test } from '@playwright/test';
 
 test('home carrega e responde com título correto', async ({ page }) => {
   await page.goto('/');
-  // Título mais descritivo (nome + bairro + cidade) — SEO/preview de link
-  // pro Meta reconhecer o site como ativo, não só "Academia Flex".
-  await expect(page).toHaveTitle('Academia Flex — Vila Helena, Santo André');
+  // Título final de SEO (rodada de auditoria técnica/local) — nome + o que
+  // é + onde fica, formato "Marca | Descrição", mais forte pra busca local
+  // que a versão anterior só com bairro/cidade.
+  await expect(page).toHaveTitle('Academia Flex | Musculação e Aulas em Santo André');
 });

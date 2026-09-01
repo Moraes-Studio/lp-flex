@@ -45,28 +45,39 @@ describe('getFuncionamento (arquivo real)', () => {
 });
 
 describe('calcularStatus', () => {
+  // Instantes sempre como ISO com 'Z' (UTC explícito), nunca
+  // `new Date(y, m, d, h, min)` (fuso local de quem roda o teste) — desde o
+  // achado real de produção (grade "HOJE" errada por depender do fuso do
+  // processo), `calcularStatus` interpreta `now` sempre em São Paulo
+  // (`@/lib/timezone`), então o teste precisa fixar o instante sem
+  // ambiguidade. 2026-08-17 é segunda em São Paulo; 10h/04h/23h30 abaixo já
+  // são horário de São Paulo, convertidos pra UTC (+3h) na string.
   it('retorna aberto quando o horário atual está dentro da janela de segunda', () => {
-    const segundaAsDez = new Date(2026, 7, 17, 10, 0); // 2026-08-17 é segunda
-    const status = calcularStatus(grade, segundaAsDez);
+    const segundaAsDezEmSP = new Date('2026-08-17T13:00:00Z'); // 10:00 em SP
+    const status = calcularStatus(grade, segundaAsDezEmSP);
     expect(status).toEqual({ aberto: true, texto: 'Aberto agora · fecha às 23:00' });
   });
 
   it('retorna "abre hoje às" quando ainda não abriu', () => {
-    const segundaCedo = new Date(2026, 7, 17, 4, 0);
-    const status = calcularStatus(grade, segundaCedo);
+    const segundaCedoEmSP = new Date('2026-08-17T07:00:00Z'); // 04:00 em SP
+    const status = calcularStatus(grade, segundaCedoEmSP);
     expect(status).toEqual({ aberto: false, texto: 'Abre hoje às 05:00' });
   });
 
   it('retorna "fechado, abre amanhã" quando já passou do fechamento', () => {
-    const segundaTarde = new Date(2026, 7, 17, 23, 30);
-    const status = calcularStatus(grade, segundaTarde);
+    // 23:30 de segunda em São Paulo = 02:30 de terça em UTC — instante que
+    // já "virou o dia" em UTC mas continua segunda-feira em São Paulo;
+    // prova que a virada de dia não vaza pro cálculo de horário de
+    // funcionamento.
+    const segundaTardeEmSP = new Date('2026-08-18T02:30:00Z');
+    const status = calcularStatus(grade, segundaTardeEmSP);
     expect(status).toEqual({ aberto: false, texto: 'Fechado · abre amanhã' });
   });
 
   it('retorna "fechado hoje" quando o dia não tem abre/fecha (edge case)', () => {
     const fechado = [...grade];
     fechado[1] = { ...fechado[1], abre: null, fecha: null };
-    const segundaAsDez = new Date(2026, 7, 17, 10, 0);
-    expect(calcularStatus(fechado, segundaAsDez)).toEqual({ aberto: false, texto: 'Fechado hoje' });
+    const segundaAsDezEmSP = new Date('2026-08-17T13:00:00Z');
+    expect(calcularStatus(fechado, segundaAsDezEmSP)).toEqual({ aberto: false, texto: 'Fechado hoje' });
   });
 });

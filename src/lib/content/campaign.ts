@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
+import { fimDoDiaEmSaoPaulo } from '@/lib/timezone';
 
 export const campaignSchema = z
   .object({
@@ -44,11 +45,16 @@ export function getCampaign(): Campaign {
 /**
  * A faixa só aparece se `active:true` E a data de término (se houver) ainda
  * não passou — assim ninguém precisa lembrar de desligar `active` na mão
- * quando a campanha acabar.
+ * quando a campanha acabar. `terminaEm` significa "válida durante todo o
+ * dia X em São Paulo" — usa `fimDoDiaEmSaoPaulo` (nunca
+ * `new Date('YYYY-MM-DDTHH:MM:SS')` direto: essa string sem timezone é
+ * interpretada no fuso do PROCESSO, não de São Paulo — achado real
+ * auditando esta função depois do bug de timezone na grade de Horários;
+ * antes disto a campanha podia expirar até 3h mais cedo do que o fim do dia
+ * em São Paulo, dependendo do fuso do servidor).
  */
 export function campanhaVisivel(campaign: Campaign, now: Date): boolean {
   if (!campaign.active) return false;
   if (!campaign.terminaEm) return true;
-  const fimDoDia = new Date(`${campaign.terminaEm}T23:59:59`);
-  return now <= fimDoDia;
+  return now.getTime() <= fimDoDiaEmSaoPaulo(campaign.terminaEm).getTime();
 }

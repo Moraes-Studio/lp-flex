@@ -57,13 +57,33 @@ describe('campanhaVisivel', () => {
     expect(campanhaVisivel({ ...base, active: false }, new Date('2026-08-18'))).toBe(false);
   });
 
-  it('true até o fim do dia de terminaEm (edge case)', () => {
+  it('true até o fim do dia de terminaEm em São Paulo (edge case)', () => {
+    // 22:00 de 31/08 em São Paulo = 2026-09-01T01:00:00Z — instante que já é
+    // "01/09" em UTC, mas ainda "31/08" em São Paulo, e terminaEm significa
+    // "válido durante todo o dia 31/08 em São Paulo".
     const comPrazo = { ...base, terminaEm: '2026-08-31' };
-    expect(campanhaVisivel(comPrazo, new Date('2026-08-31T22:00:00'))).toBe(true);
+    expect(campanhaVisivel(comPrazo, new Date('2026-09-01T01:00:00Z'))).toBe(true);
   });
 
-  it('false depois de terminaEm', () => {
+  it('false depois do fim do dia de terminaEm em São Paulo', () => {
+    // 2026-09-01T03:00:00Z = 2026-09-01T00:00:00-03:00 — meia-noite exata de
+    // 1º de setembro em São Paulo, já fora do prazo.
     const comPrazo = { ...base, terminaEm: '2026-08-31' };
-    expect(campanhaVisivel(comPrazo, new Date('2026-09-01T00:00:01'))).toBe(false);
+    expect(campanhaVisivel(comPrazo, new Date('2026-09-01T03:00:00Z'))).toBe(false);
+  });
+
+  it('não usa new Date(string sem timezone) — mesma string interpretada com \'Z\' e sem \'Z\' não pode divergir no resultado', () => {
+    // Reforça a correção: antes, `new Date(`${terminaEm}T23:59:59`)` sem
+    // timezone dependia do fuso do processo. Aqui comparamos o limite real
+    // (calculado via fimDoDiaEmSaoPaulo, indiretamente através de
+    // campanhaVisivel) contra um instante 1ms antes e 1ms depois — o
+    // resultado não pode depender de em que fuso o teste roda.
+    const comPrazo = { ...base, terminaEm: '2026-08-31' };
+    const limite = new Date('2026-09-01T02:59:59.999Z');
+    const umMsAntes = new Date(limite.getTime() - 1);
+    const umMsDepois = new Date(limite.getTime() + 1);
+    expect(campanhaVisivel(comPrazo, umMsAntes)).toBe(true);
+    expect(campanhaVisivel(comPrazo, limite)).toBe(true);
+    expect(campanhaVisivel(comPrazo, umMsDepois)).toBe(false);
   });
 });
