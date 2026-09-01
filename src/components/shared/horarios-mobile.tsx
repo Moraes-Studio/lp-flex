@@ -1,24 +1,21 @@
 'use client';
 
 import * as React from 'react';
-import {
-  DIA_JS_PARA_LABEL,
-  DIA_NOME_COMPLETO,
-  paraMinutos,
-  type AulaSlot,
-  type Dia,
-} from '@/lib/content/horarios-shared';
+import { DIA_NOME_COMPLETO, paraMinutos, type AulaSlot, type Dia } from '@/lib/content/horarios-shared';
+import { diaDaSemanaEmSaoPaulo } from '@/lib/timezone';
 import { cn } from '@/lib/utils';
 
 /** Grade filtrável por dia, versão mobile: abas tocáveis (não depende de
- * hover, RULES.md #5) que trocam a lista abaixo. */
+ * hover, RULES.md #5) que trocam a lista abaixo. "Hoje" sempre no horário
+ * oficial de São Paulo (`@/lib/timezone`), nunca no fuso do navegador do
+ * visitante. */
 export function HorariosMobile({ slots, diasComAula }: { slots: AulaSlot[]; diasComAula: Dia[] }) {
   const [hoje, setHoje] = React.useState<Dia | null>(null);
   const [selecionado, setSelecionado] = React.useState<Dia | null>(null);
 
   React.useEffect(() => {
     const inicializar = () => {
-      const diaAtual = DIA_JS_PARA_LABEL[new Date().getDay()];
+      const diaAtual = diaDaSemanaEmSaoPaulo(new Date());
       setHoje(diaAtual);
       setSelecionado(diasComAula.includes(diaAtual) ? diaAtual : (diasComAula[0] ?? null));
     };
