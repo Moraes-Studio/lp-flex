@@ -12,6 +12,8 @@
  * Ver nota equivalente em `horarios-shared.ts`.
  */
 
+import { minutosDoDiaEmSaoPaulo, numeroDoDiaEmSaoPaulo } from '@/lib/timezone';
+
 export interface DiaFuncionamento {
   dia: string;
   diaCurto: string;
@@ -33,14 +35,16 @@ export interface StatusFuncionamento {
  * Deriva o status "aberto agora / fecha às / abre às" a partir da grade de
  * funcionamento e de um instante (`now`). `now` é sempre recebido como
  * parâmetro (nunca `new Date()` direto na função) pra manter isto testável
- * sem mockar relógio global.
+ * sem mockar relógio global — e sempre interpretado no fuso oficial da Flex
+ * (`America/Sao_Paulo`, via `@/lib/timezone`), nunca no fuso do processo que
+ * roda o código (achado real: servidor de produção roda em UTC).
  */
 export function calcularStatus(funcionamento: DiaFuncionamento[], now: Date): StatusFuncionamento {
-  const hoje = funcionamento[now.getDay()];
+  const hoje = funcionamento[numeroDoDiaEmSaoPaulo(now)];
   if (!hoje || !hoje.abre || !hoje.fecha) {
     return { aberto: false, texto: 'Fechado hoje' };
   }
-  const minutosAgora = now.getHours() * 60 + now.getMinutes();
+  const minutosAgora = minutosDoDiaEmSaoPaulo(now);
   const abre = toMinutes(hoje.abre);
   const fecha = toMinutes(hoje.fecha);
   if (minutosAgora >= abre && minutosAgora < fecha) {

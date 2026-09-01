@@ -5,6 +5,7 @@ import { siteConfig, whatsappUrl } from '@/config/site';
 import { Button } from '@/components/ui/button';
 import { MobileMenu } from '@/components/layout/mobile-menu';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
+import { CtaArrow } from '@/components/shared/cta-arrow';
 
 export function Header() {
   const anos = new Date().getFullYear() - siteConfig.foundedYear;
@@ -52,7 +53,7 @@ export function Header() {
         </nav>
 
         <div className="ml-auto flex items-center gap-3">
-          <Button asChild size="sm" className="hidden md:inline-flex">
+          <Button asChild size="sm" className="group hidden md:inline-flex">
             <a
               href={whatsappUrl('Olá! Quero treinar na Academia Flex.')}
               target="_blank"
@@ -60,6 +61,7 @@ export function Header() {
             >
               <WhatsappGlyph className="h-4 w-4" />
               Quero treinar agora
+              <CtaArrow variant="up-right" />
             </a>
           </Button>
           <MobileMenu />

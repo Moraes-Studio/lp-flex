@@ -8,6 +8,8 @@ import { Eyebrow } from '@/components/shared/eyebrow';
 import { HeroBoard } from '@/components/shared/hero-board';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
 import { StatusChip } from '@/components/layout/status-chip';
+import { CtaArrow } from '@/components/shared/cta-arrow';
+import { CountUp } from '@/components/shared/count-up';
 import { cn } from '@/lib/utils';
 
 export function Hero() {
@@ -24,14 +26,21 @@ export function Hero() {
   ];
 
   return (
-    <section className="px-[6%] pt-12 pb-14 md:pt-16 md:pb-16">
-      <div className="mx-auto grid max-w-[1180px] items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
+    <section className="px-[6%] pt-10 pb-12 md:pt-14 md:pb-14">
+      {/* items-center (não items-start): o quadro "Hoje" (7 aulas) é bem mais
+       * curto que a coluna de texto (headline+parágrafo+CTAs+status) — com
+       * items-start sobrava um vão vazio grande embaixo dele (achado real,
+       * medido: ~173px de buraco). Centralizado, o mesmo espaço "sobrando"
+       * fica dividido em cima/embaixo e lê como composição, não como bug. */}
+      <div className="mx-auto grid max-w-[1180px] items-center gap-x-14 gap-y-8 lg:grid-cols-[1.25fr_0.75fr]">
         <div>
           <Eyebrow className="enter" style={{ '--enter-delay': '0ms' } as React.CSSProperties}>
             Vila Helena · {siteConfig.address.city} · desde {siteConfig.foundedYear}
           </Eyebrow>
+          {/* (Removida a linha que atravessava o grid atrás do "SALA." —
+           * ficou feia na prática, não sobreviveu à revisão visual.) */}
           <h1
-            className="enter text-[clamp(34px,6.4vw,64px)] leading-[1.05]"
+            className="enter heading-reveal text-[clamp(34px,6.2vw,64px)] leading-[1.2]"
             style={{ '--enter-delay': '70ms' } as React.CSSProperties}
           >
             Musculação e aulas
@@ -51,7 +60,7 @@ export function Hero() {
             className="enter mt-7 flex flex-wrap gap-3"
             style={{ '--enter-delay': '210ms' } as React.CSSProperties}
           >
-            <Button asChild>
+            <Button asChild className="group">
               <a
                 href={whatsappUrl('Olá! Quero treinar na Academia Flex.')}
                 target="_blank"
@@ -59,10 +68,14 @@ export function Hero() {
               >
                 <WhatsappGlyph className="h-4 w-4" />
                 Falar no WhatsApp
+                <CtaArrow variant="up-right" />
               </a>
             </Button>
-            <Button asChild variant="ghost">
-              <a href="#planos">Ver planos</a>
+            <Button asChild variant="ghost" className="group">
+              <a href="#planos">
+                Ver planos
+                <CtaArrow variant="right" />
+              </a>
             </Button>
           </div>
 
@@ -71,40 +84,31 @@ export function Hero() {
             className="enter mt-6"
             style={{ '--enter-delay': '250ms' } as React.CSSProperties}
           />
-
-          <dl className="border-border divide-border mt-10 grid grid-cols-3 divide-x border-t pt-6 sm:max-w-[460px]">
-            {/* dt antes de dd (ordem semântica correta) + `flex-col-reverse`
-             * pra manter o número grande visualmente em cima do rótulo —
-             * antes tinha um `<p>` como terceiro filho da div junto de
-             * dt/dd, e `<dl>` só aceita dt/dd (+script/template) como
-             * filho direto (ou dentro de div): achado real de Lighthouse
-             * (audit "definition-list", SDD.md §10 gate de 95+).
-             * Números maiores + divisores verticais (`divide-x`): tratamento
-             * de "placar" pedido na lapidação — o número é o elemento
-             * visual, não só um dado dentro de texto. `.enter` por item (não
-             * no `<dl>` inteiro) pra escalonar levemente a entrada dos 3
-             * números — mesmo mecanismo em CSS puro do resto do Hero, só com
-             * um delay incremental por stat. */}
-            {stats.map((stat, i) => (
-              <div
-                key={stat.label}
-                className={cn('enter flex flex-col-reverse', i > 0 && 'pl-4')}
-                style={{ '--enter-delay': `${280 + i * 60}ms` } as React.CSSProperties}
-              >
-                <dt className="text-muted-foreground mt-1.5 text-[11.5px] leading-snug normal-case">
-                  {stat.label}
-                </dt>
-                <dd className="font-heading text-flex-blue-700 text-[36px] leading-none normal-case sm:text-[42px]">
-                  {stat.valor}
-                </dd>
-              </div>
-            ))}
-          </dl>
         </div>
 
-        <div className="enter" style={{ '--enter-delay': '120ms' } as React.CSSProperties}>
+        <div className="enter relative z-10" style={{ '--enter-delay': '120ms' } as React.CSSProperties}>
           <HeroBoard slots={horarios} />
         </div>
+
+        {/* Placar de stats — V2: virou grafismo de largura cheia (não mais
+         * confinado à coluna de texto), números bem maiores, cruza por baixo
+         * das duas colunas em vez de ficar preso numa delas. */}
+        <dl className="border-flex-blue-600/15 divide-flex-blue-600/15 mt-1 grid grid-cols-3 divide-x border-t pt-5 lg:col-span-2 lg:mt-4 lg:max-w-[620px]">
+          {stats.map((stat, i) => (
+            <div
+              key={stat.label}
+              className={cn('enter flex flex-col-reverse', i > 0 && 'pl-4 sm:pl-6')}
+              style={{ '--enter-delay': `${280 + i * 60}ms` } as React.CSSProperties}
+            >
+              <dt className="text-muted-foreground mt-1.5 text-[11.5px] leading-snug normal-case">
+                {stat.label}
+              </dt>
+              <dd className="font-heading text-flex-blue-700 text-[38px] leading-none normal-case tabular-nums sm:text-[46px]">
+                <CountUp value={stat.valor} />
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
   );

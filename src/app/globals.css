@@ -12,6 +12,16 @@
   --font-heading: var(--font-oswald);
   --font-mono: var(--font-ibm-plex-mono);
 
+  /* Superfícies frias — V1.5 (ritmo visual, ver docs/tasks.md pivô 2026-09-01):
+     escala cinza-azulada entre branco e grafite, pra criar profundidade e
+     alternância de seção sem inventar cor de marca nova. Progressão
+     WHITE → ICE (50/100) → BLUE-GRAY (200) → STEEL-GRAY (300) → GRAPHITE →
+     FLEX BLUE (as duas últimas já existiam: --flex-graphite / --flex-blue-*). */
+  --color-surface-50: var(--surface-50);
+  --color-surface-100: var(--surface-100);
+  --color-surface-200: var(--surface-200);
+  --color-surface-300: var(--surface-300);
+
   /* Flex Blue institucional — validado no protótipo (docs/), nunca sobrescrever (RULES.md #3) */
   --color-flex-blue-50: var(--flex-blue-50);
   --color-flex-blue-100: var(--flex-blue-100);
@@ -112,9 +122,19 @@
   --flex-graphite: #1a212c;
   --flex-graphite-surface: #232c39; /* mesmo grafite, um pouco mais claro — ver @theme inline acima */
 
+  /* Superfícies frias V1.5 — cinza-azulado, nunca cinza neutro genérico (ver
+     @theme inline acima pro porquê). --background-alt passa a apontar pra
+     --surface-100 (mesmo tom "gelo" de antes, só nomeado na escala nova) —
+     nada muda visualmente pros usos já existentes (tabela de Horários,
+     status-chip etc.), só ganha vizinhos mais escuros pra dar profundidade. */
+  --surface-50: #f8fafc;
+  --surface-100: #eef3f9;
+  --surface-200: #dbe4f0;
+  --surface-300: #b9c6d6;
+
   /* superfícies — papel de quadro de avisos, tema único (sem toggle claro/escuro) */
   --background: #ffffff;
-  --background-alt: #f1f5fa;
+  --background-alt: var(--surface-100);
   --card: #ffffff;
   --card-foreground: var(--foreground);
   --popover: #ffffff;
@@ -151,7 +171,12 @@
   --accent-foreground: #ffffff;
   --ring: var(--flex-blue-600);
   --input: oklch(0 0 0 / 8%);
-  --radius: 1.125rem;
+  /* V1.5: -33% (era 1.125rem/18px) — "arredondado demais" era feedback
+     explícito do cliente. Cascata pra --radius-sm/md/lg/xl/2xl acima, então
+     um valor só ajusta a hierarquia inteira de cards/painéis. Pills
+     (--radius-pill) e botões (ver button.tsx, migrado de rounded-pill pra
+     rounded-lg nesta rodada) ficam fora dessa cascata de propósito. */
+  --radius: 0.75rem;
 }
 
 @keyframes marquee {
@@ -201,6 +226,70 @@
   .reveal-hidden {
     opacity: 0;
     transform: translateY(10px);
+  }
+}
+
+/* V1.5 — assinaturas de motion §6.B/6.C (docs no commit desta rodada).
+ * Duas classes utilitárias que se penduram nos dois mecanismos de entrada já
+ * existentes (`.enter`, orquestrado no load — ver Hero; `.reveal`/
+ * `.reveal-hidden`, scroll-triggered via IntersectionObserver — ver
+ * reveal.tsx) em vez de criar um terceiro sistema de animação. */
+@keyframes line-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* B) Linha editorial do eyebrow (eyebrow.tsx) — cresce da esquerda pra
+ * direita ao entrar. transform-origin sempre à esquerda, mesmo sem JS/motion
+ * (estado final visível por padrão — progressive enhancement, igual .reveal). */
+.eyebrow-line {
+  transform-origin: left;
+}
+
+/* C) Heading reveal — cortina sobe (clip-path) nos headings principais (h1 do
+ * Hero via `.enter`, h2 de cada seção via `.reveal` em section-heading.tsx).
+ * Mais perceptível que o fade puro do `.reveal` no resto do bloco (eyebrow/
+ * descrição continuam só com opacity), sem animar palavra/letra. */
+.heading-reveal {
+  clip-path: inset(0 0 0% 0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .enter .eyebrow-line {
+    animation: line-grow 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+  .reveal .eyebrow-line {
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+  }
+  .reveal-hidden .eyebrow-line {
+    transform: scaleX(0);
+  }
+
+  .enter.heading-reveal {
+    animation:
+      fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both,
+      heading-wipe 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+  .reveal .heading-reveal {
+    transition: clip-path 0.7s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+  }
+  .reveal-hidden .heading-reveal {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+@keyframes heading-wipe {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0% 0);
   }
 }
 

@@ -34,7 +34,7 @@ export default function Icon() {
           alignItems: 'center',
           justifyContent: 'center',
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, #0b4da2 0%, #083a7c 100%)',
+          background: '#0b4da2',
         }}
       >
         <div style={{ position: 'relative', width: barWidth, height: plateHeight, display: 'flex' }}>
