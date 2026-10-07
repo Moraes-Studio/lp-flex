@@ -1,7 +1,5 @@
 import { siteConfig } from '@/config/site';
-import { mediaConfig } from '@/config/media';
 import { Eyebrow } from '@/components/shared/eyebrow';
-import { Photo } from '@/components/shared/photo';
 import { Reveal } from '@/components/shared/reveal';
 
 /**
@@ -44,17 +42,6 @@ export function Sobre() {
             <p className="mt-1.5 font-mono text-[11px] tracking-[0.14em] text-white/50 uppercase">
               Vila Helena · {siteConfig.address.city}
             </p>
-
-            {/* Continua null até existir foto real (política de fotografia,
-             * CLAUDE.md) — quando existir, encaixa como uma foto presa no
-             * canto do painel, sem precisar tocar nesta composição. */}
-            <Photo
-              src={mediaConfig.sobreFoto}
-              alt={`Fachada e equipe da ${siteConfig.name}`}
-              label="fachada / equipe Flex"
-              ratio="square"
-              className="border-white/30 absolute right-0 bottom-0 w-28 shadow-xl sm:w-36 lg:-right-4 lg:-bottom-4 lg:w-40"
-            />
           </div>
         </div>
 
