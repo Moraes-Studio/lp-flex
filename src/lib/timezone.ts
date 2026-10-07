@@ -111,7 +111,14 @@ export function fimDoDiaEmSaoPaulo(dataISO: string): Date {
     hour12: false,
   }).formatToParts(chute);
   const get = (tipo: string) => Number(partes.find((p) => p.type === tipo)?.value ?? '0');
-  const chuteComoSP = Date.UTC(get('year'), get('month') - 1, get('day'), get('hour') % 24, get('minute'), get('second'));
+  const chuteComoSP = Date.UTC(
+    get('year'),
+    get('month') - 1,
+    get('day'),
+    get('hour') % 24,
+    get('minute'),
+    get('second')
+  );
 
   const diferenca = chuteComoSP - desejadoSemMs;
   return new Date(desejadoSemMs - diferenca + 999);

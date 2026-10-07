@@ -119,7 +119,10 @@ export function CookieConsent() {
         'shadow-overlay fixed right-3 bottom-3 left-3 z-[70] overflow-hidden rounded-2xl border border-white/15 transition-[opacity,transform] duration-[250ms] ease-out sm:right-6 sm:bottom-6 sm:left-auto sm:w-[400px] sm:max-w-[calc(100vw-3rem)]',
         estado === 'aberto' ? classesVisivel : classesEscondido
       )}
-      style={{ background: 'linear-gradient(165deg, var(--flex-graphite-surface), var(--flex-graphite) 65%)' }}
+      style={{
+        background:
+          'linear-gradient(165deg, var(--flex-graphite-surface), var(--flex-graphite) 65%)',
+      }}
     >
       {/* Barra azul fina no topo — assinatura mínima da Flex (mesma
        * linguagem de faixa de cor de HojeStrip/Horários/Contato), não um

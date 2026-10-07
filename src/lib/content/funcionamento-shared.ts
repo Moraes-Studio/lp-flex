@@ -92,7 +92,8 @@ export function agruparFuncionamento(funcionamento: DiaFuncionamento[]): GrupoFu
   }
 
   return grupos.map(({ dias, horario }) => ({
-    rotulo: dias.length === 1 ? dias[0].dia : `${dias[0].diaCurto} a ${dias[dias.length - 1].diaCurto}`,
+    rotulo:
+      dias.length === 1 ? dias[0].dia : `${dias[0].diaCurto} a ${dias[dias.length - 1].diaCurto}`,
     horario,
   }));
 }

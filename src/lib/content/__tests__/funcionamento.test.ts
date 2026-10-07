@@ -79,7 +79,10 @@ describe('calcularStatus', () => {
     const fechado = [...grade];
     fechado[1] = { ...fechado[1], abre: null, fecha: null };
     const segundaAsDezEmSP = new Date('2026-08-17T13:00:00Z');
-    expect(calcularStatus(fechado, segundaAsDezEmSP)).toEqual({ aberto: false, texto: 'Fechado hoje' });
+    expect(calcularStatus(fechado, segundaAsDezEmSP)).toEqual({
+      aberto: false,
+      texto: 'Fechado hoje',
+    });
   });
 });
 
@@ -94,7 +97,9 @@ describe('agruparFuncionamento', () => {
   });
 
   it('dia fechado vira "Fechado" e não se junta a dia aberto', () => {
-    const comFechado = grade.map((d) => (d.diaCurto === 'Dom' ? { ...d, abre: null, fecha: null } : d));
+    const comFechado = grade.map((d) =>
+      d.diaCurto === 'Dom' ? { ...d, abre: null, fecha: null } : d
+    );
     expect(agruparFuncionamento(comFechado).at(-1)).toEqual({
       rotulo: 'Domingo e feriados',
       horario: 'Fechado',

@@ -23,7 +23,9 @@ test.describe('Contato: horário de funcionamento agrupado', () => {
   test('CTA do contato usa o rótulo único', async ({ page }) => {
     await page.goto('/');
     await aceitarCookies(page);
-    await expect(page.locator('#contato').getByRole('link', { name: 'Quero treinar agora' })).toBeAttached();
+    await expect(
+      page.locator('#contato').getByRole('link', { name: 'Quero treinar agora' })
+    ).toBeAttached();
   });
 });
 
@@ -32,7 +34,9 @@ test.describe('Horários: faixa HOJE', () => {
     await page.goto('/');
     await expect(page.locator('#horarios').getByTestId('hoje-strip')).toBeAttached();
     await expect(page.getByTestId('hoje-strip')).toHaveCount(1);
-    await expect(page.locator('main > section').first().getByText('Hoje', { exact: true })).toHaveCount(0);
+    await expect(
+      page.locator('main > section').first().getByText('Hoje', { exact: true })
+    ).toHaveCount(0);
   });
 
   test('resumo de funcionamento da grade sem travessão', async ({ page }) => {
@@ -98,10 +102,13 @@ test.describe('Hero', () => {
       test.skip(isMobile, 'só desktop');
       await page.setViewportSize({ width: w, height: h });
       await page.goto('/');
-      const medidas = await page.locator('h1').first().evaluate((el) => ({
-        altura: el.getBoundingClientRect().height,
-        linha: parseFloat(getComputedStyle(el).lineHeight),
-      }));
+      const medidas = await page
+        .locator('h1')
+        .first()
+        .evaluate((el) => ({
+          altura: el.getBoundingClientRect().height,
+          linha: parseFloat(getComputedStyle(el).lineHeight),
+        }));
       expect(medidas.altura).toBeLessThanOrEqual(2.2 * medidas.linha);
       const xH1 = (await page.locator('h1').first().boundingBox())!.x;
       const xLogo = (await page.locator('header a').first().boundingBox())!.x;

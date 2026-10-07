@@ -33,7 +33,8 @@ export function Hero() {
             className="enter heading-reveal text-[clamp(34px,3.8vw,56px)] leading-[1.12]"
             style={{ '--enter-delay': '70ms' } as React.CSSProperties}
           >
-            Musculação e aulas com professor <span className="text-flex-blue-600 whitespace-nowrap">em sala</span>.
+            Musculação e aulas com professor{' '}
+            <span className="text-flex-blue-600 whitespace-nowrap">em sala</span>.
           </h1>
           <p
             className="enter text-muted-foreground mt-5 max-w-[460px] text-[17px] font-normal normal-case"

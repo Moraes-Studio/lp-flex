@@ -51,7 +51,9 @@ export function Contato() {
                   className="border-border flex items-baseline justify-between gap-3 border-b py-3.5 normal-case last:border-b-0"
                 >
                   <span className="text-[15.5px] font-medium">{grupo.rotulo}</span>
-                  <span className="text-flex-blue-700 font-mono text-[14px] tabular-nums">{grupo.horario}</span>
+                  <span className="text-flex-blue-700 font-mono text-[14px] tabular-nums">
+                    {grupo.horario}
+                  </span>
                 </div>
               ))}
             </div>

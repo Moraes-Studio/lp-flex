@@ -1,7 +1,12 @@
 'use client';
 
 import * as React from 'react';
-import { DIA_NOME_COMPLETO, paraMinutos, type AulaSlot, type Dia } from '@/lib/content/horarios-shared';
+import {
+  DIA_NOME_COMPLETO,
+  paraMinutos,
+  type AulaSlot,
+  type Dia,
+} from '@/lib/content/horarios-shared';
 import { agoraEmSaoPaulo } from '@/lib/timezone';
 import { cn } from '@/lib/utils';
 
@@ -22,7 +27,8 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
     return () => window.clearInterval(id);
   }, []);
 
-  const ordenar = (lista: AulaSlot[]) => [...lista].sort((a, b) => paraMinutos(a.time) - paraMinutos(b.time));
+  const ordenar = (lista: AulaSlot[]) =>
+    [...lista].sort((a, b) => paraMinutos(a.time) - paraMinutos(b.time));
 
   const doDia = estado ? ordenar(slots.filter((s) => s.day === estado.dia)) : [];
 
@@ -65,7 +71,8 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
         <div className="col-start-1 row-start-1">
           {estado && doDia.length === 0 ? (
             <p className="text-sm text-white/70">
-              Sem aulas coletivas hoje. A musculação funciona no horário normal, com professor na sala.
+              Sem aulas coletivas hoje. A musculação funciona no horário normal, com professor na
+              sala.
             </p>
           ) : (
             <ul className={classeLista}>
@@ -79,8 +86,12 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
                     key={`${slot.day}-${slot.time}-${slot.aula}`}
                     className={cn(classeItem, rodando && 'text-white')}
                   >
-                    <time className="text-flex-blue-300 font-mono text-[13px] tabular-nums">{slot.time}</time>
-                    <span className={cn('text-[15px]', rodando && 'font-semibold')}>{slot.aula}</span>
+                    <time className="text-flex-blue-300 font-mono text-[13px] tabular-nums">
+                      {slot.time}
+                    </time>
+                    <span className={cn('text-[15px]', rodando && 'font-semibold')}>
+                      {slot.aula}
+                    </span>
                     {rodando ? (
                       <span className="bg-flex-blue-600 rounded-pill px-2 py-0.5 font-mono text-[9.5px] tracking-[0.14em] text-white uppercase">
                         agora

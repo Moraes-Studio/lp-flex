@@ -11,9 +11,9 @@ export function Horarios() {
 
   const diasComAula = DIAS.filter((dia) => horarios.some((s) => s.day === dia));
   const colunas = diasComAula.filter((d) => d !== 'Dom');
-  const horas = [...new Set(colunas.flatMap((d) => horarios.filter((s) => s.day === d).map((s) => s.time)))].sort(
-    (a, b) => paraMinutos(a) - paraMinutos(b)
-  );
+  const horas = [
+    ...new Set(colunas.flatMap((d) => horarios.filter((s) => s.day === d).map((s) => s.time))),
+  ].sort((a, b) => paraMinutos(a) - paraMinutos(b));
 
   const resumoFuncionamento = `Funcionamento: ${agruparFuncionamento(funcionamento)
     .map((g) => `${g.rotulo.toLowerCase()} ${g.horario}`)

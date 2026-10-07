@@ -8,7 +8,14 @@ import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
  * próprio, mesmo peso visual dos ícones do resto do site (strokeWidth 1.75). */
 function InstagramGlyph({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className={className} aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.75}
+      className={className}
+      aria-hidden="true"
+    >
       <rect x="3" y="3" width="18" height="18" rx="5" />
       <circle cx="12" cy="12" r="4.2" />
       <circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" stroke="none" />
@@ -88,7 +95,14 @@ export function Footer() {
               {/* Arquivo fonte (public/logo.png) só tem 102×96px — acima disso
                * fica borrado por falta de resolução, não por CSS. Pendência
                * real: pedir um arquivo de logo maior (ideal: vetor/SVG). */}
-              <Image src="/logo.png" alt="" width={48} height={45} className="h-[45px] w-12" priority={false} />
+              <Image
+                src="/logo.png"
+                alt=""
+                width={48}
+                height={45}
+                className="h-[45px] w-12"
+                priority={false}
+              />
               <span className="font-heading text-sm tracking-wide">{siteConfig.name}</span>
             </div>
 

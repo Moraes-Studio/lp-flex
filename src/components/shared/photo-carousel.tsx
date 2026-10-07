@@ -51,7 +51,10 @@ export function PhotoCarousel({ fotos, rotulo }: PhotoCarouselProps) {
     if (!el || !slide) return;
     const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
     const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    el.scrollBy({ left: direcao * (slide.offsetWidth + gap), behavior: reduzido ? 'auto' : 'smooth' });
+    el.scrollBy({
+      left: direcao * (slide.offsetWidth + gap),
+      behavior: reduzido ? 'auto' : 'smooth',
+    });
   }, []);
 
   const aoTeclar = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -76,7 +79,7 @@ export function PhotoCarousel({ fotos, rotulo }: PhotoCarouselProps) {
         aria-label={rotulo}
         tabIndex={0}
         onKeyDown={aoTeclar}
-        className="flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-flex-blue-600 md:gap-5 [&::-webkit-scrollbar]:hidden"
+        className="focus-visible:outline-flex-blue-600 flex snap-x snap-mandatory [scrollbar-width:none] gap-4 overflow-x-auto overscroll-x-contain pb-2 focus-visible:outline-2 focus-visible:outline-offset-4 md:gap-5 [&::-webkit-scrollbar]:hidden"
       >
         {fotos.map((foto, i) => (
           <figure
@@ -97,25 +100,35 @@ export function PhotoCarousel({ fotos, rotulo }: PhotoCarouselProps) {
               />
             </div>
             {foto.legenda ? (
-              <figcaption className="text-muted-foreground mt-2.5 text-[13.5px]">{foto.legenda}</figcaption>
+              <figcaption className="text-muted-foreground mt-2.5 text-[13.5px]">
+                {foto.legenda}
+              </figcaption>
             ) : null}
           </figure>
         ))}
       </div>
 
       <div className="mt-5 flex gap-2.5">
-        <button type="button" aria-label="Foto anterior" onClick={() => {
+        <button
+          type="button"
+          aria-label="Foto anterior"
+          onClick={() => {
             if (!noInicio) mover(-1);
           }}
           aria-disabled={noInicio}
-          className={botao}>
+          className={botao}
+        >
           <ChevronLeft className="h-5 w-5" aria-hidden="true" />
         </button>
-        <button type="button" aria-label="Próxima foto" onClick={() => {
+        <button
+          type="button"
+          aria-label="Próxima foto"
+          onClick={() => {
             if (!noFim) mover(1);
           }}
           aria-disabled={noFim}
-          className={botao}>
+          className={botao}
+        >
           <ChevronRight className="h-5 w-5" aria-hidden="true" />
         </button>
       </div>

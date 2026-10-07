@@ -29,7 +29,7 @@ export function Sobre() {
     <section id="sobre" className="px-[6%] py-16 md:py-24">
       <div className="mx-auto max-w-[1180px]">
         <Reveal className="max-w-[640px]">
-          <h2 className="heading-reveal text-balance text-[clamp(28px,3.6vw,44px)] leading-[1.1]">
+          <h2 className="heading-reveal text-[clamp(28px,3.6vw,44px)] leading-[1.1] text-balance">
             Academia completa,{' '}
             <span className="whitespace-nowrap">desde {siteConfig.foundedYear}.</span>
           </h2>
@@ -42,7 +42,9 @@ export function Sobre() {
         <dl className="border-flex-blue-600/15 divide-flex-blue-600/15 mt-10 grid max-w-[620px] grid-cols-3 divide-x border-t pt-6">
           {stats.map((stat, i) => (
             <div key={stat.label} className={cn('flex flex-col-reverse', i > 0 && 'pl-4 sm:pl-6')}>
-              <dt className="text-muted-foreground mt-1.5 text-[12px] leading-snug normal-case">{stat.label}</dt>
+              <dt className="text-muted-foreground mt-1.5 text-[12px] leading-snug normal-case">
+                {stat.label}
+              </dt>
               <dd className="font-heading text-flex-blue-700 text-[38px] leading-none tabular-nums sm:text-[46px]">
                 <CountUp value={stat.valor} />
               </dd>

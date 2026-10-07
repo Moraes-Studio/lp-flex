@@ -51,7 +51,11 @@ export function HeroRotator({ fotos, intervaloMs = 6000 }: HeroRotatorProps) {
   }, [fotos.length, intervaloMs]);
 
   return (
-    <div data-testid="hero-rotator" data-ativo={ativo} className="relative h-full w-full overflow-hidden">
+    <div
+      data-testid="hero-rotator"
+      data-ativo={ativo}
+      className="relative h-full w-full overflow-hidden"
+    >
       {fotos.map((foto, i) => (
         <div
           key={foto.src}

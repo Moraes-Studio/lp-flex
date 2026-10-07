@@ -24,7 +24,10 @@ export function Professores() {
   return (
     // bg-surface-200 — um degrau mais frio que Modalidades (V1.5 §1/§2):
     // Horários (grafite) fica entre as duas, então não é repetição de tom.
-    <section id="professores" className="bg-surface-200 border-border border-y px-[6%] py-16 md:py-20">
+    <section
+      id="professores"
+      className="bg-surface-200 border-border border-y px-[6%] py-16 md:py-20"
+    >
       <div className="mx-auto max-w-[1180px]">
         <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
           {/* Coluna grande — a "voz" da equipe: heading maior (size="large",
@@ -73,7 +76,7 @@ export function Professores() {
               return (
                 <article
                   key={professor.id}
-                  className="group border-flex-blue-600/20 relative grid grid-cols-[26px_1fr] gap-x-3 border-t py-5 pl-3 transition-colors duration-200 lg:hover:bg-surface-100/60"
+                  className="group border-flex-blue-600/20 lg:hover:bg-surface-100/60 relative grid grid-cols-[26px_1fr] gap-x-3 border-t py-5 pl-3 transition-colors duration-200"
                 >
                   <span
                     aria-hidden="true"
