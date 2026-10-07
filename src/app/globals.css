@@ -396,4 +396,7 @@ body:has(#cookie-consent) #whatsapp-float {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  .hero-zoom {
+    animation: none;
+  }
 }

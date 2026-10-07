@@ -90,6 +90,22 @@ test.describe('Hero', () => {
     await expect(hero.getByText(/Aberto agora|Abre hoje/)).toHaveCount(0);
   });
 
+  for (const [w, h] of [
+    [1280, 800],
+    [1440, 900],
+  ]) {
+    test(`H1 em no máximo 2 linhas no desktop (${w}x${h})`, async ({ page, isMobile }) => {
+      test.skip(isMobile, 'só desktop');
+      await page.setViewportSize({ width: w, height: h });
+      await page.goto('/');
+      const medidas = await page.locator('h1').first().evaluate((el) => ({
+        altura: el.getBoundingClientRect().height,
+        linha: parseFloat(getComputedStyle(el).lineHeight),
+      }));
+      expect(medidas.altura).toBeLessThanOrEqual(2.2 * medidas.linha);
+    });
+  }
+
   test('primeira foto do hero carrega com prioridade alta', async ({ page }) => {
     await page.goto('/');
     const primeira = page.getByTestId('hero-rotator').locator('img').first();

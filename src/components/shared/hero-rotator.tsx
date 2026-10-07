@@ -20,6 +20,9 @@ interface HeroRotatorProps {
  */
 export function HeroRotator({ fotos, intervaloMs = 6000 }: HeroRotatorProps) {
   const [ativo, setAtivo] = React.useState(0);
+  // Slide que acabou de sair: mantém o zoom até o fim do fade, sem salto de escala.
+  const [anterior, setAnterior] = React.useState<number | null>(null);
+  const ativoRef = React.useRef(0);
 
   React.useEffect(() => {
     if (fotos.length < 2) return;
@@ -28,7 +31,11 @@ export function HeroRotator({ fotos, intervaloMs = 6000 }: HeroRotatorProps) {
     let id: number | undefined;
     const iniciar = () => {
       window.clearInterval(id);
-      id = window.setInterval(() => setAtivo((i) => (i + 1) % fotos.length), intervaloMs);
+      id = window.setInterval(() => {
+        setAnterior(ativoRef.current);
+        ativoRef.current = (ativoRef.current + 1) % fotos.length;
+        setAtivo(ativoRef.current);
+      }, intervaloMs);
     };
     const aoMudarVisibilidade = () => {
       if (document.hidden) window.clearInterval(id);
@@ -61,7 +68,7 @@ export function HeroRotator({ fotos, intervaloMs = 6000 }: HeroRotatorProps) {
             sizes="(min-width: 1024px) 50vw, 100vw"
             preload={i === 0}
             fetchPriority={i === 0 ? 'high' : 'auto'}
-            className={cn('object-cover', i === ativo && 'hero-zoom')}
+            className={cn('object-cover', (i === ativo || i === anterior) && 'hero-zoom')}
           />
         </div>
       ))}

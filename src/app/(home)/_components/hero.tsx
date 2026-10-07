@@ -24,16 +24,16 @@ export function Hero() {
         <HeroRotator fotos={mediaConfig.heroFotos} />
       </div>
 
-      <div className="flex items-center px-[6%] py-12 md:py-16 lg:order-1 lg:py-20 lg:pr-12">
-        <div className="mx-auto w-full max-w-[560px] lg:mr-0 lg:ml-auto">
+      <div className="flex items-center px-[6%] py-12 md:py-16 lg:order-1 lg:py-20 lg:pr-8">
+        <div className="mx-auto w-full max-w-[640px] lg:mr-0 lg:ml-auto">
           <Eyebrow className="enter" style={{ '--enter-delay': '0ms' } as React.CSSProperties}>
             Vila Helena · {siteConfig.address.city} · desde {siteConfig.foundedYear}
           </Eyebrow>
           <h1
-            className="enter heading-reveal text-[clamp(34px,4.6vw,58px)] leading-[1.12]"
+            className="enter heading-reveal text-[clamp(34px,3.8vw,56px)] leading-[1.12]"
             style={{ '--enter-delay': '70ms' } as React.CSSProperties}
           >
-            Musculação e aulas com professor <span className="text-flex-blue-600">em sala</span>.
+            Musculação e aulas com professor <span className="text-flex-blue-600 whitespace-nowrap">em sala</span>.
           </h1>
           <p
             className="enter text-muted-foreground mt-5 max-w-[460px] text-[17px] font-normal normal-case"
