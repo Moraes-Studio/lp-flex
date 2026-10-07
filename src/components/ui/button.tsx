@@ -14,16 +14,17 @@ const buttonVariants = cva(
           'bg-primary text-primary-foreground shadow-[0_10px_28px_-10px_rgba(var(--flex-glow-rgb),0.55)] hover:bg-flex-blue-700 hover:-translate-y-0.5',
         ghost:
           'border border-border bg-transparent text-foreground hover:border-flex-blue-600 hover:text-flex-blue-600',
+        /** CTA primário sobre azul institucional (flex-blue-700): o `primary`
+         * (azul sobre azul) some, então inverte — fundo branco, texto azul
+         * (contraste ~10:1). Mesmo lift do hover do `primary`. */
+        onDark:
+          'bg-white text-flex-blue-700 hover:bg-flex-ice hover:-translate-y-0.5 focus-visible:ring-white focus-visible:ring-offset-flex-blue-700',
         /** Equivalente ao `ghost`, mas pra superfície escura (grafite/azul
          * institucional) — `ghost` (texto escuro, borda cinza-claro) fica
          * ilegível em fundo escuro. Mesmo idioma "ghost" já usado nos pills
          * do Marquee escuro (border-white/25 bg-white/10 text-white). */
-        /** CTA primário sobre azul institucional (flex-blue-700): o `primary`
-         * (azul sobre azul) some, então inverte — fundo branco, texto azul
-         * (contraste ~10:1). Mesmo lift do hover do `primary`. */
-        onDark: 'bg-white text-flex-blue-700 hover:bg-flex-ice hover:-translate-y-0.5',
         secondaryOnDark:
-          'border border-white/30 bg-white/12 text-white hover:border-white/45 hover:bg-white/22',
+          'border border-white/30 bg-white/12 text-white hover:border-white/45 hover:bg-white/22 focus-visible:ring-white focus-visible:ring-offset-flex-blue-700',
       },
       size: {
         default: 'px-[26px] py-[14px]',
