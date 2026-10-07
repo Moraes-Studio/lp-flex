@@ -41,7 +41,7 @@ const linkFocus =
  */
 export function Footer() {
   const ano = new Date().getFullYear();
-  const endereco = `${siteConfig.address.street}, ${siteConfig.address.city} — ${siteConfig.address.state}`;
+  const endereco = `${siteConfig.address.street}, ${siteConfig.address.city}, ${siteConfig.address.state}`;
 
   return (
     // `isolate` (não só `relative`): cria stacking context próprio pro
@@ -106,7 +106,7 @@ export function Footer() {
                 className={`inline-flex items-center gap-1 hover:text-white hover:underline ${linkFocus}`}
               >
                 <WhatsappGlyph className="h-3 w-3" />
-                Falar no WhatsApp
+                Quero treinar agora
               </a>
               <span className="text-white/30">·</span>
               <a

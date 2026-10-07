@@ -11,7 +11,7 @@ export function WhatsappFloat() {
       href={whatsappUrl('Olá! Vim pelo site e quero saber mais sobre os planos.')}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Falar no WhatsApp"
+      aria-label="Quero treinar agora"
       // id="whatsapp-float": alvo do seletor `body:has(#cookie-consent)
       // #whatsapp-float` em globals.css — enquanto o banner de cookies
       // existir no DOM, essa regra CSS reposiciona/esconde o botão (nunca

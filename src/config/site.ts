@@ -17,7 +17,7 @@ export const siteConfig = {
   cnpj: '68.934.850/0001-09',
   razaoSocial: null as string | null,
   address: {
-    street: 'R. das Hortênsias, 104 — Vila Helena',
+    street: 'R. das Hortênsias, 104, Vila Helena',
     city: 'Santo André',
     state: 'SP',
     zip: '09175-500',

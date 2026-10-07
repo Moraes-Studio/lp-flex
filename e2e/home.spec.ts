@@ -25,7 +25,7 @@ test.describe('Home — layout geral', () => {
     // antes de checar o comportamento normal do botão.
     await page.getByRole('button', { name: 'Aceitar todos' }).click();
 
-    const float = page.getByRole('link', { name: 'Falar no WhatsApp' }).last();
+    const float = page.getByRole('link', { name: 'Quero treinar agora' }).last();
     await expect(float).toBeVisible();
     await page.evaluate(() => window.scrollTo(0, 2000));
     await expect(float).toBeVisible();

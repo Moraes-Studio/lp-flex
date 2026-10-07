@@ -40,3 +40,24 @@ test.describe('Horários: faixa HOJE', () => {
     await expect(page.locator('#horarios')).not.toContainText('–');
   });
 });
+
+test.describe('Header e rótulos', () => {
+  test('sem barra azul do topo e sem "Falar no WhatsApp" na página', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('formando a vizinhança')).toHaveCount(0);
+    await expect(page.getByText('Falar no WhatsApp')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: 'Falar no WhatsApp' })).toHaveCount(0);
+  });
+
+  test('chip de funcionamento aparece no header em telas largas', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    await expect(page.locator('header').getByText(/Aberto agora|Abre hoje|Fechado/)).toBeVisible();
+  });
+
+  test('header e rodapé sem travessão', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('header')).not.toContainText('—');
+    await expect(page.locator('footer')).not.toContainText('—');
+  });
+});
