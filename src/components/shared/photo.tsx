@@ -16,11 +16,11 @@ interface PhotoProps {
 
 /**
  * Slot de foto pronto pro dia em que o arquivo real chegar: enquanto `src`
- * for nulo, não reserva espaço nenhum (a caixa com padrão diagonal ficava
- * feia demais pra ir pro ar assim, pedido explícito) — o layout ao redor
- * simplesmente flui sem o card de foto. Trocar `src` de null pra um caminho
- * real não exige tocar em nenhum componente. Nunca gerar imagem sintética
- * pra preencher o vazio — política de fotografia do CLAUDE.md.
+ * for nulo, não reserva espaço nenhum. Sem borda nem raio próprios (o
+ * card com borda fazia a foto parecer template, rodada 2026-10-07): quem
+ * usa decide o raio pela regra do site (foto até a borda da tela = 0,
+ * foto em coluna = rounded-xl). Nunca gerar imagem sintética pra
+ * preencher o vazio (política de fotografia do CLAUDE.md).
  */
 export function Photo({ src, alt, ratio = 'wide', className, priority, sizes }: PhotoProps) {
   if (!src) {
@@ -28,7 +28,7 @@ export function Photo({ src, alt, ratio = 'wide', className, priority, sizes }: 
   }
 
   return (
-    <div className={cn('border-border relative overflow-hidden rounded-2xl border', RATIO_CLASS[ratio], className)}>
+    <div className={cn('relative overflow-hidden', RATIO_CLASS[ratio], className)}>
       <Image
         src={src}
         alt={alt}

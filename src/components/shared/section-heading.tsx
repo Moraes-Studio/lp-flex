@@ -4,7 +4,10 @@ import { Eyebrow, type EyebrowProps } from '@/components/shared/eyebrow';
 import { Reveal } from '@/components/shared/reveal';
 
 interface SectionHeadingProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
-  eyebrow: React.ReactNode;
+  /** Opcional: a home usa no máximo 3 eyebrows (Hero, Horários, Contato).
+   * Eyebrow em toda seção é o vício de template nº 1 (revisão taste-skill,
+   * 2026-10-07). Sem eyebrow, o título sozinho abre a seção. */
+  eyebrow?: React.ReactNode;
   eyebrowVariant?: EyebrowProps['variant'];
   title: React.ReactNode;
   description?: React.ReactNode;
@@ -32,9 +35,11 @@ function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <Reveal className={cn('mb-13 max-w-[640px]', className)} {...props}>
-      <Eyebrow variant={eyebrowVariant ?? (tone === 'dark' ? 'inverted' : 'bright')}>
-        {eyebrow}
-      </Eyebrow>
+      {eyebrow ? (
+        <Eyebrow variant={eyebrowVariant ?? (tone === 'dark' ? 'inverted' : 'bright')}>
+          {eyebrow}
+        </Eyebrow>
+      ) : null}
       <h2
         className={cn(
           'heading-reveal leading-[1.12]',
