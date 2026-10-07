@@ -22,12 +22,23 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
     return () => window.clearInterval(id);
   }, []);
 
-  const doDia = estado
-    ? slots
-        .filter((s) => s.day === estado.dia)
-        .slice()
-        .sort((a, b) => paraMinutos(a.time) - paraMinutos(b.time))
-    : [];
+  const ordenar = (lista: AulaSlot[]) => [...lista].sort((a, b) => paraMinutos(a.time) - paraMinutos(b.time));
+
+  const doDia = estado ? ordenar(slots.filter((s) => s.day === estado.dia)) : [];
+
+  // Altura reservada: o dia com mais aulas, calculado só a partir de `slots`
+  // (igual no servidor e no cliente). Fica empilhado na mesma célula do
+  // conteúdo real, invisível, então a faixa nunca encolhe nem cresce ao montar.
+  const maisCheio = React.useMemo(() => {
+    const porDia = new Map<Dia, AulaSlot[]>();
+    for (const s of slots) porDia.set(s.day, [...(porDia.get(s.day) ?? []), s]);
+    let melhor: AulaSlot[] = [];
+    for (const lista of porDia.values()) if (lista.length > melhor.length) melhor = lista;
+    return ordenar(melhor);
+  }, [slots]);
+
+  const classeLista = 'flex flex-wrap gap-x-6 gap-y-3';
+  const classeItem = 'flex items-baseline gap-2.5 text-white/80';
 
   return (
     <div
@@ -36,42 +47,52 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
     >
       <p className="flex items-baseline gap-2.5 text-white">
         <strong className="font-heading text-[22px] tracking-[0.02em] uppercase">Hoje</strong>
-        <span className="text-flex-blue-300 font-mono text-[11px] tracking-[0.14em] uppercase" suppressHydrationWarning>
+        <span className="text-flex-blue-300 font-mono text-[11px] tracking-[0.14em] uppercase">
           {estado ? DIA_NOME_COMPLETO[estado.dia] : ''}
         </span>
       </p>
 
-      {estado && doDia.length === 0 ? (
-        <p className="text-sm text-white/70">
-          Sem aulas coletivas hoje. A musculação funciona no horário normal, com professor na sala.
-        </p>
-      ) : (
-        <ul className="flex flex-wrap gap-x-6 gap-y-3" aria-live="polite">
-          {doDia.map((slot) => {
-            const rodando =
-              estado !== null &&
-              estado.minutos >= paraMinutos(slot.time) &&
-              estado.minutos < paraMinutos(slot.time) + 60;
-            return (
-              <li
-                key={`${slot.day}-${slot.time}-${slot.aula}`}
-                className={cn(
-                  'flex items-baseline gap-2.5 text-white/80',
-                  rodando && 'text-white'
-                )}
-              >
-                <time className="text-flex-blue-300 font-mono text-[13px] tabular-nums">{slot.time}</time>
-                <span className={cn('text-[15px]', rodando && 'font-semibold')}>{slot.aula}</span>
-                {rodando ? (
-                  <span className="bg-flex-blue-600 rounded-pill px-2 py-0.5 font-mono text-[9.5px] tracking-[0.14em] text-white uppercase">
-                    agora
-                  </span>
-                ) : null}
-              </li>
-            );
-          })}
+      <div className="grid">
+        <ul aria-hidden="true" className={cn(classeLista, 'invisible col-start-1 row-start-1')}>
+          {maisCheio.map((slot) => (
+            <li key={`${slot.day}-${slot.time}-${slot.aula}`} className={classeItem}>
+              <time className="font-mono text-[13px] tabular-nums">{slot.time}</time>
+              <span className="text-[15px]">{slot.aula}</span>
+            </li>
+          ))}
         </ul>
-      )}
+
+        <div className="col-start-1 row-start-1">
+          {estado && doDia.length === 0 ? (
+            <p className="text-sm text-white/70">
+              Sem aulas coletivas hoje. A musculação funciona no horário normal, com professor na sala.
+            </p>
+          ) : (
+            <ul className={classeLista}>
+              {doDia.map((slot) => {
+                const rodando =
+                  estado !== null &&
+                  estado.minutos >= paraMinutos(slot.time) &&
+                  estado.minutos < paraMinutos(slot.time) + 60;
+                return (
+                  <li
+                    key={`${slot.day}-${slot.time}-${slot.aula}`}
+                    className={cn(classeItem, rodando && 'text-white')}
+                  >
+                    <time className="text-flex-blue-300 font-mono text-[13px] tabular-nums">{slot.time}</time>
+                    <span className={cn('text-[15px]', rodando && 'font-semibold')}>{slot.aula}</span>
+                    {rodando ? (
+                      <span className="bg-flex-blue-600 rounded-pill px-2 py-0.5 font-mono text-[9.5px] tracking-[0.14em] text-white uppercase">
+                        agora
+                      </span>
+                    ) : null}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
