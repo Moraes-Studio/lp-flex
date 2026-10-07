@@ -37,3 +37,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# skills locais de referência (não versionar — ver PR de agent skills)
+.claude/skills/awesome-design/
