@@ -61,3 +61,38 @@ test.describe('Header e rótulos', () => {
     await expect(page.locator('footer')).not.toContainText('—');
   });
 });
+
+test.describe('Hero', () => {
+  test('troca de foto depois do intervalo', async ({ page }) => {
+    await page.goto('/');
+    const rotator = page.getByTestId('hero-rotator');
+    await expect(rotator).toHaveAttribute('data-ativo', '0');
+    await expect(rotator).toHaveAttribute('data-ativo', '1', { timeout: 9000 });
+  });
+
+  test.describe('com movimento reduzido', () => {
+    test.use({ contextOptions: { reducedMotion: 'reduce' } });
+
+    test('fica parado na primeira foto', async ({ page }) => {
+      await page.goto('/');
+      const rotator = page.getByTestId('hero-rotator');
+      await expect(rotator).toHaveAttribute('data-ativo', '0');
+      await page.waitForTimeout(7000);
+      await expect(rotator).toHaveAttribute('data-ativo', '0');
+    });
+  });
+
+  test('hero tem no máximo 2 CTAs e nenhum chip ou número de stats', async ({ page }) => {
+    await page.goto('/');
+    const hero = page.locator('main > section').first();
+    await expect(hero.getByRole('link')).toHaveCount(2);
+    await expect(hero.getByText('anos na Vila Helena')).toHaveCount(0);
+    await expect(hero.getByText(/Aberto agora|Abre hoje/)).toHaveCount(0);
+  });
+
+  test('primeira foto do hero carrega com prioridade alta', async ({ page }) => {
+    await page.goto('/');
+    const primeira = page.getByTestId('hero-rotator').locator('img').first();
+    await expect(primeira).toHaveAttribute('fetchpriority', 'high');
+  });
+});

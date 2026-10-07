@@ -1,60 +1,50 @@
 import { siteConfig, whatsappUrl } from '@/config/site';
-import { getFuncionamento } from '@/lib/content/funcionamento';
-import { getModalidades } from '@/lib/content/modalidades';
-import { contarConfirmados, getProfessores } from '@/lib/content/professores';
+import { mediaConfig } from '@/config/media';
 import { Button } from '@/components/ui/button';
 import { Eyebrow } from '@/components/shared/eyebrow';
+import { HeroRotator } from '@/components/shared/hero-rotator';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
-import { StatusChip } from '@/components/layout/status-chip';
 import { CtaArrow } from '@/components/shared/cta-arrow';
-import { CountUp } from '@/components/shared/count-up';
-import { cn } from '@/lib/utils';
 
+/**
+ * Hero (rodada 2026-10-07): texto à esquerda no fundo claro, fotos reais à
+ * direita até a borda da tela, nada sobreposto à foto. No máximo 4
+ * elementos de texto (eyebrow, h1, subtexto ≤ 20 palavras, CTAs). O quadro
+ * HOJE foi pra Horários, o chip "aberto agora" pro header e os números pro
+ * Sobre.
+ *
+ * Subtexto revisado contra SDD §7 (portão 1): só frases permitidas
+ * ("professor presente na sala", "orientação", "tirar dúvidas"), nada que
+ * implique acompanhamento individual incluso no plano.
+ */
 export function Hero() {
-  const funcionamento = getFuncionamento();
-  const modalidades = getModalidades();
-  const professores = getProfessores();
-  const anos = new Date().getFullYear() - siteConfig.foundedYear;
-
-  const stats = [
-    { valor: `${anos}+`, label: 'anos na Vila Helena' },
-    { valor: String(modalidades.length), label: 'modalidades inclusas' },
-    { valor: String(contarConfirmados(professores)), label: 'professores confirmados' },
-  ];
-
   return (
-    <section className="px-[6%] pt-10 pb-12 md:pt-14 md:pb-14">
-      {/* items-center (não items-start): o quadro "Hoje" (7 aulas) é bem mais
-       * curto que a coluna de texto (headline+parágrafo+CTAs+status) — com
-       * items-start sobrava um vão vazio grande embaixo dele (achado real,
-       * medido: ~173px de buraco). Centralizado, o mesmo espaço "sobrando"
-       * fica dividido em cima/embaixo e lê como composição, não como bug. */}
-      <div className="mx-auto grid max-w-[1180px] items-center gap-x-14 gap-y-8 lg:grid-cols-[1.25fr_0.75fr]">
-        <div>
+    <section className="grid lg:min-h-[min(720px,calc(100dvh-121px))] lg:grid-cols-2">
+      <div className="relative aspect-[4/3] w-full lg:order-2 lg:aspect-auto">
+        <HeroRotator fotos={mediaConfig.heroFotos} />
+      </div>
+
+      <div className="flex items-center px-[6%] py-12 md:py-16 lg:order-1 lg:py-20 lg:pr-12">
+        <div className="mx-auto w-full max-w-[560px] lg:mr-0 lg:ml-auto">
           <Eyebrow className="enter" style={{ '--enter-delay': '0ms' } as React.CSSProperties}>
             Vila Helena · {siteConfig.address.city} · desde {siteConfig.foundedYear}
           </Eyebrow>
-          {/* (Removida a linha que atravessava o grid atrás do "SALA." —
-           * ficou feia na prática, não sobreviveu à revisão visual.) */}
           <h1
-            className="enter heading-reveal text-[clamp(34px,6.2vw,64px)] leading-[1.2]"
+            className="enter heading-reveal text-[clamp(34px,4.6vw,58px)] leading-[1.12]"
             style={{ '--enter-delay': '70ms' } as React.CSSProperties}
           >
-            Musculação e aulas
-            <br />
-            com professor <span className="text-flex-blue-600">em sala</span>.
+            Musculação e aulas com professor <span className="text-flex-blue-600">em sala</span>.
           </h1>
           <p
-            className="enter text-muted-foreground mt-5 max-w-[500px] text-[17px] font-normal normal-case"
+            className="enter text-muted-foreground mt-5 max-w-[460px] text-[17px] font-normal normal-case"
             style={{ '--enter-delay': '140ms' } as React.CSSProperties}
           >
-            Na Flex, seu treino é montado por um professor de Educação Física. Durante todo o
-            horário de funcionamento, há sempre um professor em sala para orientar a execução dos
-            exercícios e tirar dúvidas.
+            Professor de Educação Física presente na sala em todo o horário, orientando a execução e
+            tirando dúvidas.
           </p>
 
           <div
-            className="enter mt-7 flex flex-wrap gap-3"
+            className="enter mt-8 flex flex-wrap gap-3"
             style={{ '--enter-delay': '210ms' } as React.CSSProperties}
           >
             <Button asChild className="group">
@@ -64,7 +54,7 @@ export function Hero() {
                 rel="noopener noreferrer"
               >
                 <WhatsappGlyph className="h-4 w-4" />
-                Falar no WhatsApp
+                Quero treinar agora
                 <CtaArrow variant="up-right" />
               </a>
             </Button>
@@ -75,33 +65,7 @@ export function Hero() {
               </a>
             </Button>
           </div>
-
-          <StatusChip
-            funcionamento={funcionamento}
-            className="enter mt-6"
-            style={{ '--enter-delay': '250ms' } as React.CSSProperties}
-          />
         </div>
-
-        {/* Placar de stats — V2: virou grafismo de largura cheia (não mais
-         * confinado à coluna de texto), números bem maiores, cruza por baixo
-         * das duas colunas em vez de ficar preso numa delas. */}
-        <dl className="border-flex-blue-600/15 divide-flex-blue-600/15 mt-1 grid grid-cols-3 divide-x border-t pt-5 lg:col-span-2 lg:mt-4 lg:max-w-[620px]">
-          {stats.map((stat, i) => (
-            <div
-              key={stat.label}
-              className={cn('enter flex flex-col-reverse', i > 0 && 'pl-4 sm:pl-6')}
-              style={{ '--enter-delay': `${280 + i * 60}ms` } as React.CSSProperties}
-            >
-              <dt className="text-muted-foreground mt-1.5 text-[11.5px] leading-snug normal-case">
-                {stat.label}
-              </dt>
-              <dd className="font-heading text-flex-blue-700 text-[38px] leading-none normal-case tabular-nums sm:text-[46px]">
-                <CountUp value={stat.valor} />
-              </dd>
-            </div>
-          ))}
-        </dl>
       </div>
     </section>
   );
