@@ -100,3 +100,14 @@ Motivado por: site sendo usado como prova de "negócio ativo" pro Meta Business 
 ## Nota de ambiente
 
 Atualização 2026-08-18: WebKit (Mobile Safari) **já roda neste ambiente** — a limitação de libs de sistema (`libgtk-4`, `libmanette`) descrita aqui antes não se confirmou mais; os 36 testes de `e2e/` passaram nos 3 targets (Desktop Chrome, Mobile Chrome, Mobile Safari) nesta sessão. Se isso voltar a falhar em outra máquina/CI, tratar como configuração de ambiente, não reintroduzir a suposição de bloqueio permanente sem checar de novo.
+
+## Rodada 2026-10-07 — mini rebranding com fotos reais
+
+Spec: `docs/superpowers/specs/2026-10-07-rebranding-fotos-design.md` · Plano: `docs/superpowers/plans/2026-10-07-rebranding-fotos.md`
+
+- [x] Fotos reais otimizadas em `public/fotos/` (originais fora do git, `scripts/otimizar-fotos.mjs`), fonte única `src/config/media.ts`.
+- [x] Hero: texto + fotos rotativas (crossfade, pausa em movimento reduzido), 4 elementos de texto. Quadro HOJE foi pra Horários (desvio do CLAUDE.md, atualizado); chip "aberto agora" foi pro header (xl+); números foram pro Sobre.
+- [x] Modalidades em dois blocos com foto; Sobre em pilha vertical com carrossel (setas sempre visíveis, RULES #5).
+- [x] Eyebrows limitados a 3 (Hero, Horários, Contato); rótulo único "Quero treinar agora"; sem travessão em texto visível; horário de funcionamento agrupado (`agruparFuncionamento`, com teste).
+- [ ] **Portão 1 (SDD §11):** aprovação humana dos textos novos: subtexto do hero e título "Professores presentes na sala.".
+- [ ] Retratos da equipe (`public/06_equipe/`, fora do git): entram quando todos os professores mandarem bio; o card já aceita `fotoUrl`.
