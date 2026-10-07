@@ -115,3 +115,15 @@ test.describe('Hero', () => {
     await expect(primeira).toHaveAttribute('fetchpriority', 'high');
   });
 });
+
+test.describe('Modalidades', () => {
+  test('dois blocos com foto e todas as aulas como etiquetas', async ({ page }) => {
+    await page.goto('/');
+    const secao = page.locator('#modalidades');
+    await secao.scrollIntoViewIfNeeded();
+    await expect(secao.locator('img')).toHaveCount(2);
+    await expect(secao.getByTestId('aula-coletiva')).toHaveCount(10);
+    await expect(secao.getByRole('heading', { name: 'Musculação' })).toBeVisible();
+    await expect(secao.getByRole('heading', { name: 'Aulas coletivas' })).toBeVisible();
+  });
+});
