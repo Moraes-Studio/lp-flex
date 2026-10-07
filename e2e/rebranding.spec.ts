@@ -188,3 +188,17 @@ test.describe('Sem scroll horizontal', () => {
     });
   }
 });
+
+test.describe('Eyebrows', () => {
+  test('no máximo 3 na home', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('main .eyebrow-line')).toHaveCount(3);
+  });
+
+  test('título de Professores revisado (SDD §7)', async ({ page }) => {
+    await page.goto('/');
+    await expect(
+      page.locator('#professores').getByRole('heading', { name: 'Professores presentes na sala.' })
+    ).toBeAttached();
+  });
+});

@@ -32,15 +32,15 @@ export function Professores() {
            * professor, tratada como citação editorial, não mais uma linha de
            * bio igual às outras. */}
           <div>
+            {/* Título revisado contra SDD §7 (portão 1, rodada 2026-10-07): o anterior, "Seu treino montado por um professor", ficava perto de "Seu professor"/acompanhamento individual. */}
             <SectionHeading
               className="mb-8 lg:mb-10"
-              eyebrow="Equipe"
               size="large"
               title={
                 <>
-                  Seu treino montado
+                  Professores
                   <br />
-                  por um professor.
+                  presentes na sala.
                 </>
               }
               description="Todos formados em Educação Física."
