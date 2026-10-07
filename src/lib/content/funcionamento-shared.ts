@@ -55,3 +55,44 @@ export function calcularStatus(funcionamento: DiaFuncionamento[], now: Date): St
   }
   return { aberto: false, texto: 'Fechado · abre amanhã' };
 }
+
+export interface GrupoFuncionamento {
+  rotulo: string;
+  horario: string;
+}
+
+function formatarHorario(dia: DiaFuncionamento): string {
+  return dia.abre && dia.fecha ? `${dia.abre}-${dia.fecha}` : 'Fechado';
+}
+
+/**
+ * Agrupa dias consecutivos (Seg→Sáb) com o mesmo horário, pra tabela de
+ * funcionamento ter 4 linhas em vez de 7 (revisão taste-skill, 2026-10-07).
+ * Domingo fica sempre num grupo próprio no fim: ele carrega "e feriados"
+ * no nome e é lido separado pelo público. Entrada na ordem de
+ * `content/funcionamento.json` (índice 0 = domingo). Hífen como separador
+ * de faixa, nunca travessão.
+ */
+export function agruparFuncionamento(funcionamento: DiaFuncionamento[]): GrupoFuncionamento[] {
+  const semana = funcionamento.slice(1);
+  const domingo = funcionamento[0];
+  const grupos: { dias: DiaFuncionamento[]; horario: string }[] = [];
+
+  for (const dia of semana) {
+    const horario = formatarHorario(dia);
+    const ultimo = grupos.at(-1);
+    if (ultimo && ultimo.horario === horario) {
+      ultimo.dias.push(dia);
+    } else {
+      grupos.push({ dias: [dia], horario });
+    }
+  }
+  if (domingo) {
+    grupos.push({ dias: [domingo], horario: formatarHorario(domingo) });
+  }
+
+  return grupos.map(({ dias, horario }) => ({
+    rotulo: dias.length === 1 ? dias[0].dia : `${dias[0].diaCurto} a ${dias[dias.length - 1].diaCurto}`,
+    horario,
+  }));
+}
