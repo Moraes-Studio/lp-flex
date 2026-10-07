@@ -13,7 +13,8 @@ interface HeroRotatorProps {
 /**
  * Fotos do hero em crossfade lento (o "site vivo" pedido pelo cliente, sem
  * setas nem bolinhas: o visitante não precisa controlar, é ambientação).
- * Nada é sobreposto à foto (decisão de 2026-10-07).
+ * Iteração imersiva: preenche o hero em tela cheia (sizes 100vw); o hero
+ * aplica por cima só uma camada de cor sólida, nada de placa/legenda.
  * - Só a primeira foto é prioridade de carregamento (é o LCP).
  * - Cada foto tem o próprio `alt`; as inativas ficam `aria-hidden`, então só a
  *   foto ativa é exposta a leitores de tela.
@@ -71,7 +72,7 @@ export function HeroRotator({ fotos, intervaloMs = 6000 }: HeroRotatorProps) {
             src={foto.src}
             alt={foto.alt}
             fill
-            sizes="(min-width: 1024px) 50vw, 100vw"
+            sizes="100vw"
             preload={i === 0}
             fetchPriority={i === 0 ? 'high' : 'auto'}
             className={cn('object-cover', (i === ativo || i === anterior) && 'hero-zoom')}

@@ -65,6 +65,28 @@ test.describe('Header e rótulos', () => {
     await expect(page.locator('header')).not.toContainText('—');
     await expect(page.locator('footer')).not.toContainText('—');
   });
+
+  test('na home, header transparente sobre o hero e sólido depois de rolar', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const header = page.locator('header').first();
+    await expect(header).toHaveAttribute('data-modo', 'transparente');
+    await page.evaluate(() => window.scrollTo(0, 1200));
+    await expect(header).toHaveAttribute('data-modo', 'solido');
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(header).toHaveAttribute('data-modo', 'transparente');
+  });
+
+  test('em /privacidade o header é sempre sólido', async ({ page }) => {
+    await page.goto('/privacidade');
+    const header = page.locator('header').first();
+    await expect(header).toHaveAttribute('data-modo', 'solido');
+    await page.waitForTimeout(500);
+    await expect(header).toHaveAttribute('data-modo', 'solido');
+    await page.evaluate(() => window.scrollTo(0, 600));
+    await expect(header).toHaveAttribute('data-modo', 'solido');
+  });
 });
 
 test.describe('Hero', () => {
@@ -87,52 +109,46 @@ test.describe('Hero', () => {
     });
   });
 
-  test('hero tem no máximo 2 CTAs e nenhum chip ou número de stats', async ({ page }) => {
+  test("hero tem um único link, 'Ver planos', para #planos, e nenhum stat/chip", async ({
+    page,
+  }) => {
     await page.goto('/');
-    const hero = page.locator('main > section').first();
-    await expect(hero.getByRole('link')).toHaveCount(2);
+    const hero = page.locator('[data-hero-imersivo]');
+    await expect(hero).toHaveCount(1);
+    const links = hero.getByRole('link');
+    await expect(links).toHaveCount(1);
+    await expect(links.first()).toHaveAccessibleName(/Ver planos/);
+    await expect(links.first()).toHaveAttribute('href', '#planos');
     await expect(hero.getByText('anos na Vila Helena')).toHaveCount(0);
     await expect(hero.getByText(/Aberto agora|Abre hoje/)).toHaveCount(0);
   });
 
   for (const [w, h] of [
-    [1280, 800],
     [1440, 900],
+    [390, 844],
   ]) {
-    test(`H1 em no máximo 2 linhas no desktop (${w}x${h})`, async ({ page, isMobile }) => {
-      test.skip(isMobile, 'só desktop');
+    test(`hero em tela cheia, foto no topo e H1 visível sem rolar (${w}x${h})`, async ({
+      page,
+    }) => {
       await page.setViewportSize({ width: w, height: h });
       await page.goto('/');
-      const medidas = await page
-        .locator('h1')
-        .first()
-        .evaluate((el) => ({
-          altura: el.getBoundingClientRect().height,
-          linha: parseFloat(getComputedStyle(el).lineHeight),
-        }));
-      expect(medidas.altura).toBeLessThanOrEqual(2.2 * medidas.linha);
-      const xH1 = (await page.locator('h1').first().boundingBox())!.x;
-      const xLogo = (await page.locator('header a').first().boundingBox())!.x;
-      expect(Math.abs(xH1 - xLogo)).toBeLessThanOrEqual(2);
+      const hero = (await page.locator('[data-hero-imersivo]').boundingBox())!;
+      expect(hero.height).toBeGreaterThanOrEqual(0.95 * h);
+
+      const foto = (await page.getByTestId('hero-rotator').boundingBox())!;
+      expect(foto.y).toBeLessThanOrEqual(1);
+
+      // Espera a entrada (.enter) terminar antes de medir.
+      const h1 = page.locator('h1').first();
+      await expect(h1).toBeVisible();
+      await page.waitForTimeout(1000);
+      const caixa = (await h1.boundingBox())!;
+      expect(caixa.y).toBeGreaterThanOrEqual(0);
+      expect(caixa.y + caixa.height).toBeLessThanOrEqual(h);
+      expect(caixa.x).toBeGreaterThanOrEqual(0);
+      expect(caixa.x + caixa.width).toBeLessThanOrEqual(w);
     });
   }
-
-  test('tela larga (1920x1080): texto e foto juntos, foto na borda direita', async ({
-    page,
-    isMobile,
-  }) => {
-    test.skip(isMobile, 'só desktop');
-    await page.setViewportSize({ width: 1920, height: 1080 });
-    await page.goto('/');
-    const h1 = (await page.locator('h1').first().boundingBox())!;
-    const foto = (await page.getByTestId('hero-rotator').boundingBox())!;
-    const lacuna = foto.x - (h1.x + h1.width);
-    expect(lacuna).toBeGreaterThan(0);
-    expect(lacuna).toBeLessThanOrEqual(160);
-
-    // A foto vai até a borda da viewport (sem faixa azul à direita).
-    expect(Math.abs(foto.x + foto.width - 1920)).toBeLessThanOrEqual(1);
-  });
 
   test('primeira foto do hero carrega com prioridade alta', async ({ page }) => {
     await page.goto('/');

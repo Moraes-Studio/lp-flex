@@ -6,6 +6,7 @@ import { getFuncionamento } from '@/lib/content/funcionamento';
 import { Button } from '@/components/ui/button';
 import { MobileMenu } from '@/components/layout/mobile-menu';
 import { StatusChip } from '@/components/layout/status-chip';
+import { HeaderShell } from '@/components/layout/header-shell';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
 import { CtaArrow } from '@/components/shared/cta-arrow';
 
@@ -14,13 +15,17 @@ import { CtaArrow } from '@/components/shared/cta-arrow';
  * rodada de 2026-10-07: a mesma informação já abre o hero e repeti-la três
  * vezes era vício de template). O chip "aberto agora" veio do hero pra cá,
  * só a partir de `xl`, pra navegação continuar numa linha só em `lg`.
+ *
+ * Iteração imersiva: a casca (`HeaderShell`, client) fica transparente sobre
+ * o hero em tela cheia e sólida no resto. Este conteúdo continua no servidor;
+ * só as cores mudam, via `group-data-[modo=transparente]/header:*`. O chip
+ * tem fundo claro próprio e o CTA segue azul nos dois modos.
  */
 export function Header() {
   const funcionamento = getFuncionamento();
 
   return (
-    <div className="sticky top-0 z-50">
-      <header className="bg-background border-border flex items-center justify-between gap-4 border-b px-[6%] py-3">
+    <HeaderShell>
         <Link href="/" aria-label={`${siteConfig.name}, página inicial`} className="shrink-0">
           {/* 102×96 = tamanho nativo do arquivo-fonte (public/logo.png) —
            * teto sem ficar borrado. Já aumentado uma vez (68×64) e o cliente
@@ -45,7 +50,7 @@ export function Header() {
             <a
               key={item.href}
               href={item.href}
-              className="text-foreground/75 hover:text-flex-blue-600 text-[13px] font-medium tracking-wide uppercase transition-colors duration-200"
+              className="text-foreground/75 hover:text-flex-blue-600 text-[13px] font-medium tracking-wide uppercase transition-colors duration-200 group-data-[modo=transparente]/header:text-white/90 group-data-[modo=transparente]/header:hover:text-white"
             >
               {item.label}
             </a>
@@ -67,7 +72,6 @@ export function Header() {
           </Button>
           <MobileMenu />
         </div>
-      </header>
-    </div>
+    </HeaderShell>
   );
 }
