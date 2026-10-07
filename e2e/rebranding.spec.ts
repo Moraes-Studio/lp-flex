@@ -177,6 +177,31 @@ test.describe('Sobre: carrossel', () => {
     expect(img && legenda && legenda.y >= img.y + img.height - 1).toBe(true);
   });
 
+  test('todas as fotos carregam, inclusive a última, após percorrer o carrossel', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await aceitarCookies(page);
+    const sobre = page.locator('#sobre');
+    await sobre.scrollIntoViewIfNeeded();
+    const proxima = sobre.getByRole('button', { name: 'Próxima foto' });
+    for (let i = 0; i < 20; i++) {
+      if ((await proxima.getAttribute('aria-disabled')) === 'true') break;
+      // dispatchEvent: o botão pode ainda estar "instável" (reveal/scroll da
+      // página) e o clique do Playwright esperaria até o timeout.
+      await proxima.dispatchEvent('click');
+      await page.waitForTimeout(250);
+    }
+    await expect(proxima).toHaveAttribute('aria-disabled', 'true');
+    await expect
+      .poll(() =>
+        page
+          .locator('#sobre figure img')
+          .evaluateAll((imgs) => imgs.every((img) => (img as HTMLImageElement).naturalWidth > 0))
+      )
+      .toBe(true);
+  });
+
   test('números saíram do hero e estão no Sobre', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('#sobre').getByText('anos na Vila Helena')).toBeAttached();

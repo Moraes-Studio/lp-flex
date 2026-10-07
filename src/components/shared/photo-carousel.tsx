@@ -26,6 +26,27 @@ export function PhotoCarousel({ fotos, rotulo }: PhotoCarouselProps) {
   const ultimo = React.useRef<HTMLElement | null>(null);
   const [noInicio, setNoInicio] = React.useState(true);
   const [noFim, setNoFim] = React.useState(false);
+  const raiz = React.useRef<HTMLDivElement>(null);
+  // O lazy nativo do Chrome não dispara pra imagem muito à direita dentro de
+  // um overflow-x: a última foto ficava sem carregar. Quando o carrossel chega
+  // perto da viewport, todas as fotos passam a eager (uma vez só).
+  const [carregarTudo, setCarregarTudo] = React.useState(false);
+
+  React.useEffect(() => {
+    const el = raiz.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entradas) => {
+        if (entradas.some((e) => e.isIntersecting)) {
+          setCarregarTudo(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '300px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   React.useEffect(() => {
     const root = trilho.current;
@@ -71,7 +92,7 @@ export function PhotoCarousel({ fotos, rotulo }: PhotoCarouselProps) {
     'border-border text-flex-blue-700 hover:bg-flex-ice flex h-11 w-11 items-center justify-center rounded-full border bg-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-flex-blue-600 aria-disabled:hover:bg-white aria-disabled:cursor-not-allowed aria-disabled:opacity-35';
 
   return (
-    <div>
+    <div ref={raiz}>
       <div
         ref={trilho}
         role="region"
@@ -98,6 +119,7 @@ export function PhotoCarousel({ fotos, rotulo }: PhotoCarouselProps) {
                 src={foto.src}
                 alt={foto.alt}
                 fill
+                loading={carregarTudo ? 'eager' : 'lazy'}
                 sizes="(min-width: 1024px) 32vw, (min-width: 640px) 48vw, 82vw"
                 className="object-cover"
               />
