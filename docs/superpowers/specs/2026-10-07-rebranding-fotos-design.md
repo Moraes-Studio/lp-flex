@@ -27,7 +27,7 @@ A ordem da home não muda: Header → Hero → Marquee → Promo → Planos → 
 ### Header
 - Remover a barra azul do topo ("Desde 1992 · Vila Helena · Santo André — SP · 34+ anos…"). Essa informação aparece uma vez, no hero.
 - O chip "aberto agora" continua no header, como está.
-- CTA com rótulo único de WhatsApp (ver "Rótulos de CTA").
+- CTA "Quero treinar agora", como hoje (ver "Rótulos de CTA").
 - Mantém a mudança de `preload` + `fetchPriority` no logo, que hoje está no working tree e ainda não foi commitada.
 
 ### Hero
@@ -80,7 +80,7 @@ Troca o "—" por vírgula. Fora isso, sem mudança.
 ## Regras transversais
 
 - **Eyebrows:** no máximo 3 na página (Hero, Horários e Contato).
-- **Rótulos de CTA:** um único rótulo para "falar no WhatsApp" no header, no hero, no contato e no botão flutuante (aria-label). Proposta: "Falar no WhatsApp". "Quero esse plano" se mantém nos cards de Planos, porque carrega o plano na mensagem.
+- **Rótulos de CTA:** um único rótulo para a intenção "falar no WhatsApp": **"Quero treinar agora"** (decisão do usuário em 2026-10-07: é o CTA já usado no header e faz parte da estratégia de SEO/conversão). Vale no header, no hero, no contato e no aria-label do botão flutuante; "Falar no WhatsApp" deixa de ser usado. "Quero esse plano" se mantém nos cards de Planos, porque carrega o plano na mensagem.
 - **Travessões:** nenhum "—" ou "–" em texto visível. Faixas de horário usam hífen ("05:00-23:00"). Inclui os 13 textos de `content/professores.json` e 1 de `content/campaign.json`, que são edição de conteúdo; os de professores passam pelo portão 1.
 - **Forma:** foto até a borda da viewport tem raio 0. Foto dentro de coluna ou carrossel usa `--radius-xl`. Botões e cards seguem a escala atual.
 - **`Photo`:** perde a borda e o `rounded-2xl` padrão. O raio vem por prop ou classe conforme a regra acima.
