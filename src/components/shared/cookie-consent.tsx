@@ -61,7 +61,7 @@ const classesVisivel = 'opacity-100 translate-y-0';
  * glassmorphism), borda de baixo contraste, sombra própria de overlay
  * (`shadow-overlay`, diferente da sombra de card), e uma barra azul fina no
  * topo como assinatura — mesma linguagem de "faixa de cor" já usada em
- * HeroBoard/Horários/Contato, não um ícone novo.
+ * HojeStrip/Horários/Contato, não um ícone novo.
  *
  * Não é modal: sem overlay de fundo, sem foco preso — a página continua
  * 100% usável com o banner aberto. Some só quando o visitante decide
@@ -122,7 +122,7 @@ export function CookieConsent() {
       style={{ background: 'linear-gradient(165deg, var(--flex-graphite-surface), var(--flex-graphite) 65%)' }}
     >
       {/* Barra azul fina no topo — assinatura mínima da Flex (mesma
-       * linguagem de faixa de cor de HeroBoard/Horários/Contato), não um
+       * linguagem de faixa de cor de HojeStrip/Horários/Contato), não um
        * ícone ou logo novo. */}
       <div className="bg-flex-blue-600 h-1 w-full" aria-hidden="true" />
 

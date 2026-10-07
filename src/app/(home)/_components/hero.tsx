@@ -1,11 +1,9 @@
 import { siteConfig, whatsappUrl } from '@/config/site';
 import { getFuncionamento } from '@/lib/content/funcionamento';
-import { getHorarios } from '@/lib/content/horarios';
 import { getModalidades } from '@/lib/content/modalidades';
 import { contarConfirmados, getProfessores } from '@/lib/content/professores';
 import { Button } from '@/components/ui/button';
 import { Eyebrow } from '@/components/shared/eyebrow';
-import { HeroBoard } from '@/components/shared/hero-board';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
 import { StatusChip } from '@/components/layout/status-chip';
 import { CtaArrow } from '@/components/shared/cta-arrow';
@@ -13,7 +11,6 @@ import { CountUp } from '@/components/shared/count-up';
 import { cn } from '@/lib/utils';
 
 export function Hero() {
-  const horarios = getHorarios();
   const funcionamento = getFuncionamento();
   const modalidades = getModalidades();
   const professores = getProfessores();
@@ -84,10 +81,6 @@ export function Hero() {
             className="enter mt-6"
             style={{ '--enter-delay': '250ms' } as React.CSSProperties}
           />
-        </div>
-
-        <div className="enter relative z-10" style={{ '--enter-delay': '120ms' } as React.CSSProperties}>
-          <HeroBoard slots={horarios} />
         </div>
 
         {/* Placar de stats — V2: virou grafismo de largura cheia (não mais

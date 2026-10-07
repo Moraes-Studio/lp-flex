@@ -19,7 +19,7 @@ interface HorariosDesktopProps {
  * cálculo rodava uma vez no build/deploy da Vercel (UTC) e ficava congelado
  * no HTML até o próximo deploy, além de nem usar o fuso de São Paulo. Mesmo
  * padrão de correção já usado pelo componente irmão `horarios-mobile.tsx`
- * (e por HeroBoard/StatusChip): "hoje" só existe depois de montar no
+ * (e por HojeStrip/StatusChip): "hoje" só existe depois de montar no
  * cliente. Antes de montar (`hoje === null`), a tabela renderiza sem nenhum
  * destaque — igual ao que o servidor já mandou, sem mismatch de hidratação.
  */

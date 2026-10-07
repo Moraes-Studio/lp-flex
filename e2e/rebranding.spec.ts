@@ -26,3 +26,17 @@ test.describe('Contato: horário de funcionamento agrupado', () => {
     await expect(page.locator('#contato').getByRole('link', { name: 'Quero treinar agora' })).toBeAttached();
   });
 });
+
+test.describe('Horários: faixa HOJE', () => {
+  test('a faixa HOJE fica em #horarios e não existe mais no hero', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#horarios').getByTestId('hoje-strip')).toBeAttached();
+    await expect(page.getByTestId('hoje-strip')).toHaveCount(1);
+    await expect(page.locator('main > section').first().getByText('Hoje', { exact: true })).toHaveCount(0);
+  });
+
+  test('resumo de funcionamento da grade sem travessão', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#horarios')).not.toContainText('–');
+  });
+});
