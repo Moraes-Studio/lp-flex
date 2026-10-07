@@ -1,4 +1,4 @@
-import { getModalidades } from '@/lib/content/modalidades';
+import { getModalidades, separarModalidades } from '@/lib/content/modalidades';
 import { mediaConfig } from '@/config/media';
 import { SectionHeading } from '@/components/shared/section-heading';
 import { ModalidadeIcon } from '@/components/shared/modalidade-icon';
@@ -13,8 +13,7 @@ import { Reveal } from '@/components/shared/reveal';
  * Sem eyebrow (máximo 3 na home).
  */
 export function Modalidades() {
-  const modalidades = getModalidades();
-  const aulas = modalidades.filter((m) => m.icone !== 'musculacao');
+  const { musculacao, aulas } = separarModalidades(getModalidades());
 
   return (
     <section
@@ -34,7 +33,7 @@ export function Modalidades() {
               className="rounded-xl"
               sizes="(min-width: 1024px) 40vw, 100vw"
             />
-            <h3 className="mt-5 text-[22px]">Musculação</h3>
+            <h3 className="mt-5 text-[22px]">{musculacao?.nome ?? 'Musculação'}</h3>
             <p className="text-muted-foreground mt-2 max-w-[420px] text-[15.5px] normal-case">
               Aparelhos, pesos livres e área de cardio, abertos em todo o horário de funcionamento.
             </p>

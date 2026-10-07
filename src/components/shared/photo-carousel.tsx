@@ -68,7 +68,7 @@ export function PhotoCarousel({ fotos, rotulo }: PhotoCarouselProps) {
   };
 
   const botao =
-    'border-border text-flex-blue-700 hover:bg-flex-ice flex h-11 w-11 items-center justify-center rounded-full border bg-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-flex-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-35';
+    'border-border text-flex-blue-700 hover:bg-flex-ice flex h-11 w-11 items-center justify-center rounded-full border bg-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-flex-blue-600 aria-disabled:hover:bg-white aria-disabled:cursor-not-allowed aria-disabled:opacity-35';
 
   return (
     <div>
@@ -88,6 +88,9 @@ export function PhotoCarousel({ fotos, rotulo }: PhotoCarouselProps) {
               if (i === 0) primeiro.current = el;
               if (i === fotos.length - 1) ultimo.current = el;
             }}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${i + 1} de ${fotos.length}`}
             className="w-[82%] shrink-0 snap-start sm:w-[48%] lg:w-[31.5%]"
           >
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl">

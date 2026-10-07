@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getModalidades, parseModalidades } from '@/lib/content/modalidades';
+import { getModalidades, parseModalidades, separarModalidades } from '@/lib/content/modalidades';
 
 describe('parseModalidades', () => {
   it('aceita uma lista válida', () => {
@@ -32,5 +32,26 @@ describe('getModalidades (arquivo real)', () => {
   it('content/modalidades.json é válido', () => {
     expect(() => getModalidades()).not.toThrow();
     expect(getModalidades().length).toBeGreaterThan(0);
+  });
+});
+
+describe('separarModalidades', () => {
+  it('dados reais: 10 aulas e musculação definida', () => {
+    const { musculacao, aulas } = separarModalidades(getModalidades());
+    expect(aulas).toHaveLength(10);
+    expect(musculacao).toBeDefined();
+  });
+
+  it('lista vazia', () => {
+    expect(separarModalidades([])).toEqual({ musculacao: undefined, aulas: [] });
+  });
+
+  it('preserva a ordem das aulas', () => {
+    const { aulas } = separarModalidades([
+      { nome: 'Zumba', icone: 'zumba' },
+      { nome: 'Musculação', icone: 'musculacao' },
+      { nome: 'Pilates', icone: 'pilates' },
+    ]);
+    expect(aulas.map((a) => a.nome)).toEqual(['Zumba', 'Pilates']);
   });
 });

@@ -15,6 +15,8 @@ interface HeroRotatorProps {
  * setas nem bolinhas: o visitante não precisa controlar, é ambientação).
  * Nada é sobreposto à foto (decisão de 2026-10-07).
  * - Só a primeira foto é prioridade de carregamento (é o LCP).
+ * - Cada foto tem o próprio `alt`; as inativas ficam `aria-hidden`, então só a
+ *   foto ativa é exposta a leitores de tela.
  * - Com `prefers-reduced-motion: reduce`, nunca troca: fica na primeira.
  * - Pausa com a aba oculta, pra não acumular trocas em segundo plano.
  */
@@ -67,7 +69,7 @@ export function HeroRotator({ fotos, intervaloMs = 6000 }: HeroRotatorProps) {
         >
           <Image
             src={foto.src}
-            alt={i === 0 ? foto.alt : ''}
+            alt={foto.alt}
             fill
             sizes="(min-width: 1024px) 50vw, 100vw"
             preload={i === 0}

@@ -47,7 +47,7 @@ export const mediaConfig: {
     {
       src: '/fotos/sobre-fachada.jpg',
       alt: 'Fachada do prédio da Academia Flex na Rua das Hortênsias, Vila Helena',
-      legenda: 'Fachada, R. das Hortênsias 104',
+      legenda: 'Fachada',
     },
     {
       src: '/fotos/sobre-entrada.jpg',

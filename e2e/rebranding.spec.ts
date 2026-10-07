@@ -42,6 +42,7 @@ test.describe('Horários: faixa HOJE', () => {
   test('resumo de funcionamento da grade sem travessão', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('#horarios')).not.toContainText('–');
+    await expect(page.locator('#horarios')).not.toContainText('—');
   });
 });
 

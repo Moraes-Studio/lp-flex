@@ -62,7 +62,9 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
         <ul aria-hidden="true" className={cn(classeLista, 'invisible col-start-1 row-start-1')}>
           {maisCheio.map((slot) => (
             <li key={`${slot.day}-${slot.time}-${slot.aula}`} className={classeItem}>
-              <time className="font-mono text-[13px] tabular-nums">{slot.time}</time>
+              <time dateTime={slot.time} className="font-mono text-[13px] tabular-nums">
+                {slot.time}
+              </time>
               <span className="text-[15px]">{slot.aula}</span>
             </li>
           ))}
@@ -86,7 +88,10 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
                     key={`${slot.day}-${slot.time}-${slot.aula}`}
                     className={cn(classeItem, rodando && 'text-white')}
                   >
-                    <time className="text-flex-blue-300 font-mono text-[13px] tabular-nums">
+                    <time
+                      dateTime={slot.time}
+                      className="text-flex-blue-300 font-mono text-[13px] tabular-nums"
+                    >
                       {slot.time}
                     </time>
                     <span className={cn('text-[15px]', rodando && 'font-semibold')}>

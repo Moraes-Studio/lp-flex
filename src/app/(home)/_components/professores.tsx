@@ -91,7 +91,7 @@ export function Professores() {
                       alt={professor.nome}
                       label={`professor ${professor.nome}`}
                       ratio="square"
-                      className="mb-3 w-16"
+                      className="mb-3 w-16 rounded-xl"
                     />
                     <h3 className="text-[18px] leading-tight">{professor.nome}</h3>
                     <p className="text-muted-foreground mt-1 font-mono text-[11px] tracking-[0.08em] uppercase">

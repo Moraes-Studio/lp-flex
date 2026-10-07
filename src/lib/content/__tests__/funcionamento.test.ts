@@ -87,6 +87,10 @@ describe('calcularStatus', () => {
 });
 
 describe('agruparFuncionamento', () => {
+  it('entrada vazia retorna lista vazia', () => {
+    expect(agruparFuncionamento([])).toEqual([]);
+  });
+
   it('junta dias consecutivos com o mesmo horário (grade real)', () => {
     expect(agruparFuncionamento(grade)).toEqual([
       { rotulo: 'Seg a Qui', horario: '05:00-23:00' },

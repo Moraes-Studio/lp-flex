@@ -102,7 +102,7 @@ export function HorariosDesktop({
                         </>
                       ) : (
                         <span className="text-border" aria-hidden="true">
-                          —
+                          ·
                         </span>
                       )}
                     </td>

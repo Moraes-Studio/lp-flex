@@ -1,6 +1,6 @@
 import { siteConfig } from '@/config/site';
 import { mediaConfig } from '@/config/media';
-import { getModalidades } from '@/lib/content/modalidades';
+import { getModalidades, separarModalidades } from '@/lib/content/modalidades';
 import { contarConfirmados, getProfessores } from '@/lib/content/professores';
 import { CountUp } from '@/components/shared/count-up';
 import { PhotoCarousel } from '@/components/shared/photo-carousel';
@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 export function Sobre() {
   const anos = new Date().getFullYear() - siteConfig.foundedYear;
   const modalidades = getModalidades();
+  const { aulas } = separarModalidades(modalidades);
   const professores = getProfessores();
 
   const stats = [
@@ -34,8 +35,8 @@ export function Sobre() {
             <span className="whitespace-nowrap">desde {siteConfig.foundedYear}.</span>
           </h2>
           <p className="text-muted-foreground mt-5 text-[17px] normal-case">
-            Musculação e as {modalidades.length - 1} aulas coletivas no mesmo plano, na Vila Helena
-            desde {siteConfig.foundedYear}.
+            Musculação e as {aulas.length} aulas coletivas no mesmo plano, na Vila Helena desde{' '}
+            {siteConfig.foundedYear}.
           </p>
         </Reveal>
 
