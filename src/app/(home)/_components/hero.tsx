@@ -19,13 +19,13 @@ import { CtaArrow } from '@/components/shared/cta-arrow';
  */
 export function Hero() {
   return (
-    <section className="grid lg:min-h-[min(720px,calc(100dvh-121px))] lg:grid-cols-2">
+    <section className="grid lg:min-h-[min(720px,calc(100dvh-121px))] lg:grid-cols-[1.1fr_0.9fr]">
       <div className="relative aspect-[4/3] w-full lg:order-2 lg:aspect-auto">
         <HeroRotator fotos={mediaConfig.heroFotos} />
       </div>
 
-      <div className="flex items-center px-[6%] py-12 md:py-16 lg:order-1 lg:py-20 lg:pr-8">
-        <div className="mx-auto w-full max-w-[640px] lg:mr-0 lg:ml-auto">
+      <div className="flex items-center px-[6%] py-12 md:py-16 lg:order-1 lg:py-20 lg:pr-8 lg:pl-[6vw]">
+        <div className="mx-auto w-full max-w-[640px] lg:mx-0">
           <Eyebrow className="enter" style={{ '--enter-delay': '0ms' } as React.CSSProperties}>
             Vila Helena · {siteConfig.address.city} · desde {siteConfig.foundedYear}
           </Eyebrow>

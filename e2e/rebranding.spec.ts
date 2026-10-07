@@ -103,6 +103,9 @@ test.describe('Hero', () => {
         linha: parseFloat(getComputedStyle(el).lineHeight),
       }));
       expect(medidas.altura).toBeLessThanOrEqual(2.2 * medidas.linha);
+      const xH1 = (await page.locator('h1').first().boundingBox())!.x;
+      const xLogo = (await page.locator('header a').first().boundingBox())!.x;
+      expect(Math.abs(xH1 - xLogo)).toBeLessThanOrEqual(2);
     });
   }
 
