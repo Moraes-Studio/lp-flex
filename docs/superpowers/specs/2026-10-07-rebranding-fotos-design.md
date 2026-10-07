@@ -146,3 +146,15 @@ Retratos da equipe, nova seção de comunidade, mudança de paleta, fontes ou lo
 9. `docs: CLAUDE.md e tasks.md com o desvio do quadro HOJE`
 
 Sem assinatura ou co-autoria de IA nos commits nem no PR (RULES #8).
+
+---
+
+## Iteração 2 — direção imersiva (decisão do usuário, 2026-10-07)
+
+Depois de ver a versão anterior, o usuário comparou com SmartFit/Bluefit e pediu um salto ("pode perder muita coisa, mas deixa algo foda"). Decisões:
+
+1. **Hero imersivo em tela cheia:** as 3 fotos do `HeroRotator` ocupam a viewport inteira (`min-h-[100dvh]`), com uma camada azul Flex sólida por cima para leitura (cor com opacidade, sem gradiente), título branco enorme em 3 linhas ("Musculação / e aulas com / professor em sala.", "em sala" em azul-claro) e **um único botão, "Ver planos"** (rola para `#planos`). Isto revoga, só para o hero e para a faixa de foto abaixo, a regra "nada sobreposto às fotos"; placas, quadros, chips e legendas sobre foto continuam proibidos.
+2. **CTA sem duplicidade:** o header mantém "Quero treinar agora" (WhatsApp) sempre visível; o hero não repete esse botão.
+3. **Header transparente sobre o hero:** links e logo sobre a foto; ao sair do hero vira branco sólido. Em páginas sem hero imersivo (ex.: `/privacidade`) é sempre sólido.
+4. **Página com mais contraste (pivô do tema claro de agosto):** Modalidades em azul profundo com texto branco; nova faixa de foto em largura total (cardio com vista) com "05:00 às 23:00 / segunda a quinta" lido de `content/funcionamento.json`, com parallax leve via CSS (desligado em movimento reduzido); Sobre em azul Flex com texto branco; Planos, Professores e Contato claros; títulos de seção maiores (~72px no desktop). `CLAUDE.md` ganha nota do novo pivô.
+5. Continua valendo: sem gradiente/brilho/vidro, sem foto de pessoa gerada por IA, contraste AA (título sobre foto medido nas 3 fotos), ≤3 eyebrows, movimento reduzido respeitado, touch sem hover.
