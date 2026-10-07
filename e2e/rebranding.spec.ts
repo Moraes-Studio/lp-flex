@@ -127,3 +127,64 @@ test.describe('Modalidades', () => {
     await expect(secao.getByRole('heading', { name: 'Aulas coletivas' })).toBeVisible();
   });
 });
+
+test.describe('Sobre: carrossel', () => {
+  test('setas visíveis sem hover e navegação por toque/clique', async ({ page }) => {
+    await page.goto('/');
+    await aceitarCookies(page);
+    const sobre = page.locator('#sobre');
+    await sobre.scrollIntoViewIfNeeded();
+
+    const anterior = sobre.getByRole('button', { name: 'Foto anterior' });
+    const proxima = sobre.getByRole('button', { name: 'Próxima foto' });
+    await expect(anterior).toBeVisible();
+    await expect(proxima).toBeVisible();
+    await expect(anterior).toBeDisabled();
+    await expect(proxima).toBeEnabled();
+
+    const trilho = sobre.getByRole('region', { name: 'Fotos da Academia Flex' });
+    const antes = await trilho.evaluate((el) => el.scrollLeft);
+    await proxima.click();
+    await expect.poll(() => trilho.evaluate((el) => el.scrollLeft)).toBeGreaterThan(antes);
+    await expect(anterior).toBeEnabled();
+  });
+
+  test('teclado: seta para a direita avança', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'teclado só no desktop');
+    await page.goto('/');
+    await aceitarCookies(page);
+    const trilho = page.locator('#sobre').getByRole('region', { name: 'Fotos da Academia Flex' });
+    await trilho.scrollIntoViewIfNeeded();
+    await trilho.focus();
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(() => trilho.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+  });
+
+  test('legenda fica abaixo da foto, nunca por cima', async ({ page }) => {
+    await page.goto('/');
+    const primeiro = page.locator('#sobre figure').first();
+    await primeiro.scrollIntoViewIfNeeded();
+    const img = await primeiro.locator('img').boundingBox();
+    const legenda = await primeiro.locator('figcaption').boundingBox();
+    expect(img && legenda && legenda.y >= img.y + img.height - 1).toBe(true);
+  });
+
+  test('números saíram do hero e estão no Sobre', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#sobre').getByText('anos na Vila Helena')).toBeAttached();
+  });
+});
+
+test.describe('Sem scroll horizontal', () => {
+  for (const largura of [375, 768, 1440]) {
+    test(`largura ${largura}px`, async ({ page }) => {
+      await page.setViewportSize({ width: largura, height: 900 });
+      await page.goto('/');
+      await page.waitForLoadState('networkidle');
+      const transborda = await page.evaluate(
+        () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1
+      );
+      expect(transborda).toBe(false);
+    });
+  }
+});

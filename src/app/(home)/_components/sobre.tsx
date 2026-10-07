@@ -1,70 +1,56 @@
 import { siteConfig } from '@/config/site';
-import { Eyebrow } from '@/components/shared/eyebrow';
+import { mediaConfig } from '@/config/media';
+import { getModalidades } from '@/lib/content/modalidades';
+import { contarConfirmados, getProfessores } from '@/lib/content/professores';
+import { CountUp } from '@/components/shared/count-up';
+import { PhotoCarousel } from '@/components/shared/photo-carousel';
 import { Reveal } from '@/components/shared/reveal';
+import { cn } from '@/lib/utils';
 
 /**
- * V2 (direção de arte) — o principal momento gráfico da página. Antes (V1.5)
- * era "número grande dentro da seção clara"; agora é uma composição de marca
- * de verdade: metade da viewport vira superfície Flex Blue (grid de 2
- * colunas em largura total, não o `max-w-[1180px]` do resto do site — é o
- * próprio grid quem faz o "bleed", sem precisar de calc(50vw) nem
- * overflow-hidden de página inteira). Texto real continua disciplinado
- * (mesmo `px-[6%]`/max-width de sempre) — só a superfície escapa.
+ * Sobre (rodada 2026-10-07): pilha vertical, não split. Hero e Professores
+ * já são duas colunas, e Contato também; três seções seguidas no mesmo
+ * formato é zigue-zague de template. Título, texto curto, os números que
+ * saíram do hero e o carrossel com o espaço real (fachada primeiro). Sem
+ * eyebrow e sem o bloco azul com o "1992" gigante.
  */
 export function Sobre() {
   const anos = new Date().getFullYear() - siteConfig.foundedYear;
+  const modalidades = getModalidades();
+  const professores = getProfessores();
+
+  const stats = [
+    { valor: `${anos}+`, label: 'anos na Vila Helena' },
+    { valor: String(modalidades.length), label: 'modalidades inclusas' },
+    { valor: String(contarConfirmados(professores)), label: 'professores confirmados' },
+  ];
 
   return (
-    <section id="sobre">
-      <div className="lg:grid lg:grid-cols-[0.85fr_1.15fr] lg:items-stretch">
-        {/* Metade azul — patrimônio. overflow-hidden contém o "1992" quando
-         * ele excede a coluna (crop intencional, nunca vira scroll). */}
-        <div className="bg-flex-blue-700 relative overflow-hidden px-[6%] py-16 md:py-20 lg:flex lg:items-center lg:py-0">
-          <div className="relative mx-auto w-full max-w-[420px] lg:mx-0 lg:ml-auto lg:mr-12 lg:max-w-[440px]">
-            <p className="font-mono text-flex-blue-200 text-[11px] tracking-[0.32em] uppercase">Est.</p>
-            {/* aria-hidden: decorativo — o ano real já está em texto legível
-             * logo abaixo ("{anos}+ anos") e no h2 da coluna branca ("desde
-             * {ano}"). whitespace-nowrap + clamp: em telas muito largas o
-             * numeral excede os 440px do bloco de propósito e é cortado pelo
-             * overflow-hidden do pai — "parcialmente cortado, mas intencional". */}
-            <p
-              aria-hidden="true"
-              className="font-heading text-white -mt-1 text-[clamp(110px,15vw,230px)] leading-[0.78] whitespace-nowrap normal-case"
-            >
-              {siteConfig.foundedYear}
-            </p>
-            <div className="mt-5 flex items-center gap-2.5 border-t border-white/20 pt-5">
-              <span className="bg-flex-blue-300 h-1.5 w-1.5 shrink-0 rounded-full" aria-hidden="true" />
-              <p className="font-mono text-[11px] tracking-[0.14em] text-white/80 uppercase">
-                {anos}+ anos na Vila Helena
-              </p>
-            </div>
-            <p className="mt-1.5 font-mono text-[11px] tracking-[0.14em] text-white/50 uppercase">
-              Vila Helena · {siteConfig.address.city}
-            </p>
-          </div>
-        </div>
+    <section id="sobre" className="px-[6%] py-16 md:py-24">
+      <div className="mx-auto max-w-[1180px]">
+        <Reveal className="max-w-[640px]">
+          <h2 className="heading-reveal text-[clamp(28px,3.6vw,44px)] leading-[1.1]">
+            Academia completa, desde {siteConfig.foundedYear}.
+          </h2>
+          <p className="text-muted-foreground mt-5 text-[17px] normal-case">
+            Musculação e as {modalidades.length - 1} aulas coletivas no mesmo plano, na Vila Helena
+            desde {siteConfig.foundedYear}.
+          </p>
+        </Reveal>
 
-        {/* Metade branca — a mesma leitura de antes, só que agora reage à
-         * escala do lado azul em vez de dividir a seção ao meio de forma
-         * neutra. */}
-        <div className="flex items-center px-[6%] py-16 md:py-20">
-          <Reveal className="w-full max-w-[540px]">
-            <Eyebrow>Sobre a Flex</Eyebrow>
-            <h2 className="heading-reveal text-[clamp(28px,3.6vw,42px)] leading-[1.1]">
-              Academia completa,
-              <br />
-              desde {siteConfig.foundedYear}.
-            </h2>
-            <p className="text-muted-foreground mt-5 max-w-[540px] text-[16.5px] normal-case">
-              Professores de Educação Física ficam em sala durante o horário de funcionamento,
-              montam o treino do aluno e orientam a execução dos exercícios.
-            </p>
-            <p className="text-muted-foreground mt-4 max-w-[540px] text-[16.5px] normal-case">
-              Musculação e todas as aulas coletivas entram no mesmo plano: pilates, yoga, zumba,
-              jump, fit dance, step, GAP, ritbox, flex training e cross training.
-            </p>
-          </Reveal>
+        <dl className="border-flex-blue-600/15 divide-flex-blue-600/15 mt-10 grid max-w-[620px] grid-cols-3 divide-x border-t pt-6">
+          {stats.map((stat, i) => (
+            <div key={stat.label} className={cn('flex flex-col-reverse', i > 0 && 'pl-4 sm:pl-6')}>
+              <dt className="text-muted-foreground mt-1.5 text-[12px] leading-snug normal-case">{stat.label}</dt>
+              <dd className="font-heading text-flex-blue-700 text-[38px] leading-none tabular-nums sm:text-[46px]">
+                <CountUp value={stat.valor} />
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        <div className="mt-12 md:mt-14">
+          <PhotoCarousel fotos={mediaConfig.sobreGaleria} rotulo="Fotos da Academia Flex" />
         </div>
       </div>
     </section>
