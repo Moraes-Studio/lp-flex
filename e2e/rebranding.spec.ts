@@ -139,14 +139,14 @@ test.describe('Sobre: carrossel', () => {
     const proxima = sobre.getByRole('button', { name: 'Próxima foto' });
     await expect(anterior).toBeVisible();
     await expect(proxima).toBeVisible();
-    await expect(anterior).toBeDisabled();
-    await expect(proxima).toBeEnabled();
+    await expect(anterior).toHaveAttribute('aria-disabled', 'true');
+    await expect(proxima).toHaveAttribute('aria-disabled', 'false');
 
     const trilho = sobre.getByRole('region', { name: 'Fotos da Academia Flex' });
     const antes = await trilho.evaluate((el) => el.scrollLeft);
     await proxima.click();
     await expect.poll(() => trilho.evaluate((el) => el.scrollLeft)).toBeGreaterThan(antes);
-    await expect(anterior).toBeEnabled();
+    await expect(anterior).toHaveAttribute('aria-disabled', 'false');
   });
 
   test('teclado: seta para a direita avança', async ({ page, isMobile }) => {
@@ -180,7 +180,8 @@ test.describe('Sem scroll horizontal', () => {
     test(`largura ${largura}px`, async ({ page }) => {
       await page.setViewportSize({ width: largura, height: 900 });
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('load');
+      await expect(page.locator('#sobre figure').first()).toBeVisible();
       const transborda = await page.evaluate(
         () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1
       );

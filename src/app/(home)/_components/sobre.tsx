@@ -29,8 +29,9 @@ export function Sobre() {
     <section id="sobre" className="px-[6%] py-16 md:py-24">
       <div className="mx-auto max-w-[1180px]">
         <Reveal className="max-w-[640px]">
-          <h2 className="heading-reveal text-[clamp(28px,3.6vw,44px)] leading-[1.1]">
-            Academia completa, desde {siteConfig.foundedYear}.
+          <h2 className="heading-reveal text-balance text-[clamp(28px,3.6vw,44px)] leading-[1.1]">
+            Academia completa,{' '}
+            <span className="whitespace-nowrap">desde {siteConfig.foundedYear}.</span>
           </h2>
           <p className="text-muted-foreground mt-5 text-[17px] normal-case">
             Musculação e as {modalidades.length - 1} aulas coletivas no mesmo plano, na Vila Helena
