@@ -11,8 +11,8 @@ import { CtaArrow } from '@/components/shared/cta-arrow';
  * brilho ou vidro) e o texto alinhado à esquerda na mesma margem do logo
  * (`px-[6%]`), assentado na metade de baixo.
  *
- * - Puxado pra baixo do header sticky com `-mt-[121px]` (logo 96 + `py-3`
- *   24 + borda 1) e o mesmo valor de padding-top: a foto começa no topo da
+ * - Puxado pra baixo do header sticky com margem negativa de `--header-h`
+ *   (globals.css, a mesma altura que o header usa) e o mesmo valor de padding-top: a foto começa no topo da
  *   viewport e o header fica transparente por cima (header-shell.tsx).
  * - Um único botão, "Ver planos". O WhatsApp acima da dobra é só o do
  *   header ("Quero treinar agora").
@@ -29,14 +29,14 @@ export function Hero() {
   return (
     <section
       data-hero-imersivo
-      className="bg-flex-blue-950 relative isolate -mt-[121px] flex min-h-[100dvh] flex-col"
+      className="bg-flex-blue-950 relative isolate -mt-(--header-h) flex min-h-[100dvh] flex-col"
     >
       <div className="absolute inset-0 -z-10">
         <HeroRotator fotos={mediaConfig.heroFotos} />
       </div>
       <div className="bg-flex-blue-950/70 absolute inset-0 -z-10" aria-hidden="true" />
 
-      <div className="flex flex-1 items-end px-[6%] pt-[calc(121px+40px)] pb-[clamp(48px,11dvh,128px)]">
+      <div className="flex flex-1 items-end px-[6%] pt-[calc(var(--header-h)+40px)] pb-[clamp(48px,11dvh,128px)]">
         <div className="w-full max-w-[1100px]">
           <Eyebrow
             variant="inverted"
@@ -52,10 +52,12 @@ export function Hero() {
               desde {siteConfig.foundedYear}
             </span>
           </Eyebrow>
-          {/* `pt-[0.14em]`: com entrelinha 0.95 o til de "Ã" passa do topo da
-           * caixa e o clip-path do `heading-reveal` cortava o acento. */}
+          {/* Entrelinha 1.08: em 0.95/1.02 a cedilha de "Ç" encostava no "O" de
+           * "COM" na linha de baixo (conferido com zoom em 1920/1440/1366/390).
+           * `pt-[0.14em]`: o til de "Ã" passa do topo da caixa e o clip-path
+           * do `heading-reveal` cortava o acento. */}
           <h1
-            className="enter heading-reveal pt-[0.14em] text-[clamp(48px,min(8.4vw,13.5dvh),124px)] leading-[0.95] font-bold tracking-[0.005em] text-balance text-white md:text-wrap"
+            className="enter heading-reveal pt-[0.14em] text-[clamp(48px,min(8.4vw,13.5dvh),124px)] leading-[1.08] font-bold tracking-[0.005em] text-balance text-white md:text-wrap"
             style={{ '--enter-delay': '70ms' } as React.CSSProperties}
           >
             Musculação <br className="hidden md:block" />e aulas com{' '}

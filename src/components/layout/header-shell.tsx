@@ -6,12 +6,6 @@ import { cn } from '@/lib/utils';
 
 type Modo = 'transparente' | 'solido';
 
-/** Altura do header (logo 96 + `py-3` 24 + borda 1). O hero imersivo usa o
- * mesmo número na margem negativa (`-mt-[121px]`, ver hero.tsx); não é
- * exportado porque valor importado de módulo 'use client' num Server
- * Component vira referência de cliente, não o número. */
-const HEADER_ALTURA_PX = 121;
-
 /**
  * Casca do header: decide o modo visual, o conteúdo vem do servidor como
  * children (header.tsx).
@@ -34,10 +28,13 @@ export function HeaderShell({ children }: { children: React.ReactNode }) {
     const hero = document.querySelector('[data-hero-imersivo]');
     // Sem hero (ex: /privacidade) o padrão por rota já é `solido`.
     if (!hero) return;
+    // Mesma altura que o header usa (`--header-h`, globals.css).
+    const alturaHeader =
+      getComputedStyle(document.documentElement).getPropertyValue('--header-h').trim() || '121px';
     const observer = new IntersectionObserver(
       ([entrada]) =>
         setObservado({ rota: pathname, modo: entrada.isIntersecting ? 'transparente' : 'solido' }),
-      { rootMargin: `-${HEADER_ALTURA_PX}px 0px 0px 0px` }
+      { rootMargin: `-${alturaHeader} 0px 0px 0px` }
     );
     observer.observe(hero);
     return () => observer.disconnect();
@@ -55,7 +52,7 @@ export function HeaderShell({ children }: { children: React.ReactNode }) {
       <header
         data-modo={modo}
         className={cn(
-          'group/header flex items-center justify-between gap-4 border-b px-[6%] py-3',
+          'group/header flex h-(--header-h) items-center justify-between gap-4 border-b px-[6%] py-3',
           'bg-background border-border',
           'data-[modo=transparente]:border-transparent data-[modo=transparente]:bg-transparent',
           'transition-[background-color,border-color,box-shadow] duration-200 ease-out motion-reduce:transition-none'

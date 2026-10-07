@@ -78,6 +78,23 @@ test.describe('Header e rótulos', () => {
     await expect(header).toHaveAttribute('data-modo', 'transparente');
   });
 
+  test('CTA do header: branco sobre o hero, azul institucional no modo sólido', async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, 'CTA do header só aparece a partir de md');
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    const header = page.locator('header').first();
+    const cta = header.getByRole('link', { name: 'Quero treinar agora' });
+    const fundo = () => cta.evaluate((el) => getComputedStyle(el).backgroundColor);
+    await expect(header).toHaveAttribute('data-modo', 'transparente');
+    await expect.poll(fundo).toBe('rgb(255, 255, 255)');
+    await page.evaluate(() => window.scrollTo(0, 1200));
+    await expect(header).toHaveAttribute('data-modo', 'solido');
+    await expect.poll(fundo).toBe('rgb(11, 77, 162)');
+  });
+
   test('em /privacidade o header é sempre sólido', async ({ page }) => {
     await page.goto('/privacidade');
     const header = page.locator('header').first();

@@ -59,7 +59,14 @@ export function Header() {
 
         <div className="ml-auto flex items-center gap-3">
           <StatusChip funcionamento={funcionamento} className="hidden xl:inline-flex" />
-          <Button asChild size="sm" className="group hidden md:inline-flex">
+          {/* Mesmo botão nos dois modos; só as classes trocam. Sobre a foto
+           * (modo transparente) o azul quase some contra a camada azul-escura
+           * (1.1 a 1.9:1), então vira o estilo `onDark`: branco, texto azul. */}
+          <Button
+            asChild
+            size="sm"
+            className="group hidden transition-[transform,background-color,border-color,color,box-shadow] md:inline-flex group-data-[modo=transparente]/header:bg-white group-data-[modo=transparente]/header:text-flex-blue-700 group-data-[modo=transparente]/header:shadow-none group-data-[modo=transparente]/header:hover:bg-flex-ice group-data-[modo=transparente]/header:focus-visible:ring-white group-data-[modo=transparente]/header:focus-visible:ring-offset-flex-blue-950"
+          >
             <a
               href={whatsappUrl('Olá! Quero treinar na Academia Flex.')}
               target="_blank"

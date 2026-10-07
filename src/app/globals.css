@@ -97,6 +97,11 @@
 }
 
 :root {
+  /* Altura do header (logo 96 + `py-3` 24 + borda 1). Fonte única: o header
+     usa como altura (header-shell.tsx), o hero imersivo como margem negativa
+     e padding-top (hero.tsx) e o shell como rootMargin do observer. */
+  --header-h: 121px;
+
   /* Escala Flex Blue institucional — ancorada no azul real do logo (#0B4DA2 = 600).
      Pivô pro tema claro (papel/quadro de avisos) aprovado em 2026-08-18: substitui a
      escala escura anterior. Ver RULES.md #3 — este azul nunca muda com campanha ativa. */
