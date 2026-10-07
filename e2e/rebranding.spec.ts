@@ -117,6 +117,44 @@ test.describe('Hero', () => {
     });
   }
 
+  test('tela larga (1920x1080): texto e foto juntos, azul dos dois lados, sem faixa branca', async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, 'só desktop');
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.goto('/');
+    const h1 = (await page.locator('h1').first().boundingBox())!;
+    const foto = (await page.getByTestId('hero-rotator').boundingBox())!;
+    const lacuna = foto.x - (h1.x + h1.width);
+    expect(lacuna).toBeGreaterThan(0);
+    expect(lacuna).toBeLessThanOrEqual(160);
+
+    // Robusto contra a estrutura interna: pega o elemento que está de fato
+    // sob um ponto em cada margem do hero e sobe até o primeiro ancestral que
+    // pinta fundo. Nas duas margens (antes do contêiner e depois da foto) o
+    // que pinta tem de ser o azul institucional (#083a7c), nunca branco.
+    const hero = (await page.locator('main > section').first().boundingBox())!;
+    const y = hero.y + hero.height / 2;
+    const margemDireita = foto.x + foto.width + 20;
+    expect(margemDireita).toBeLessThan(1920);
+    for (const x of [10, margemDireita]) {
+      const fundo = await page.evaluate(
+        ([px, py]) => {
+          let el = document.elementFromPoint(px, py);
+          while (el) {
+            const bg = getComputedStyle(el).backgroundColor;
+            if (bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') return bg;
+            el = el.parentElement;
+          }
+          return 'nenhum';
+        },
+        [x, y]
+      );
+      expect(fundo).toBe('rgb(8, 58, 124)');
+    }
+  });
+
   test('primeira foto do hero carrega com prioridade alta', async ({ page }) => {
     await page.goto('/');
     const primeira = page.getByTestId('hero-rotator').locator('img').first();

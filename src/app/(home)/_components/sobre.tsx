@@ -27,7 +27,7 @@ export function Sobre() {
   ];
 
   return (
-    <section id="sobre" className="px-[6%] py-16 md:py-24">
+    <section id="sobre" className="bg-flex-ice px-[6%] py-16 md:py-24">
       <div className="mx-auto max-w-[1180px]">
         <Reveal className="max-w-[640px]">
           <h2 className="heading-reveal text-[clamp(28px,3.6vw,44px)] leading-[1.1] text-balance">
