@@ -19,17 +19,16 @@ import { CtaArrow } from '@/components/shared/cta-arrow';
  */
 export function Hero() {
   return (
-    // A seção pinta o azul de borda a borda; o grid fica num contêiner de
-    // 1600px centralizado pra texto e foto não se afastarem em tela larga
-    // (acima de 1600px sobra só azul dos dois lados).
+    // A foto vai até a borda direita em qualquer largura. Em tela larga
+    // (2xl) o bloco de texto encosta no fim da sua coluna, junto da foto.
     <section className="bg-flex-blue-700">
-      <div className="mx-auto grid max-w-[1600px] lg:min-h-[min(720px,calc(100dvh-121px))] lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="grid lg:min-h-[min(720px,calc(100dvh-121px))] lg:grid-cols-[1.1fr_0.9fr]">
         <div className="relative aspect-[4/3] w-full lg:order-2 lg:aspect-auto">
           <HeroRotator fotos={mediaConfig.heroFotos} />
         </div>
 
         <div className="flex items-center px-[6%] py-12 md:py-16 lg:order-1 lg:py-20 lg:pr-8 lg:pl-[6vw]">
-          <div className="mx-auto w-full max-w-[640px] lg:mx-0">
+          <div className="mx-auto w-full max-w-[640px] lg:mx-0 2xl:ml-auto">
             <Eyebrow
               variant="inverted"
               className="enter"

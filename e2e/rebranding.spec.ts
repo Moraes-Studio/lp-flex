@@ -117,7 +117,7 @@ test.describe('Hero', () => {
     });
   }
 
-  test('tela larga (1920x1080): texto e foto juntos, azul dos dois lados, sem faixa branca', async ({
+  test('tela larga (1920x1080): texto e foto juntos, foto na borda direita', async ({
     page,
     isMobile,
   }) => {
@@ -130,29 +130,8 @@ test.describe('Hero', () => {
     expect(lacuna).toBeGreaterThan(0);
     expect(lacuna).toBeLessThanOrEqual(160);
 
-    // Robusto contra a estrutura interna: pega o elemento que está de fato
-    // sob um ponto em cada margem do hero e sobe até o primeiro ancestral que
-    // pinta fundo. Nas duas margens (antes do contêiner e depois da foto) o
-    // que pinta tem de ser o azul institucional (#083a7c), nunca branco.
-    const hero = (await page.locator('main > section').first().boundingBox())!;
-    const y = hero.y + hero.height / 2;
-    const margemDireita = foto.x + foto.width + 20;
-    expect(margemDireita).toBeLessThan(1920);
-    for (const x of [10, margemDireita]) {
-      const fundo = await page.evaluate(
-        ([px, py]) => {
-          let el = document.elementFromPoint(px, py);
-          while (el) {
-            const bg = getComputedStyle(el).backgroundColor;
-            if (bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') return bg;
-            el = el.parentElement;
-          }
-          return 'nenhum';
-        },
-        [x, y]
-      );
-      expect(fundo).toBe('rgb(8, 58, 124)');
-    }
+    // A foto vai até a borda da viewport (sem faixa azul à direita).
+    expect(Math.abs(foto.x + foto.width - 1920)).toBeLessThanOrEqual(1);
   });
 
   test('primeira foto do hero carrega com prioridade alta', async ({ page }) => {
