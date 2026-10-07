@@ -11,17 +11,16 @@ import { Reveal } from '@/components/shared/reveal';
  * a musculação e o salão onde acontecem as aulas coletivas. Cada aula
  * mantém o próprio ícone (nunca reaproveitado entre modalidades, RULES).
  * Sem eyebrow (máximo 3 na home).
+ * Iteração imersiva: fundo azul profundo (flex-blue-900) pra dar contraste
+ * de ritmo entre Planos (branco) e Horários (grafite).
  */
 export function Modalidades() {
   const { musculacao, aulas } = separarModalidades(getModalidades());
 
   return (
-    <section
-      id="modalidades"
-      className="bg-surface-100 border-border border-y px-[6%] py-16 md:py-20"
-    >
+    <section id="modalidades" className="bg-flex-blue-900 px-[6%] py-20 text-white md:py-28">
       <div className="mx-auto max-w-[1180px]">
-        <SectionHeading title="O que você treina aqui." />
+        <SectionHeading tone="dark" title="O que você treina aqui." />
 
         <div className="grid gap-10 lg:grid-cols-[5fr_7fr] lg:gap-12">
           <Reveal>
@@ -33,8 +32,10 @@ export function Modalidades() {
               className="rounded-xl"
               sizes="(min-width: 1024px) 40vw, 100vw"
             />
-            <h3 className="mt-5 text-[22px]">{musculacao?.nome ?? 'Musculação'}</h3>
-            <p className="text-muted-foreground mt-2 max-w-[420px] text-[15.5px] normal-case">
+            <h3 className="mt-6 text-[clamp(24px,2.2vw,30px)] text-white">
+              {musculacao?.nome ?? 'Musculação'}
+            </h3>
+            <p className="mt-2 max-w-[420px] text-[16px] text-white/75 normal-case">
               Aparelhos, pesos livres e área de cardio, abertos em todo o horário de funcionamento.
             </p>
           </Reveal>
@@ -48,8 +49,8 @@ export function Modalidades() {
               className="rounded-xl"
               sizes="(min-width: 1024px) 58vw, 100vw"
             />
-            <h3 className="mt-5 text-[22px]">Aulas coletivas</h3>
-            <p className="text-muted-foreground mt-2 text-[15.5px] normal-case">
+            <h3 className="mt-6 text-[clamp(24px,2.2vw,30px)] text-white">Aulas coletivas</h3>
+            <p className="mt-2 text-[16px] text-white/75 normal-case">
               {aulas.length} aulas no mesmo plano. Confira os dias na grade de horários.
             </p>
             <ul className="mt-5 flex flex-wrap gap-2.5">
@@ -57,9 +58,9 @@ export function Modalidades() {
                 <li
                   key={aula.nome}
                   data-testid="aula-coletiva"
-                  className="border-border rounded-pill inline-flex items-center gap-2 border bg-white px-3.5 py-2 text-[14px] font-medium"
+                  className="rounded-pill inline-flex items-center gap-2 border border-white/20 bg-white/10 px-3.5 py-2 text-[14px] font-medium text-white"
                 >
-                  <ModalidadeIcon icone={aula.icone} className="text-flex-blue-600 h-4 w-4" />
+                  <ModalidadeIcon icone={aula.icone} className="text-flex-blue-300 h-4 w-4" />
                   {aula.nome}
                 </li>
               ))}

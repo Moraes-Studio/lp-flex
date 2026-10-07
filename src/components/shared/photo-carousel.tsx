@@ -4,11 +4,15 @@ import * as React from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Foto } from '@/config/media';
+import { cn } from '@/lib/utils';
 
 interface PhotoCarouselProps {
   fotos: Foto[];
   /** Nome acessível da região, ex.: "Fotos da Academia Flex". */
   rotulo: string;
+  /** 'light' (padrão) pra fundo claro; 'dark' pra fundo azul/escuro (Sobre):
+   * legenda e setas trocam pra tons claros sem duplicar o componente. */
+  tone?: 'light' | 'dark';
 }
 
 /**
@@ -20,7 +24,8 @@ interface PhotoCarouselProps {
  *   (nada de listener de scroll).
  * - Sem autoplay e sem contador "03 / 08". Legenda abaixo da foto.
  */
-export function PhotoCarousel({ fotos, rotulo }: PhotoCarouselProps) {
+export function PhotoCarousel({ fotos, rotulo, tone = 'light' }: PhotoCarouselProps) {
+  const escuro = tone === 'dark';
   const trilho = React.useRef<HTMLDivElement>(null);
   const primeiro = React.useRef<HTMLElement | null>(null);
   const ultimo = React.useRef<HTMLElement | null>(null);
@@ -88,8 +93,12 @@ export function PhotoCarousel({ fotos, rotulo }: PhotoCarouselProps) {
     }
   };
 
-  const botao =
-    'border-border text-flex-blue-700 hover:bg-flex-ice flex h-11 w-11 items-center justify-center rounded-full border bg-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-flex-blue-600 aria-disabled:hover:bg-white aria-disabled:cursor-not-allowed aria-disabled:opacity-35';
+  const botao = cn(
+    'flex h-11 w-11 items-center justify-center rounded-full border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 aria-disabled:cursor-not-allowed aria-disabled:opacity-35',
+    escuro
+      ? 'border-white/30 bg-white/10 text-white hover:bg-white/20 focus-visible:outline-white aria-disabled:hover:bg-white/10'
+      : 'border-border text-flex-blue-700 hover:bg-flex-ice focus-visible:outline-flex-blue-600 bg-white aria-disabled:hover:bg-white'
+  );
 
   return (
     <div ref={raiz}>
@@ -100,7 +109,10 @@ export function PhotoCarousel({ fotos, rotulo }: PhotoCarouselProps) {
         aria-label={rotulo}
         tabIndex={0}
         onKeyDown={aoTeclar}
-        className="focus-visible:outline-flex-blue-600 flex snap-x snap-mandatory [scrollbar-width:none] gap-4 overflow-x-auto overscroll-x-contain pb-2 focus-visible:outline-2 focus-visible:outline-offset-4 md:gap-5 [&::-webkit-scrollbar]:hidden"
+        className={cn(
+          'flex snap-x snap-mandatory [scrollbar-width:none] gap-4 overflow-x-auto overscroll-x-contain pb-2 focus-visible:outline-2 focus-visible:outline-offset-4 md:gap-5 [&::-webkit-scrollbar]:hidden',
+          escuro ? 'focus-visible:outline-white' : 'focus-visible:outline-flex-blue-600'
+        )}
       >
         {fotos.map((foto, i) => (
           <figure
@@ -125,7 +137,12 @@ export function PhotoCarousel({ fotos, rotulo }: PhotoCarouselProps) {
               />
             </div>
             {foto.legenda ? (
-              <figcaption className="text-muted-foreground mt-2.5 text-[13.5px]">
+              <figcaption
+                className={cn(
+                  'mt-2.5 text-[13.5px]',
+                  escuro ? 'text-white/70' : 'text-muted-foreground'
+                )}
+              >
                 {foto.legenda}
               </figcaption>
             ) : null}

@@ -27,8 +27,7 @@ export function Planos() {
         <SectionHeading
           title={
             <>
-              Musculação e todas as
-              <br />
+              Musculação e todas as <br className="hidden sm:block" />
               modalidades inclusas.
             </>
           }

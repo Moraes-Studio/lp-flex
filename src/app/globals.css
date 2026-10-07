@@ -258,8 +258,11 @@
  * Hero via `.enter`, h2 de cada seção via `.reveal` em section-heading.tsx).
  * Mais perceptível que o fade puro do `.reveal` no resto do bloco (eyebrow/
  * descrição continuam só com opacity), sem animar palavra/letra. */
+/* Estado final com folga negativa vertical: com entrelinha justa (1.02 nos
+ * h2 da iteração imersiva), `inset(0)` cortava acento da 1ª linha (Ê, Ã) e
+ * cedilha da última. A folga só afrouxa o recorte, não muda layout. */
 .heading-reveal {
-  clip-path: inset(0 0 0% 0);
+  clip-path: inset(-0.3em 0 -0.3em 0);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -293,7 +296,7 @@
     clip-path: inset(0 0 100% 0);
   }
   to {
-    clip-path: inset(0 0 0% 0);
+    clip-path: inset(-0.3em 0 -0.3em 0);
   }
 }
 

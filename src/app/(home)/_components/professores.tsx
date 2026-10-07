@@ -35,6 +35,9 @@ export function Professores() {
            * professor, tratada como citação editorial, não mais uma linha de
            * bio igual às outras. */}
           <div>
+            {/* Quebras explícitas: na escala large (80px) a coluna não comporta
+             * "presentes na sala." numa linha, e o navegador deixava "sala."
+             * sozinha. Três linhas intencionais em vez de uma órfã. */}
             {/* Título revisado contra SDD §7 (portão 1, rodada 2026-10-07): o anterior, "Seu treino montado por um professor", ficava perto de "Seu professor"/acompanhamento individual. */}
             <SectionHeading
               className="mb-8 lg:mb-10"
@@ -43,7 +46,9 @@ export function Professores() {
                 <>
                   Professores
                   <br />
-                  presentes na sala.
+                  presentes
+                  <br />
+                  na sala.
                 </>
               }
               description="Todos formados em Educação Física."

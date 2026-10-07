@@ -66,9 +66,7 @@ test.describe('Header e rótulos', () => {
     await expect(page.locator('footer')).not.toContainText('—');
   });
 
-  test('na home, header transparente sobre o hero e sólido depois de rolar', async ({
-    page,
-  }) => {
+  test('na home, header transparente sobre o hero e sólido depois de rolar', async ({ page }) => {
     await page.goto('/');
     const header = page.locator('header').first();
     await expect(header).toHaveAttribute('data-modo', 'transparente');
@@ -284,5 +282,56 @@ test.describe('Eyebrows', () => {
     await expect(
       page.locator('#professores').getByRole('heading', { name: 'Professores presentes na sala.' })
     ).toBeAttached();
+  });
+});
+
+test.describe('Seções: contraste e escala (iteração imersiva)', () => {
+  test('#modalidades em flex-blue-900 e #sobre em flex-blue-700', async ({ page }) => {
+    await page.goto('/');
+    const fundo = (sel: string) =>
+      page.locator(sel).evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(await fundo('#modalidades')).toBe('rgb(4, 29, 64)');
+    expect(await fundo('#sobre')).toBe('rgb(8, 58, 124)');
+  });
+
+  test('títulos das seções em branco sobre os fundos azuis', async ({ page }) => {
+    await page.goto('/');
+    for (const sel of ['#modalidades h2', '#sobre h2']) {
+      const cor = await page
+        .locator(sel)
+        .first()
+        .evaluate((el) => getComputedStyle(el).color);
+      expect(cor, sel).toBe('rgb(255, 255, 255)');
+    }
+  });
+
+  test('setas do carrossel legíveis no azul (ícone branco)', async ({ page }) => {
+    await page.goto('/');
+    const proxima = page.locator('#sobre').getByRole('button', { name: 'Próxima foto' });
+    await expect(proxima).toBeVisible();
+    expect(await proxima.evaluate((el) => getComputedStyle(el).color)).toBe('rgb(255, 255, 255)');
+  });
+
+  test('títulos grandes e com no máximo 3 linhas em 1440', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'medição de escala no desktop');
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    for (const id of ['planos', 'modalidades', 'professores', 'sobre', 'contato']) {
+      const h2 = page.locator(`#${id} h2`).first();
+      const { tamanho, linhas } = await h2.evaluate((el) => {
+        const s = getComputedStyle(el);
+        const lh = parseFloat(s.lineHeight);
+        return {
+          tamanho: parseFloat(s.fontSize),
+          linhas: Math.round(el.getBoundingClientRect().height / lh),
+        };
+      });
+      expect(tamanho, id).toBeGreaterThanOrEqual(64);
+      expect(linhas, id).toBeLessThanOrEqual(3);
+    }
+    const horarios = await page
+      .locator('#horarios h2')
+      .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+    expect(horarios).toBeGreaterThanOrEqual(44);
   });
 });
