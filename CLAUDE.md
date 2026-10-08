@@ -35,7 +35,7 @@ Este projeto usa **fotografia documental real**, não imagem gerada por IA e nã
 
 ## Padrão de frontend/UX/UI
 
-Antes de criar ou alterar qualquer componente visual, usar a skill `frontend-design` disponível no ambiente — ela cobre os tokens deste projeto (paleta Flex Blue institucional em tema claro — "papel", ancorada no azul real do logo `#0B4DA2`; tipografia Oswald/Barlow/IBM Plex Mono; motivo de assinatura "quadro de avisos" — faixa de aulas de hoje no topo de Horários, cartões com hairline e header azul sólido, nunca glass/glow/gradiente) e evita cair em template genérico de IA (hero com gradiente + 3 cards, glassmorphism em excesso, ícones fora de contexto). Esse padrão de qualidade é não-negociável: o site compete visualmente com SmartFit, Panobianco, Bluefit e Red Target, que têm equipe de design própria — "parece feito à mão" não é aceitável aqui.
+Antes de criar ou alterar qualquer componente visual, usar a skill `frontend-design` disponível no ambiente — ela cobre os tokens deste projeto (paleta Flex Blue institucional ancorada no azul real do logo `#0B4DA2`, com seções alternando azul profundo, grafite e claras ("papel") e hero imersivo em tela cheia; tipografia Oswald/Barlow/IBM Plex Mono; motivo de assinatura "quadro de avisos" — faixa de aulas de hoje no topo de Horários, cartões com hairline e header azul sólido, nunca glass/glow/gradiente) e evita cair em template genérico de IA (hero com gradiente + 3 cards, glassmorphism em excesso, ícones fora de contexto). Esse padrão de qualidade é não-negociável: o site compete visualmente com SmartFit, Panobianco, Bluefit e Red Target, que têm equipe de design própria — "parece feito à mão" não é aceitável aqui.
 
 > Nota de histórico (2026-08-18): o tema visual pivotou de um esquema escuro (`#050608`, glow ciano) pra este tema claro — decisão do cliente/dev, documentada porque a Etapa 2 original descrevia o tema escuro como "validado". Ver `docs/tasks.md` e o commit que introduziu o pivô.
 
@@ -57,3 +57,5 @@ Cada um desses agentes lê o `docs/SDD.md` e `docs/RULES.md` inteiros antes de c
 ## Convenção de commit
 
 Mensagem de commit referencia qual seção do `docs/SDD.md` a mudança implementa, quando aplicável (ex: `feat: grade de horários filtrável (SDD §4)`). Facilita auditoria depois, principalmente pros pontos que já tiveram retrabalho neste projeto.
+
+> Nota de histórico (2026-10-07, segunda rodada): o tema claro de agosto pivotou para uma direção imersiva, por pedido do usuário após comparar com SmartFit/Bluefit. Hero em tela cheia com as fotos reais e camada azul sólida, header transparente sobre o hero, Modalidades e Sobre em azul, faixa de foto em largura total com o horário de funcionamento. Só o título e o CTA do hero e da faixa ficam sobre foto, sempre com camada de cor sólida; placas, quadros, chips e legendas sobre foto continuam proibidos, assim como gradiente, brilho e vidro. Ver "Iteração 2" no spec de 2026-10-07.
