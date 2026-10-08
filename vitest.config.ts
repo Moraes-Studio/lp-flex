@@ -13,6 +13,8 @@ export default defineConfig(({ mode }) => ({
   test: {
     globals: true,
     environment: 'node',
+    // WSL com pouca memória: o padrão abre um worker por núcleo.
+    maxWorkers: 1,
     env: loadEnv(mode, process.cwd(), ''),
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
     coverage: {

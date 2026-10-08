@@ -7,10 +7,14 @@ const PORT = Number(process.env.E2E_PORT ?? 3000);
 
 export default defineConfig({
   testDir: './e2e',
-  fullyParallel: true,
+  /** Paralelismo contido: a máquina de dev (e a do cliente) é WSL com 4 GB e 2 núcleos, e cada worker
+   * abre um navegador (WebKit incluso) enquanto o `next dev` compila. Com o
+   * padrão de vários workers o WSL fica sem memória e cai.
+   * Subir com `E2E_WORKERS=n` se a máquina aguentar. */
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : Number(process.env.E2E_WORKERS ?? 1),
   reporter: 'list',
   use: {
     baseURL: `http://localhost:${PORT}`,
