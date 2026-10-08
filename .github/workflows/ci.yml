@@ -52,8 +52,14 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run build
-      - name: npm audit (falha em vulnerabilidade alta/crítica)
-        run: npm audit --audit-level=high
+      # Só dependências de produção (`--omit=dev`): o que vai pro site.
+      # Ferramentas de dev (shadcn CLI, eslint-config-next) puxam
+      # `braces <=3.0.3` (GHSA-vfj7-8cjw-p6xm, DoS com glob malicioso), sem
+      # versão corrigida publicada até 2026-10-08 — com o audit completo o CI
+      # ficaria vermelho sem ação possível. Essas ferramentas só rodam com
+      # padrões escritos por nós, nunca com entrada de usuário.
+      - name: npm audit (falha em vulnerabilidade alta/crítica de produção)
+        run: npm audit --omit=dev --audit-level=high
 
   e2e:
     needs: lint-typecheck-test
