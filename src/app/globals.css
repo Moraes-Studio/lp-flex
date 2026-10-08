@@ -148,7 +148,10 @@
   /* texto */
   --foreground: #15202c;
   --heading-foreground: #0e1822;
-  --muted-foreground: #5c6c7d;
+  /* #5c6c7d dava 4,20:1 sobre --surface-200 (bios dos professores, Contato),
+   * abaixo de AA. Mesmo tom, um degrau mais escuro: 4,79:1 no surface-200,
+   * 6,15:1 no branco. */
+  --muted-foreground: #536376;
 
   /* feedback semântico — recalibrado pra contraste em fundo branco */
   --warning: #b45309;
