@@ -9,6 +9,12 @@ import { publicEnv } from '@/config/env.public';
 export const siteConfig = {
   name: 'Academia Flex',
   tagline: 'Musculação e aulas coletivas desde 1992.',
+  // Meta description da home e `description` do JSON-LD (uma fonte só).
+  // Cada afirmação conferida contra o conteúdo real: "Vila Helena, Santo
+  // André, desde 1992", "professor em sala" (SDD.md §7) e modalidades que
+  // existem em content/modalidades.json ("e mais" cobre as outras).
+  descricaoSeo:
+    'Academia em Vila Helena, Santo André, desde 1992. Musculação com professor em sala e aulas de Pilates, Yoga, Zumba, Jump, Fit Dance e mais.',
   url: publicEnv.NEXT_PUBLIC_SITE_URL,
   whatsappNumber: publicEnv.NEXT_PUBLIC_WHATSAPP_NUMBER,
   instagramUrl: publicEnv.NEXT_PUBLIC_INSTAGRAM_URL,
@@ -27,4 +33,11 @@ export const siteConfig = {
 export function whatsappUrl(message: string): string {
   const params = new URLSearchParams({ text: message });
   return `https://wa.me/${siteConfig.whatsappNumber}?${params.toString()}`;
+}
+
+/** Link "Abrir no Google Maps" (Contato) e `hasMap` do JSON-LD. */
+export function mapsUrl(): string {
+  const { street, city, state, zip } = siteConfig.address;
+  const query = encodeURIComponent(`${street}, ${city}, ${state}, ${zip}`);
+  return `https://www.google.com/maps/search/?api=1&query=${query}`;
 }

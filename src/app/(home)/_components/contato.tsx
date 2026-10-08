@@ -1,6 +1,6 @@
 import { ArrowUpRight, MapPin } from 'lucide-react';
 import { agruparFuncionamento, getFuncionamento } from '@/lib/content/funcionamento';
-import { siteConfig, whatsappUrl } from '@/config/site';
+import { mapsUrl, siteConfig, whatsappUrl } from '@/config/site';
 import { SectionHeading } from '@/components/shared/section-heading';
 import { Button } from '@/components/ui/button';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
@@ -11,7 +11,7 @@ export function Contato() {
   const grupos = agruparFuncionamento(funcionamento);
   const endereco = `${siteConfig.address.street}, ${siteConfig.address.city}, ${siteConfig.address.state}, ${siteConfig.address.zip}`;
   const mapaQuery = encodeURIComponent(endereco);
-  const abrirNoMapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapaQuery}`;
+  const abrirNoMapsUrl = mapsUrl();
 
   return (
     // bg-surface-200 (não bg-background-alt): último degrau frio antes do azul
