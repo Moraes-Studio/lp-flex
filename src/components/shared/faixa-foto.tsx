@@ -24,7 +24,7 @@ export function FaixaFoto({ funcionamento }: { funcionamento: DiaFuncionamento[]
     >
       <div className="absolute inset-0 -z-10" aria-hidden="true">
         <div data-faixa-parallax className="faixa-parallax absolute inset-0">
-          <Image src={foto.src} alt="" fill sizes="100vw" quality={70} className="object-cover" />
+          <Image src={foto.src} alt="" fill sizes="100vw" className="object-cover" />
         </div>
       </div>
       <div className="bg-flex-blue-950/55 absolute inset-0 -z-10" aria-hidden="true" />
