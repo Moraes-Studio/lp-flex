@@ -73,15 +73,15 @@ Quando desbloqueado: `lib/payments/` isola a chamada atrás de `criarLinkDePagam
 - [x] Fluxo de branch decidido (2026-08-25, pedido do cliente): trabalho sobe pra branch `develop` (não direto pra `main`) — vira PR/preview deploy da Vercel pra aprovação visual antes de qualquer coisa ir pra produção. `main` só recebe merge depois de aprovado — o cliente controla esse merge, não o agente.
 - [ ] Configurar na Vercel: `main` = Production Branch, `develop` (e demais branches/PRs) = Preview — isso é ajuste no painel Vercel, não no repo; precisa da conta do cliente/estúdio (mesmo bloqueio de sempre).
 - [ ] Deploy inicial na Vercel.
-- [ ] Variáveis de ambiente de produção configuradas direto no painel Vercel (nunca no repo) — `NEXT_PUBLIC_SITE_URL=https://academiaflex.com.br` (domínio já confirmado, ver Pendências transversais).
+- [ ] Variáveis de ambiente de produção configuradas direto no painel Vercel (nunca no repo) — `NEXT_PUBLIC_SITE_URL=https://www.academiaflex.com.br` (canônico com `www`, decisão do cliente em 2026-10-08) e, nos domínios da Vercel, `academiaflex.com.br` redirecionando para `www`.
 
 ## Pendências transversais (não travam etapa, mas precisam de decisão do cliente antes de produção)
 
 - [x] ~~WhatsApp~~ — confirmado pelo cliente em 2026-08-18 (+55 11 93918-2762), `.env.local`/`.env.example` atualizados.
 - [x] ~~CNPJ~~ — confirmado pelo cliente em 2026-08-18.
 - [x] ~~Endereço~~ — confirmado pelo cliente em 2026-08-25 (R. das Hortênsias, 104 — Vila Helena).
-- [x] ~~Domínio~~ — confirmado pelo cliente em 2026-08-25: `academiaflex.com.br` (print do painel de registro mostrando "Publicado"). Já era o valor em `.env.example`, então nenhum código mudou — só deixou de ser "placeholder" e virou dado real; `NEXT_PUBLIC_SITE_URL` de produção ainda precisa ser configurada assim direto no painel da Vercel (agente não tem/não deve ter acesso a isso, ver Etapa 8).
-- [ ] Data exata de fundação — bio do Instagram cita 1992, `SDD.md §1` pede confirmação antes de publicar.
+- [x] ~~Domínio~~ — confirmado pelo cliente em 2026-08-25: `academiaflex.com.br`; em 2026-10-08 o cliente definiu `https://www.academiaflex.com.br` como canônico, com o domínio sem `www` redirecionando para ele (print do painel de registro mostrando "Publicado"). Já era o valor em `.env.example`, então nenhum código mudou — só deixou de ser "placeholder" e virou dado real; `NEXT_PUBLIC_SITE_URL` de produção ainda precisa ser configurada assim direto no painel da Vercel (agente não tem/não deve ter acesso a isso, ver Etapa 8).
+- [x] ~~Data exata de fundação~~ — 1992 confirmado pelo cliente em 2026-10-08.
 - [ ] Bio + foto real dos 3 professores com perfil completo mas sem foto (Flávio, Vanessa, Gustavo) e dos 13 pendentes em `content/professores.json` — 7 já com nome real confirmado (Josué, Tom, Rose, Giovana, Rafael, Joab, Douglas) esperando só o formulário voltar, 6 ainda sem nome (vagas Fit Dance/Step Funcional/Flex Training/Cross Training/GAP/Ritbox). Card só aparece na home quando a bio deixa de ser a genérica (`temPerfilCompleto`, `professores.ts`) — até lá, o nome já conta no stat "professores confirmados" do Hero mas fica sem card (pedido do cliente, 2026-08-25: card sem bio/foto "ficava feio").
 - [ ] Fotos reais: `src/config/media.ts` (hero, sobre, comunidade) e `professor.fotoUrl` em `content/professores.json` são os únicos lugares a editar quando as fotos chegarem — nenhum componente precisa mudar (`<Photo>` alterna sozinho entre placeholder e imagem real, mesma moldura, zero layout shift). Nenhuma gerada por IA nem banco de imagem (`CLAUDE.md`).
 - [ ] Confirmar se a limitação da API Next Fit (só leitura) continua válida antes de qualquer feature que dependa dela (`SDD.md §11` portão 5).
@@ -94,7 +94,7 @@ Motivado por: site sendo usado como prova de "negócio ativo" pro Meta Business 
 - [x] `opengraph-image.tsx` — gráfico de marca gerado em runtime (Satori/`next/og`), não foto — usa cores institucionais + wordmark, é o preview que aparece ao compartilhar o link no WhatsApp/Instagram.
 - [x] `robots.ts` + `sitemap.ts` (convenção App Router).
 - [x] Slot pra tag de verificação de domínio do Meta Business Manager (`NEXT_PUBLIC_META_DOMAIN_VERIFICATION`, opcional) — só preencher quando o domínio real for cadastrado lá.
-- [x] `NEXT_PUBLIC_SITE_URL`: domínio confirmado pelo cliente em 2026-08-25 (`academiaflex.com.br`) — já é o valor em `.env.example`; falta só configurar essa env de verdade no painel da Vercel em produção (`metadataBase`, OG e sitemap dependem dela pra gerar URL absoluta correta), ver Etapa 8.
+- [x] `NEXT_PUBLIC_SITE_URL`: domínio canônico `https://www.academiaflex.com.br` (cliente, 2026-10-08; sem `www` redireciona) — já é o valor em `.env.example`; falta só configurar essa env de verdade no painel da Vercel em produção (`metadataBase`, OG e sitemap dependem dela pra gerar URL absoluta correta), ver Etapa 8.
 - [ ] Deploy em si continua bloqueado por falta de acesso à conta Vercel do cliente (Etapa 8) — igual antes, esse agente não deve ter essa credencial.
 
 ## Nota de ambiente
@@ -109,7 +109,21 @@ Spec: `docs/superpowers/specs/2026-10-07-rebranding-fotos-design.md` · Plano: `
 - [x] Hero: texto + fotos rotativas (crossfade, pausa em movimento reduzido), 4 elementos de texto. Quadro HOJE foi pra Horários (desvio do CLAUDE.md, atualizado); chip "aberto agora" foi pro header (xl+); números foram pro Sobre.
 - [x] Modalidades em dois blocos com foto; Sobre em pilha vertical com carrossel (setas sempre visíveis, RULES #5).
 - [x] Eyebrows limitados a 3 (Hero, Horários, Contato); rótulo único "Quero treinar agora"; sem travessão em texto visível; horário de funcionamento agrupado (`agruparFuncionamento`, com teste).
-- [ ] **Portão 1 (SDD §11):** aprovação humana dos textos novos: subtexto do hero e título "Professores presentes na sala.".
+- [x] **Portão 1 (SDD §11):** aprovação humana dos textos novos: subtexto do hero e título "Professores presentes na sala.". Aprovado pelo cliente em 2026-10-08.
 - [ ] Retratos da equipe (`public/06_equipe/`, fora do git): entram quando todos os professores mandarem bio; o card já aceita `fotoUrl`.
 - [x] **Iteração 2 (imersiva):** hero em tela cheia (`min-h-[100dvh]`) com as 3 fotos rotativas, camada azul sólida e título gigante, um único botão "Ver planos"; header transparente sobre o hero (sólido em `/privacidade` e após a dobra); títulos de seção maiores; Modalidades e Sobre em azul; nova faixa de foto em largura total com "05:00 às 23:00" lido de `content/funcionamento.json` (parallax CSS, desligado em movimento reduzido). Spec: "Iteração 2" em `docs/superpowers/specs/2026-10-07-rebranding-fotos-design.md`.
-- [ ] Pendência de acessibilidade (pré-existente, follow-up): `muted-foreground` sobre `surface-200` (4,20:1, abaixo de AA) nas bios dos professores e em textos pequenos de Contato.
+- [x] ~~Pendência de acessibilidade~~: `muted-foreground` escurecido de `#5c6c7d` para `#536376` (4,79:1 sobre `surface-200`, era 4,20:1). Resolvido em 2026-10-08.
+
+### Passe pré-produção (2026-10-08)
+
+Auditoria do build de produção (Lighthouse local, mobile 84–88 / desktop 98–99 em Performance; 99–100 nas demais) e correções:
+
+- [x] Fontes só com subset `latin` (14 → 7 arquivos pré-carregados, LCP mobile).
+- [x] Fotos 2 e 3 do hero só montam depois do `load` (antes entravam no carregamento inicial com prioridade alta); com movimento reduzido nem são baixadas.
+- [x] Carrossel: `role="group"` saiu da `<figure>` (ARIA in HTML; axe do Lighthouse reprovava).
+- [x] JSON-LD `ExerciseGym` com fotos reais, descrição igual à meta description e `hasMap`.
+- [x] `/design-system` vira 404 em produção; logo solto removido de `public/`.
+- [x] **Bug:** home estática congelava a campanha no build (`new Date()` só no build). `revalidate = 3600`: campanha vencida sai do ar em até 1h, sem deploy. Teste E2E da campanha agora segue `terminaEm`.
+- [x] `seo.spec` compara com `NEXT_PUBLIC_SITE_URL`, não com a porta do Playwright (as 12 falhas "pré-existentes" com `E2E_PORT=3100` sumiram).
+- [x] Rodapé alinhado à grade das seções; Sobre mostra "aulas coletivas inclusas" (mesma conta de Modalidades).
+- [ ] Fora do código: Search Console (enviar sitemap), Google Meu Negócio com o mesmo endereço do site, Lighthouse mobile na URL real.
