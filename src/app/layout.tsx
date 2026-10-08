@@ -9,21 +9,24 @@ import { CookieConsent } from '@/components/shared/cookie-consent';
 import { AnchorScrollHandler } from '@/components/shared/anchor-scroll-handler';
 import './globals.css';
 
+// Só o subset `latin`: ele já cobre todo o português (ã, ç, é, õ…). O
+// `latin-ext` dobrava os arquivos pré-carregados (14 → 7) sem nenhum
+// caractere em uso, e as fontes competiam com o logo e a foto do hero no LCP mobile.
 const oswald = Oswald({
   variable: '--font-oswald',
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   weight: ['500', '600', '700'],
 });
 
 const barlow = Barlow({
   variable: '--font-barlow',
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   weight: ['400', '500', '600'],
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
   variable: '--font-ibm-plex-mono',
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   weight: ['400', '500', '600'],
 });
 
