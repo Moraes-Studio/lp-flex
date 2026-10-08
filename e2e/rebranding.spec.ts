@@ -335,3 +335,40 @@ test.describe('Seções: contraste e escala (iteração imersiva)', () => {
     expect(horarios).toBeGreaterThanOrEqual(44);
   });
 });
+
+test.describe('Faixa de foto com horário de funcionamento', () => {
+  test('fica entre Modalidades e Horários, com horário real e sem travessão', async ({ page }) => {
+    await page.goto('/');
+    const faixa = page.getByRole('region', { name: 'Horário de funcionamento' });
+    await expect(faixa).toHaveCount(1);
+    await expect(faixa).toContainText('05:00');
+    await expect(faixa).toContainText('23:00');
+    await expect(faixa).toContainText('segunda a quinta');
+    await expect(faixa).not.toContainText('–');
+    await expect(faixa).not.toContainText('—');
+    const ordem = await page.evaluate(() => {
+      const ids = [...document.querySelectorAll('main > section')].map(
+        (s) => s.id || s.getAttribute('aria-label') || ''
+      );
+      return [
+        ids.indexOf('modalidades'),
+        ids.indexOf('Horário de funcionamento'),
+        ids.indexOf('horarios'),
+      ];
+    });
+    expect(ordem[0]).toBeGreaterThanOrEqual(0);
+    expect(ordem[1]).toBe(ordem[0] + 1);
+    expect(ordem[2]).toBe(ordem[1] + 1);
+  });
+
+  test('com movimento reduzido o parallax não anima', async ({ browser, baseURL }) => {
+    const ctx = await browser.newContext({ reducedMotion: 'reduce', baseURL });
+    const page = await ctx.newPage();
+    await page.goto('/');
+    const nome = await page
+      .locator('[data-faixa-parallax]')
+      .evaluate((el) => getComputedStyle(el).animationName);
+    expect(nome).toBe('none');
+    await ctx.close();
+  });
+});

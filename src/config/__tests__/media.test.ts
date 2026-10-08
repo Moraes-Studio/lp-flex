@@ -8,6 +8,7 @@ const todas: Foto[] = [
   mediaConfig.modalidades.musculacao,
   mediaConfig.modalidades.aulas,
   ...mediaConfig.sobreGaleria,
+  mediaConfig.faixaFoto,
 ];
 
 describe('mediaConfig', () => {

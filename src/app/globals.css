@@ -407,3 +407,27 @@ body:has(#cookie-consent) #whatsapp-float {
     animation: none;
   }
 }
+
+/* Parallax da faixa de foto (faixa-foto.tsx): CSS puro, sem JS. A imagem
+ * fica em scale(1.18) pra o deslocamento de ±8% não mostrar borda. Só roda
+ * com suporte a scroll-driven animations e sem prefers-reduced-motion. */
+.faixa-parallax {
+  transform: scale(1.18);
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .faixa-parallax {
+      animation: faixa-parallax linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+  }
+}
+@keyframes faixa-parallax {
+  from {
+    transform: translateY(-8%) scale(1.18);
+  }
+  to {
+    transform: translateY(8%) scale(1.18);
+  }
+}

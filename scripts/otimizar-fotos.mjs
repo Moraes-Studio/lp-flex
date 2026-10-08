@@ -22,6 +22,7 @@ const FOTOS = [
   ['03_musculacao/IMG_2675.jpg', 'sobre-pesos'],
   ['03_musculacao/IMG_2837.jpg', 'sobre-maquinas'],
   ['04_salao_aulas/IMG_2571.jpg', 'sobre-salao'],
+  ['02_cardio/IMG_2524.jpg', 'faixa-cardio'],
   ['05_detalhes/IMG_2641.jpg', 'sobre-anilhas'],
 ];
 

@@ -1,0 +1,44 @@
+import Image from 'next/image';
+import { mediaConfig } from '@/config/media';
+import { agruparFuncionamento, type DiaFuncionamento } from '@/lib/content/funcionamento';
+
+/**
+ * Faixa de foto em largura total entre Modalidades e Horários: o horário de
+ * segunda (o do primeiro grupo da grade) em tamanho gigante sobre a foto real
+ * da sala de cardio, com camada de cor sólida (nunca gradiente/vidro). Tudo
+ * vem de `content/funcionamento.json`; nada de horário fixo aqui. Não é
+ * eyebrow (limite de 3 na home) e não tem `id`: é pausa visual, não destino.
+ * Parallax só por CSS (`.faixa-parallax` em globals.css), desligado com
+ * `prefers-reduced-motion`.
+ */
+export function FaixaFoto({ funcionamento }: { funcionamento: DiaFuncionamento[] }) {
+  const segunda = funcionamento[1];
+  const grupo = agruparFuncionamento(funcionamento)[0];
+  if (!segunda?.abre || !segunda.fecha || !grupo) return null;
+  const foto = mediaConfig.faixaFoto;
+
+  return (
+    <section
+      aria-label="Horário de funcionamento"
+      className="bg-flex-blue-950 relative isolate flex min-h-[60vh] items-center overflow-hidden md:min-h-[70vh]"
+    >
+      <div className="absolute inset-0 -z-10" aria-hidden="true">
+        <div data-faixa-parallax className="faixa-parallax absolute inset-0">
+          <Image src={foto.src} alt="" fill sizes="100vw" quality={70} className="object-cover" />
+        </div>
+      </div>
+      <div className="bg-flex-blue-950/55 absolute inset-0 -z-10" aria-hidden="true" />
+
+      <div className="w-full px-[6%] py-20 text-white md:py-28">
+        <div className="mx-auto max-w-[1180px]">
+          <p className="font-heading text-[clamp(56px,11vw,168px)] leading-none font-bold tracking-[0.005em] tabular-nums">
+            {segunda.abre} às {segunda.fecha}
+          </p>
+          <p className="font-heading mt-4 text-[clamp(22px,3.2vw,44px)] leading-tight font-semibold tracking-wide uppercase md:mt-6">
+            {grupo.rotuloLongo.toLowerCase()}
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -58,6 +58,8 @@ export function calcularStatus(funcionamento: DiaFuncionamento[], now: Date): St
 
 export interface GrupoFuncionamento {
   rotulo: string;
+  /** Nome completo do primeiro e do último dia ("Segunda a Quinta"). */
+  rotuloLongo: string;
   horario: string;
 }
 
@@ -94,6 +96,7 @@ export function agruparFuncionamento(funcionamento: DiaFuncionamento[]): GrupoFu
   return grupos.map(({ dias, horario }) => ({
     rotulo:
       dias.length === 1 ? dias[0].dia : `${dias[0].diaCurto} a ${dias[dias.length - 1].diaCurto}`,
+    rotuloLongo: dias.length === 1 ? dias[0].dia : `${dias[0].dia} a ${dias[dias.length - 1].dia}`,
     horario,
   }));
 }

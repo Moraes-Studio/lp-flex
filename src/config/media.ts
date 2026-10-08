@@ -18,6 +18,7 @@ export const mediaConfig: {
   heroFotos: Foto[];
   modalidades: { musculacao: Foto; aulas: Foto };
   sobreGaleria: Foto[];
+  faixaFoto: Foto;
 } = {
   heroFotos: [
     {
@@ -42,6 +43,10 @@ export const mediaConfig: {
       src: '/fotos/modalidades-aulas.jpg',
       alt: 'Salão amplo onde acontecem as aulas coletivas da Academia Flex',
     },
+  },
+  faixaFoto: {
+    src: '/fotos/faixa-cardio.jpg',
+    alt: 'Fileira de esteiras da sala de cardio de frente para os janelões, com a cidade ao fundo',
   },
   sobreGaleria: [
     {

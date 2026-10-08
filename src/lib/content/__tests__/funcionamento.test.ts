@@ -93,10 +93,10 @@ describe('agruparFuncionamento', () => {
 
   it('junta dias consecutivos com o mesmo horário (grade real)', () => {
     expect(agruparFuncionamento(grade)).toEqual([
-      { rotulo: 'Seg a Qui', horario: '05:00-23:00' },
-      { rotulo: 'Sexta', horario: '05:00-22:00' },
-      { rotulo: 'Sábado', horario: '09:00-15:00' },
-      { rotulo: 'Domingo e feriados', horario: '09:30-12:30' },
+      { rotulo: 'Seg a Qui', rotuloLongo: 'Segunda a Quinta', horario: '05:00-23:00' },
+      { rotulo: 'Sexta', rotuloLongo: 'Sexta', horario: '05:00-22:00' },
+      { rotulo: 'Sábado', rotuloLongo: 'Sábado', horario: '09:00-15:00' },
+      { rotulo: 'Domingo e feriados', rotuloLongo: 'Domingo e feriados', horario: '09:30-12:30' },
     ]);
   });
 
@@ -106,6 +106,7 @@ describe('agruparFuncionamento', () => {
     );
     expect(agruparFuncionamento(comFechado).at(-1)).toEqual({
       rotulo: 'Domingo e feriados',
+      rotuloLongo: 'Domingo e feriados',
       horario: 'Fechado',
     });
   });
@@ -113,8 +114,8 @@ describe('agruparFuncionamento', () => {
   it('semana inteira igual vira um grupo de Seg a Sáb mais o domingo separado', () => {
     const igual = grade.map((d) => ({ ...d, abre: '06:00', fecha: '22:00' }));
     expect(agruparFuncionamento(igual)).toEqual([
-      { rotulo: 'Seg a Sáb', horario: '06:00-22:00' },
-      { rotulo: 'Domingo e feriados', horario: '06:00-22:00' },
+      { rotulo: 'Seg a Sáb', rotuloLongo: 'Segunda a Sábado', horario: '06:00-22:00' },
+      { rotulo: 'Domingo e feriados', rotuloLongo: 'Domingo e feriados', horario: '06:00-22:00' },
     ]);
   });
 
@@ -127,6 +128,16 @@ describe('agruparFuncionamento', () => {
       'Terça',
       'Quarta',
       'Quinta',
+      'Sexta',
+      'Sábado',
+      'Domingo e feriados',
+    ]);
+  });
+
+  it('rotuloLongo usa nomes completos do primeiro e do último dia', () => {
+    const grupos = agruparFuncionamento(grade);
+    expect(grupos.map((g) => g.rotuloLongo)).toEqual([
+      'Segunda a Quinta',
       'Sexta',
       'Sábado',
       'Domingo e feriados',

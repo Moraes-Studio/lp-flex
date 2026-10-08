@@ -1,6 +1,7 @@
 import { getModalidades } from '@/lib/content/modalidades';
 import { getFuncionamento } from '@/lib/content/funcionamento';
 import { gerarJsonLdNegocio } from '@/lib/structured-data';
+import { FaixaFoto } from '@/components/shared/faixa-foto';
 import { Marquee } from '@/components/shared/marquee';
 import { Hero } from './_components/hero';
 import { Planos } from './_components/planos';
@@ -30,6 +31,7 @@ export default function Home() {
       <Marquee items={modalidades.map((m) => m.nome)} tone="dark" />
       <Planos />
       <Modalidades />
+      <FaixaFoto funcionamento={funcionamento} />
       <Horarios />
       <Professores />
       <Sobre />
