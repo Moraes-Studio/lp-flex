@@ -105,3 +105,17 @@ test.describe('Privacidade', () => {
     await expect(page.getByRole('heading', { name: 'Política de Privacidade' })).toBeVisible();
   });
 });
+
+test.describe('Rodapé', () => {
+  for (const largura of [1440, 1920]) {
+    test(`alinha à esquerda com o conteúdo das seções (${largura}px)`, async ({ page }) => {
+      await page.setViewportSize({ width: largura, height: 900 });
+      await page.goto('/');
+      const titulo = (await page.locator('#contato h2').boundingBox())!;
+      const logo = (await page.locator('footer img').first().boundingBox())!;
+      const copyright = (await page.locator('footer').getByText(/Todos os direitos/).boundingBox())!;
+      expect(Math.abs(logo.x - titulo.x)).toBeLessThanOrEqual(2);
+      expect(Math.abs(copyright.x - titulo.x)).toBeLessThanOrEqual(2);
+    });
+  }
+});
