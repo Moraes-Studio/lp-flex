@@ -75,6 +75,27 @@ describe('calcularStatus', () => {
     expect(status).toEqual({ aberto: false, texto: 'Fechado · abre amanhã' });
   });
 
+  // Fim de semana: cada dia fecha num horário diferente do de segunda, e o
+  // chip tem que usar o horário do próprio dia. 2026-08-21/22/23 são sexta,
+  // sábado e domingo em São Paulo.
+  it.each([
+    ['sexta', '2026-08-21T23:00:00Z', 'Aberto agora · fecha às 22:00'], // 20:00 em SP
+    ['sábado', '2026-08-22T15:00:00Z', 'Aberto agora · fecha às 15:00'], // 12:00 em SP
+    ['domingo', '2026-08-23T13:00:00Z', 'Aberto agora · fecha às 12:30'], // 10:00 em SP
+  ])('%s aberto mostra o fechamento do próprio dia', (_dia, iso, texto) => {
+    expect(calcularStatus(grade, new Date(iso))).toEqual({ aberto: true, texto });
+  });
+
+  it.each([
+    ['sexta depois das 22:00', '2026-08-22T01:30:00Z', 'Fechado · abre amanhã'], // 22:30 em SP
+    ['sábado antes das 09:00', '2026-08-22T11:00:00Z', 'Abre hoje às 09:00'], // 08:00 em SP
+    ['sábado depois das 15:00', '2026-08-22T18:30:00Z', 'Fechado · abre amanhã'], // 15:30 em SP
+    ['domingo antes das 09:30', '2026-08-23T12:00:00Z', 'Abre hoje às 09:30'], // 09:00 em SP
+    ['domingo depois das 12:30', '2026-08-23T15:31:00Z', 'Fechado · abre amanhã'], // 12:31 em SP
+  ])('%s', (_caso, iso, texto) => {
+    expect(calcularStatus(grade, new Date(iso))).toEqual({ aberto: false, texto });
+  });
+
   it('retorna "fechado hoje" quando o dia não tem abre/fecha (edge case)', () => {
     const fechado = [...grade];
     fechado[1] = { ...fechado[1], abre: null, fecha: null };

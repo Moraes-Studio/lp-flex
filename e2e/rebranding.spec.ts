@@ -390,6 +390,15 @@ test.describe('Faixa de foto com horário de funcionamento', () => {
     await expect(faixa).toContainText('05:00');
     await expect(faixa).toContainText('23:00');
     await expect(faixa).toContainText('segunda a quinta');
+    // O resto da semana fica abaixo da foto: sem ele, o visitante lê
+    // "só abre de segunda a quinta".
+    const resto = faixa.getByTestId('faixa-resto-semana');
+    await expect(resto).toContainText('Sexta');
+    await expect(resto).toContainText('05:00 às 22:00');
+    await expect(resto).toContainText('Sábado');
+    await expect(resto).toContainText('09:00 às 15:00');
+    await expect(resto).toContainText('Domingo e feriados');
+    await expect(resto).toContainText('09:30 às 12:30');
     await expect(faixa).not.toContainText('–');
     await expect(faixa).not.toContainText('—');
     const ordem = await page.evaluate(() => {
