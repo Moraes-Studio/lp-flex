@@ -246,6 +246,19 @@ test.describe('Sobre: carrossel', () => {
     expect(img && legenda && legenda.y >= img.y + img.height - 1).toBe(true);
   });
 
+  test('slide do carrossel não põe role em <figure> com legenda (ARIA in HTML)', async ({
+    page,
+  }) => {
+    // axe-core ≥ 4.13 (o do Lighthouse) reprova role="group" em <figure> com
+    // <figcaption>; o papel de slide fica num wrapper, a figure dentro.
+    await page.goto('/');
+    const slides = page.locator('#sobre [aria-roledescription="slide"]');
+    await expect(slides).toHaveCount(7);
+    const tags = await slides.evaluateAll((els) => els.map((el) => el.tagName));
+    expect(tags.every((tag) => tag !== 'FIGURE')).toBe(true);
+    await expect(page.locator('#sobre figure[role]')).toHaveCount(0);
+  });
+
   test('todas as fotos carregam, inclusive a última, após percorrer o carrossel', async ({
     page,
   }) => {

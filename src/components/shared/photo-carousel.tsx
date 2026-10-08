@@ -73,7 +73,7 @@ export function PhotoCarousel({ fotos, rotulo, tone = 'light' }: PhotoCarouselPr
 
   const mover = React.useCallback((direcao: 1 | -1) => {
     const el = trilho.current;
-    const slide = el?.querySelector<HTMLElement>('figure');
+    const slide = el?.querySelector<HTMLElement>('[aria-roledescription="slide"]');
     if (!el || !slide) return;
     const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
     const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -115,7 +115,9 @@ export function PhotoCarousel({ fotos, rotulo, tone = 'light' }: PhotoCarouselPr
         )}
       >
         {fotos.map((foto, i) => (
-          <figure
+          // Papel de slide no wrapper, não na <figure>: com <figcaption> ela
+          // não aceita outro role (ARIA in HTML; axe do Lighthouse reprova).
+          <div
             key={foto.src}
             ref={(el) => {
               if (i === 0) primeiro.current = el;
@@ -126,27 +128,29 @@ export function PhotoCarousel({ fotos, rotulo, tone = 'light' }: PhotoCarouselPr
             aria-label={`${i + 1} de ${fotos.length}`}
             className="w-[82%] shrink-0 snap-start sm:w-[48%] lg:w-[31.5%]"
           >
-            <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-              <Image
-                src={foto.src}
-                alt={foto.alt}
-                fill
-                loading={carregarTudo ? 'eager' : 'lazy'}
-                sizes="(min-width: 1024px) 32vw, (min-width: 640px) 48vw, 82vw"
-                className="object-cover"
-              />
-            </div>
-            {foto.legenda ? (
-              <figcaption
-                className={cn(
-                  'mt-2.5 text-[13.5px]',
-                  escuro ? 'text-white/70' : 'text-muted-foreground'
-                )}
-              >
-                {foto.legenda}
-              </figcaption>
-            ) : null}
-          </figure>
+            <figure>
+              <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
+                <Image
+                  src={foto.src}
+                  alt={foto.alt}
+                  fill
+                  loading={carregarTudo ? 'eager' : 'lazy'}
+                  sizes="(min-width: 1024px) 32vw, (min-width: 640px) 48vw, 82vw"
+                  className="object-cover"
+                />
+              </div>
+              {foto.legenda ? (
+                <figcaption
+                  className={cn(
+                    'mt-2.5 text-[13.5px]',
+                    escuro ? 'text-white/70' : 'text-muted-foreground'
+                  )}
+                >
+                  {foto.legenda}
+                </figcaption>
+              ) : null}
+            </figure>
+          </div>
         ))}
       </div>
 
