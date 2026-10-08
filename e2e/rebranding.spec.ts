@@ -122,6 +122,27 @@ test.describe('Hero', () => {
       await page.waitForTimeout(7000);
       await expect(rotator).toHaveAttribute('data-ativo', '0');
     });
+
+    test('nunca baixa as outras fotos, que não seriam mostradas', async ({ page }) => {
+      await page.goto('/', { waitUntil: 'load' });
+      await page.waitForTimeout(1500);
+      await expect(page.getByTestId('hero-rotator').locator('img')).toHaveCount(1);
+    });
+  });
+
+  test('só a primeira foto do hero disputa o carregamento inicial', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'load' });
+    const imgs = page.getByTestId('hero-rotator').locator('img');
+    // Depois do load as demais entram, a tempo da primeira troca (6s).
+    await expect(imgs).toHaveCount(3, { timeout: 5000 });
+    const pedidasAntesDoLoad = await page.evaluate(() => {
+      const load = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      return performance
+        .getEntriesByType('resource')
+        .filter((r) => /hero-(cardio|salao)/.test(r.name) && r.startTime < load.loadEventStart)
+        .map((r) => r.name);
+    });
+    expect(pedidasAntesDoLoad).toEqual([]);
   });
 
   test("hero tem um único link, 'Ver planos', para #planos, e nenhum stat/chip", async ({
