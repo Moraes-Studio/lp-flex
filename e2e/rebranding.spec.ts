@@ -284,6 +284,18 @@ test.describe('Sobre: carrossel', () => {
       .toBe(true);
   });
 
+  test('contagem de aulas é a mesma no Sobre e em Modalidades', async ({ page }) => {
+    await page.goto('/');
+    const textoModalidades = await page
+      .locator('#modalidades')
+      .getByText(/\d+ aulas no mesmo plano/)
+      .textContent();
+    const n = textoModalidades!.match(/(\d+) aulas/)![1];
+    const stat = page.locator('#sobre dl').getByText('aulas coletivas inclusas');
+    await expect(stat).toBeAttached();
+    await expect(page.locator('#sobre dl')).toContainText(`aulas coletivas inclusas${n}`);
+  });
+
   test('números saíram do hero e estão no Sobre', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('#sobre').getByText('anos na Vila Helena')).toBeAttached();

@@ -24,7 +24,7 @@ export function Sobre() {
 
   const stats = [
     { valor: `${anos}+`, label: 'anos na Vila Helena' },
-    { valor: String(modalidades.length), label: 'modalidades inclusas' },
+    { valor: String(aulas.length), label: 'aulas coletivas inclusas' },
     { valor: String(contarConfirmados(professores)), label: 'professores confirmados' },
   ];
 
