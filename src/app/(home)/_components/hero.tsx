@@ -68,8 +68,8 @@ export function Hero() {
             className="enter mt-6 max-w-[520px] text-[17px] leading-[1.55] font-normal text-white/90 normal-case md:mt-8 md:text-[19px] lg:max-w-[560px] lg:text-[20px]"
             style={{ '--enter-delay': '140ms' } as React.CSSProperties}
           >
-            Professor de Educação Física presente na sala em todo o horário, orientando a execução
-            e tirando dúvidas.
+            Professor de Educação Física presente na sala em todo o horário, orientando a execução e
+            tirando dúvidas.
           </p>
 
           <div
@@ -79,7 +79,7 @@ export function Hero() {
             <Button
               asChild
               variant="onDark"
-              className="group px-8 py-[18px] text-[15px] tracking-wide uppercase focus-visible:ring-offset-flex-blue-950"
+              className="group focus-visible:ring-offset-flex-blue-950 px-8 py-[18px] text-[15px] tracking-wide uppercase"
             >
               <a href="#planos">
                 Ver planos

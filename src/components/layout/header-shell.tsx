@@ -41,11 +41,7 @@ export function HeaderShell({ children }: { children: React.ReactNode }) {
   }, [pathname]);
 
   const modo: Modo =
-    observado?.rota === pathname
-      ? observado.modo
-      : pathname === '/'
-        ? 'transparente'
-        : 'solido';
+    observado?.rota === pathname ? observado.modo : pathname === '/' ? 'transparente' : 'solido';
 
   return (
     <div className="sticky top-0 z-50">

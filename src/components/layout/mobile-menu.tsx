@@ -17,7 +17,7 @@ export function MobileMenu() {
         <button
           type="button"
           aria-label="Abrir menu"
-          className="border-border text-foreground flex h-11 w-11 items-center justify-center rounded-full border transition-colors duration-200 md:hidden group-data-[modo=transparente]/header:border-white/50 group-data-[modo=transparente]/header:text-white"
+          className="border-border text-foreground flex h-11 w-11 items-center justify-center rounded-full border transition-colors duration-200 group-data-[modo=transparente]/header:border-white/50 group-data-[modo=transparente]/header:text-white md:hidden"
         >
           <Menu className="h-5 w-5" aria-hidden="true" />
         </button>
