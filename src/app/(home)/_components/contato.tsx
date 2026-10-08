@@ -1,6 +1,6 @@
 import { ArrowUpRight, MapPin } from 'lucide-react';
-import { getFuncionamento } from '@/lib/content/funcionamento';
-import { siteConfig, whatsappUrl } from '@/config/site';
+import { agruparFuncionamento, getFuncionamento } from '@/lib/content/funcionamento';
+import { mapsUrl, siteConfig, whatsappUrl } from '@/config/site';
 import { SectionHeading } from '@/components/shared/section-heading';
 import { Button } from '@/components/ui/button';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
@@ -8,9 +8,10 @@ import { CtaArrow } from '@/components/shared/cta-arrow';
 
 export function Contato() {
   const funcionamento = getFuncionamento();
-  const endereco = `${siteConfig.address.street}, ${siteConfig.address.city} — ${siteConfig.address.state}, ${siteConfig.address.zip}`;
+  const grupos = agruparFuncionamento(funcionamento);
+  const endereco = `${siteConfig.address.street}, ${siteConfig.address.city}, ${siteConfig.address.state}, ${siteConfig.address.zip}`;
   const mapaQuery = encodeURIComponent(endereco);
-  const abrirNoMapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapaQuery}`;
+  const abrirNoMapsUrl = mapsUrl();
 
   return (
     // bg-surface-200 (não bg-background-alt): último degrau frio antes do azul
@@ -43,20 +44,18 @@ export function Contato() {
               <h3 className="font-heading text-sm tracking-[0.1em]">Horário de funcionamento</h3>
             </div>
             <div>
-              {funcionamento
-                .slice(1)
-                .concat(funcionamento[0])
-                .map((dia) => (
-                  <div
-                    key={dia.dia}
-                    className="border-border flex items-baseline justify-between gap-3 border-b py-3 normal-case"
-                  >
-                    <span className="text-[15.5px] font-medium">{dia.dia}</span>
-                    <span className="text-flex-blue-700 font-mono text-[14px] tabular-nums">
-                      {dia.abre && dia.fecha ? `${dia.abre} – ${dia.fecha}` : 'Fechado'}
-                    </span>
-                  </div>
-                ))}
+              {grupos.map((grupo) => (
+                <div
+                  key={grupo.rotulo}
+                  data-testid="grupo-funcionamento"
+                  className="border-border flex items-baseline justify-between gap-3 border-b py-3.5 normal-case last:border-b-0"
+                >
+                  <span className="text-[15.5px] font-medium">{grupo.rotulo}</span>
+                  <span className="text-flex-blue-700 font-mono text-[14px] tabular-nums">
+                    {grupo.horario}
+                  </span>
+                </div>
+              ))}
             </div>
 
             <Button asChild className="group mt-7 w-full sm:w-auto">
@@ -66,7 +65,7 @@ export function Contato() {
                 rel="noopener noreferrer"
               >
                 <WhatsappGlyph className="h-4 w-4" />
-                Falar no WhatsApp
+                Quero treinar agora
                 <CtaArrow variant="up-right" />
               </a>
             </Button>

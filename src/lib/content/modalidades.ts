@@ -32,6 +32,17 @@ export function parseModalidades(raw: unknown): Modalidade[] {
   return modalidadesSchema.parse(raw);
 }
 
+/** Separa a musculação (ícone `musculacao`) das aulas coletivas, preservando a ordem. */
+export function separarModalidades(modalidades: Modalidade[]): {
+  musculacao: Modalidade | undefined;
+  aulas: Modalidade[];
+} {
+  return {
+    musculacao: modalidades.find((m) => m.icone === 'musculacao'),
+    aulas: modalidades.filter((m) => m.icone !== 'musculacao'),
+  };
+}
+
 export function getModalidades(): Modalidade[] {
   const filePath = path.join(process.cwd(), 'content', 'modalidades.json');
   const raw: unknown = JSON.parse(readFileSync(filePath, 'utf-8'));

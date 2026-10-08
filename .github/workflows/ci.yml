@@ -52,8 +52,14 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run build
-      - name: npm audit (falha em vulnerabilidade alta/crítica)
-        run: npm audit --audit-level=high
+      # Só dependências de produção (`--omit=dev`): o que vai pro site.
+      # Ferramentas de dev (shadcn CLI, eslint-config-next) puxam
+      # `braces <=3.0.3` (GHSA-vfj7-8cjw-p6xm, DoS com glob malicioso), sem
+      # versão corrigida publicada até 2026-10-08 — com o audit completo o CI
+      # ficaria vermelho sem ação possível. Essas ferramentas só rodam com
+      # padrões escritos por nós, nunca com entrada de usuário.
+      - name: npm audit (falha em vulnerabilidade alta/crítica de produção)
+        run: npm audit --omit=dev --audit-level=high
 
   e2e:
     needs: lint-typecheck-test
@@ -107,6 +113,9 @@ jobs:
     # de forma repetível. Verificar mobile de verdade contra a URL real da
     # Vercel antes do lançamento (`docs/tasks.md`) — não dá pra confiar
     # nesse número rodando local/CI.
+    # `numberOfRuns: 3` (.lighthouserc.json): com 1 run só, a home caiu pra
+    # 94 em 2026-10-08 por TBT de 180ms, todo ele hidratação do React/Next
+    # (nenhum chunk do site acima de 78ms) no runner compartilhado.
     needs: lint-typecheck-test
     runs-on: ubuntu-latest
     steps:

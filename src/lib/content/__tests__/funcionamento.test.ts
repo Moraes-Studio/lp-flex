@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  agruparFuncionamento,
   calcularStatus,
   getFuncionamento,
   parseFuncionamento,
@@ -78,6 +79,74 @@ describe('calcularStatus', () => {
     const fechado = [...grade];
     fechado[1] = { ...fechado[1], abre: null, fecha: null };
     const segundaAsDezEmSP = new Date('2026-08-17T13:00:00Z');
-    expect(calcularStatus(fechado, segundaAsDezEmSP)).toEqual({ aberto: false, texto: 'Fechado hoje' });
+    expect(calcularStatus(fechado, segundaAsDezEmSP)).toEqual({
+      aberto: false,
+      texto: 'Fechado hoje',
+    });
+  });
+});
+
+describe('agruparFuncionamento', () => {
+  it('entrada vazia retorna lista vazia', () => {
+    expect(agruparFuncionamento([])).toEqual([]);
+  });
+
+  it('junta dias consecutivos com o mesmo horário (grade real)', () => {
+    expect(agruparFuncionamento(grade)).toEqual([
+      { rotulo: 'Seg a Qui', rotuloLongo: 'Segunda a Quinta', horario: '05:00-23:00' },
+      { rotulo: 'Sexta', rotuloLongo: 'Sexta', horario: '05:00-22:00' },
+      { rotulo: 'Sábado', rotuloLongo: 'Sábado', horario: '09:00-15:00' },
+      { rotulo: 'Domingo e feriados', rotuloLongo: 'Domingo e feriados', horario: '09:30-12:30' },
+    ]);
+  });
+
+  it('dia fechado vira "Fechado" e não se junta a dia aberto', () => {
+    const comFechado = grade.map((d) =>
+      d.diaCurto === 'Dom' ? { ...d, abre: null, fecha: null } : d
+    );
+    expect(agruparFuncionamento(comFechado).at(-1)).toEqual({
+      rotulo: 'Domingo e feriados',
+      rotuloLongo: 'Domingo e feriados',
+      horario: 'Fechado',
+    });
+  });
+
+  it('semana inteira igual vira um grupo de Seg a Sáb mais o domingo separado', () => {
+    const igual = grade.map((d) => ({ ...d, abre: '06:00', fecha: '22:00' }));
+    expect(agruparFuncionamento(igual)).toEqual([
+      { rotulo: 'Seg a Sáb', rotuloLongo: 'Segunda a Sábado', horario: '06:00-22:00' },
+      { rotulo: 'Domingo e feriados', rotuloLongo: 'Domingo e feriados', horario: '06:00-22:00' },
+    ]);
+  });
+
+  it('todos os dias diferentes geram 7 grupos com nome completo', () => {
+    const diferentes = grade.map((d, i) => ({ ...d, abre: `0${i}:00`, fecha: '20:00' }));
+    const grupos = agruparFuncionamento(diferentes);
+    expect(grupos).toHaveLength(7);
+    expect(grupos.map((g) => g.rotulo)).toEqual([
+      'Segunda',
+      'Terça',
+      'Quarta',
+      'Quinta',
+      'Sexta',
+      'Sábado',
+      'Domingo e feriados',
+    ]);
+  });
+
+  it('rotuloLongo usa nomes completos do primeiro e do último dia', () => {
+    const grupos = agruparFuncionamento(grade);
+    expect(grupos.map((g) => g.rotuloLongo)).toEqual([
+      'Segunda a Quinta',
+      'Sexta',
+      'Sábado',
+      'Domingo e feriados',
+    ]);
+  });
+
+  it('nunca usa travessão', () => {
+    for (const g of agruparFuncionamento(grade)) {
+      expect(`${g.rotulo} ${g.horario}`).not.toMatch(/[—–]/);
+    }
   });
 });

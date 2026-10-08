@@ -18,8 +18,7 @@ import { expect, test } from '@playwright/test';
  */
 test.describe.configure({ retries: 2 });
 
-const alturaDocumento = () =>
-  document.documentElement.scrollHeight;
+const alturaDocumento = () => document.documentElement.scrollHeight;
 
 test.describe('Banner de cookies — não pode alterar o layout da página', () => {
   test('altura do documento é idêntica com o banner aberto e depois de fechado', async ({
@@ -95,14 +94,18 @@ test.describe('Banner de cookies — convivência com o WhatsApp', () => {
     const wa = page.locator('#whatsapp-float');
     await expect(wa).toBeVisible();
 
-    const bannerBox = await banner.boundingBox();
-    const waBox = await wa.boundingBox();
-    expect(bannerBox && waBox).toBeTruthy();
-    if (bannerBox && waBox) {
-      // não podem se sobrepor verticalmente: o WhatsApp deve estar
-      // inteiramente acima do topo do banner.
-      expect(waBox.y + waBox.height).toBeLessThanOrEqual(bannerBox.y + 1);
-    }
+    // não podem se sobrepor verticalmente: o WhatsApp deve estar
+    // inteiramente acima do topo do banner. Poll porque os dois animam ao
+    // entrar (`bottom` do WhatsApp em 0.25s, banner com translate-y) — medir
+    // uma vez só pegava o meio da transição e falhava sob CPU limitada.
+    await expect
+      .poll(async () => {
+        const bannerBox = await banner.boundingBox();
+        const waBox = await wa.boundingBox();
+        if (!bannerBox || !waBox) return Infinity;
+        return waBox.y + waBox.height - (bannerBox.y + 1);
+      })
+      .toBeLessThanOrEqual(0);
   });
 
   test('mobile: WhatsApp fica oculto enquanto o banner está aberto e volta ao fechar', async ({

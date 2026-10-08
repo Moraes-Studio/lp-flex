@@ -25,11 +25,9 @@ export function Planos() {
     <section id="planos" className="px-[6%] py-16 md:py-20">
       <div className="mx-auto max-w-[1180px]">
         <SectionHeading
-          eyebrow="Planos"
           title={
             <>
-              Musculação e todas as
-              <br />
+              Musculação e todas as <br className="hidden sm:block" />
               modalidades inclusas.
             </>
           }
@@ -73,19 +71,24 @@ export function Planos() {
                       // "levanta" que o -translate-y-1 já faz. Menor que o
                       // destaque de propósito (padding/tipografia reduzidos
                       // abaixo) — contraste de escala, não 3 cards iguais.
-                      'border-border shadow-card hover:shadow-card-hover hover:border-flex-blue-600/25 hover:bg-surface-200 border bg-surface-100 lg:p-5'
+                      'border-border shadow-card hover:shadow-card-hover hover:border-flex-blue-600/25 hover:bg-surface-200 bg-surface-100 border lg:p-5'
                 )}
               >
                 <div className="mb-3 flex min-h-[22px] flex-wrap items-center gap-2">
                   {plano.destaque && plano.badge ? (
-                    <Badge variant="institutional" className="border-white/40 bg-white/15 text-white">
+                    <Badge
+                      variant="institutional"
+                      className="border-white/40 bg-white/15 text-white"
+                    >
                       {plano.badge}
                     </Badge>
                   ) : null}
                   {plano.badgeExtra ? (
                     <Badge
                       variant="institutional"
-                      className={plano.destaque ? 'border-white/40 bg-white/15 text-white' : undefined}
+                      className={
+                        plano.destaque ? 'border-white/40 bg-white/15 text-white' : undefined
+                      }
                     >
                       {plano.badgeExtra}
                     </Badge>
@@ -106,7 +109,9 @@ export function Planos() {
                   {temDesconto && campanhaAtivaAgora ? (
                     <Badge
                       variant="campaign"
-                      className={plano.destaque ? 'border-white/40 bg-white/15 text-white' : undefined}
+                      className={
+                        plano.destaque ? 'border-white/40 bg-white/15 text-white' : undefined
+                      }
                     >
                       Campanha ativa
                     </Badge>
@@ -160,7 +165,7 @@ export function Planos() {
                     <p
                       className={cn(
                         'font-heading',
-                        plano.destaque ? 'text-[36px] text-white' : 'text-[26px] text-flex-blue-700'
+                        plano.destaque ? 'text-[36px] text-white' : 'text-flex-blue-700 text-[26px]'
                       )}
                     >
                       Sob consulta
@@ -226,11 +231,14 @@ export function Planos() {
                     size="sm"
                     className={cn(
                       'group mt-4',
-                      plano.destaque && 'bg-white text-flex-blue-700 shadow-none hover:bg-flex-blue-50'
+                      plano.destaque &&
+                        'text-flex-blue-700 hover:bg-flex-blue-50 bg-white shadow-none'
                     )}
                   >
                     <a
-                      href={whatsappUrl(`Olá! Vim pelo site e tenho interesse no plano "${plano.nome}".`)}
+                      href={whatsappUrl(
+                        `Olá! Vim pelo site e tenho interesse no plano "${plano.nome}".`
+                      )}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

@@ -1,114 +1,93 @@
-import { siteConfig, whatsappUrl } from '@/config/site';
-import { getFuncionamento } from '@/lib/content/funcionamento';
-import { getHorarios } from '@/lib/content/horarios';
-import { getModalidades } from '@/lib/content/modalidades';
-import { contarConfirmados, getProfessores } from '@/lib/content/professores';
+import { siteConfig } from '@/config/site';
+import { mediaConfig } from '@/config/media';
 import { Button } from '@/components/ui/button';
 import { Eyebrow } from '@/components/shared/eyebrow';
-import { HeroBoard } from '@/components/shared/hero-board';
-import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
-import { StatusChip } from '@/components/layout/status-chip';
+import { HeroRotator } from '@/components/shared/hero-rotator';
 import { CtaArrow } from '@/components/shared/cta-arrow';
-import { CountUp } from '@/components/shared/count-up';
-import { cn } from '@/lib/utils';
 
+/**
+ * Hero imersivo (iteração pós-comparação com SmartFit/Bluefit): foto real em
+ * tela cheia, uma camada de cor sólida Flex Blue por cima (nunca gradiente,
+ * brilho ou vidro) e o texto alinhado à esquerda na mesma margem do logo
+ * (`px-[6%]`), assentado na metade de baixo.
+ *
+ * - Puxado pra baixo do header sticky com margem negativa de `--header-h`
+ *   (globals.css, a mesma altura que o header usa) e o mesmo valor de padding-top: a foto começa no topo da
+ *   viewport e o header fica transparente por cima (header-shell.tsx).
+ * - Um único botão, "Ver planos". O WhatsApp acima da dobra é só o do
+ *   header ("Quero treinar agora").
+ * - Opacidade da camada medida nas 3 fotos (pixel mais claro sob o texto):
+ *   70% é o mínimo em que "em sala" (flex-blue-300) passa 3:1 nas 3 fotos
+ *   (60% dá 2.6:1); o branco fica ≥ 7.3:1 até sobre lâmpada estourada.
+ *   O eyebrow é branco (não o azul-300 do `inverted`) pelo mesmo motivo:
+ *   texto pequeno pede 4.5:1. A linha do eyebrow continua azul.
+ *
+ * Copy revisada contra SDD §7 (portão 1): só frases permitidas ("professor
+ * presente na sala", "orientação", "tirar dúvidas").
+ */
 export function Hero() {
-  const horarios = getHorarios();
-  const funcionamento = getFuncionamento();
-  const modalidades = getModalidades();
-  const professores = getProfessores();
-  const anos = new Date().getFullYear() - siteConfig.foundedYear;
-
-  const stats = [
-    { valor: `${anos}+`, label: 'anos na Vila Helena' },
-    { valor: String(modalidades.length), label: 'modalidades inclusas' },
-    { valor: String(contarConfirmados(professores)), label: 'professores confirmados' },
-  ];
-
   return (
-    <section className="px-[6%] pt-10 pb-12 md:pt-14 md:pb-14">
-      {/* items-center (não items-start): o quadro "Hoje" (7 aulas) é bem mais
-       * curto que a coluna de texto (headline+parágrafo+CTAs+status) — com
-       * items-start sobrava um vão vazio grande embaixo dele (achado real,
-       * medido: ~173px de buraco). Centralizado, o mesmo espaço "sobrando"
-       * fica dividido em cima/embaixo e lê como composição, não como bug. */}
-      <div className="mx-auto grid max-w-[1180px] items-center gap-x-14 gap-y-8 lg:grid-cols-[1.25fr_0.75fr]">
-        <div>
-          <Eyebrow className="enter" style={{ '--enter-delay': '0ms' } as React.CSSProperties}>
-            Vila Helena · {siteConfig.address.city} · desde {siteConfig.foundedYear}
+    <section
+      data-hero-imersivo
+      className="bg-flex-blue-950 relative isolate -mt-(--header-h) flex min-h-[100dvh] flex-col"
+    >
+      <div className="absolute inset-0 -z-10">
+        <HeroRotator fotos={mediaConfig.heroFotos} />
+      </div>
+      <div className="bg-flex-blue-950/70 absolute inset-0 -z-10" aria-hidden="true" />
+
+      <div className="flex flex-1 items-end px-[6%] pt-[calc(var(--header-h)+40px)] pb-[clamp(48px,11dvh,128px)]">
+        <div className="w-full max-w-[1100px]">
+          <Eyebrow
+            variant="inverted"
+            className="enter mb-3 text-white md:mb-5"
+            style={{ '--enter-delay': '0ms' } as React.CSSProperties}
+          >
+            {/* No mobile quebra em "Vila Helena · Santo André" / "desde 1992",
+             * em vez de deixar um "·" solto no fim da linha. */}
+            <span>
+              Vila Helena · {siteConfig.address.city}
+              <span className="max-sm:hidden"> · </span>
+              <br className="sm:hidden" />
+              desde {siteConfig.foundedYear}
+            </span>
           </Eyebrow>
-          {/* (Removida a linha que atravessava o grid atrás do "SALA." —
-           * ficou feia na prática, não sobreviveu à revisão visual.) */}
+          {/* Entrelinha 1.08: em 0.95/1.02 a cedilha de "Ç" encostava no "O" de
+           * "COM" na linha de baixo (conferido com zoom em 1920/1440/1366/390).
+           * `pt-[0.14em]`: o til de "Ã" passa do topo da caixa e o clip-path
+           * do `heading-reveal` cortava o acento. */}
           <h1
-            className="enter heading-reveal text-[clamp(34px,6.2vw,64px)] leading-[1.2]"
+            className="enter heading-reveal pt-[0.14em] text-[clamp(48px,min(8.4vw,13.5dvh),124px)] leading-[1.08] font-bold tracking-[0.005em] text-balance text-white md:text-wrap"
             style={{ '--enter-delay': '70ms' } as React.CSSProperties}
           >
-            Musculação e aulas
-            <br />
-            com professor <span className="text-flex-blue-600">em sala</span>.
+            Musculação <br className="hidden md:block" />e aulas com{' '}
+            <br className="hidden md:block" />
+            professor <span className="text-flex-blue-300 whitespace-nowrap">em sala</span>.
           </h1>
           <p
-            className="enter text-muted-foreground mt-5 max-w-[500px] text-[17px] font-normal normal-case"
+            className="enter mt-6 max-w-[520px] text-[17px] leading-[1.55] font-normal text-white/90 normal-case md:mt-8 md:text-[19px] lg:max-w-[560px] lg:text-[20px]"
             style={{ '--enter-delay': '140ms' } as React.CSSProperties}
           >
-            Na Flex, seu treino é montado por um professor de Educação Física. Durante todo o
-            horário de funcionamento, há sempre um professor em sala para orientar a execução dos
-            exercícios e tirar dúvidas.
+            Professor de Educação Física presente na sala em todo o horário, orientando a execução e
+            tirando dúvidas.
           </p>
 
           <div
-            className="enter mt-7 flex flex-wrap gap-3"
+            className="enter mt-8 md:mt-10"
             style={{ '--enter-delay': '210ms' } as React.CSSProperties}
           >
-            <Button asChild className="group">
-              <a
-                href={whatsappUrl('Olá! Quero treinar na Academia Flex.')}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <WhatsappGlyph className="h-4 w-4" />
-                Falar no WhatsApp
-                <CtaArrow variant="up-right" />
-              </a>
-            </Button>
-            <Button asChild variant="ghost" className="group">
+            <Button
+              asChild
+              variant="onDark"
+              className="group focus-visible:ring-offset-flex-blue-950 px-8 py-[18px] text-[15px] tracking-wide uppercase"
+            >
               <a href="#planos">
                 Ver planos
                 <CtaArrow variant="right" />
               </a>
             </Button>
           </div>
-
-          <StatusChip
-            funcionamento={funcionamento}
-            className="enter mt-6"
-            style={{ '--enter-delay': '250ms' } as React.CSSProperties}
-          />
         </div>
-
-        <div className="enter relative z-10" style={{ '--enter-delay': '120ms' } as React.CSSProperties}>
-          <HeroBoard slots={horarios} />
-        </div>
-
-        {/* Placar de stats — V2: virou grafismo de largura cheia (não mais
-         * confinado à coluna de texto), números bem maiores, cruza por baixo
-         * das duas colunas em vez de ficar preso numa delas. */}
-        <dl className="border-flex-blue-600/15 divide-flex-blue-600/15 mt-1 grid grid-cols-3 divide-x border-t pt-5 lg:col-span-2 lg:mt-4 lg:max-w-[620px]">
-          {stats.map((stat, i) => (
-            <div
-              key={stat.label}
-              className={cn('enter flex flex-col-reverse', i > 0 && 'pl-4 sm:pl-6')}
-              style={{ '--enter-delay': `${280 + i * 60}ms` } as React.CSSProperties}
-            >
-              <dt className="text-muted-foreground mt-1.5 text-[11.5px] leading-snug normal-case">
-                {stat.label}
-              </dt>
-              <dd className="font-heading text-flex-blue-700 text-[38px] leading-none normal-case tabular-nums sm:text-[46px]">
-                <CountUp value={stat.valor} />
-              </dd>
-            </div>
-          ))}
-        </dl>
       </div>
     </section>
   );

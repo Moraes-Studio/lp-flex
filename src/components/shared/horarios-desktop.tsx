@@ -19,11 +19,16 @@ interface HorariosDesktopProps {
  * cálculo rodava uma vez no build/deploy da Vercel (UTC) e ficava congelado
  * no HTML até o próximo deploy, além de nem usar o fuso de São Paulo. Mesmo
  * padrão de correção já usado pelo componente irmão `horarios-mobile.tsx`
- * (e por HeroBoard/StatusChip): "hoje" só existe depois de montar no
+ * (e por HojeStrip/StatusChip): "hoje" só existe depois de montar no
  * cliente. Antes de montar (`hoje === null`), a tabela renderiza sem nenhum
  * destaque — igual ao que o servidor já mandou, sem mismatch de hidratação.
  */
-export function HorariosDesktop({ colunas, horas, horarios, resumoFuncionamento }: HorariosDesktopProps) {
+export function HorariosDesktop({
+  colunas,
+  horas,
+  horarios,
+  resumoFuncionamento,
+}: HorariosDesktopProps) {
   const [hoje, setHoje] = React.useState<Dia | null>(null);
 
   React.useEffect(() => {
@@ -35,7 +40,7 @@ export function HorariosDesktop({ colunas, horas, horarios, resumoFuncionamento 
 
   return (
     <div className="hidden lg:block">
-      <div className="overflow-x-auto rounded-2xl border border-border bg-white">
+      <div className="border-border overflow-x-auto rounded-2xl border bg-white">
         <table className="w-full min-w-[720px] border-collapse">
           <thead>
             <tr>
@@ -44,13 +49,15 @@ export function HorariosDesktop({ colunas, horas, horarios, resumoFuncionamento 
                   key={dia}
                   scope="col"
                   className={cn(
-                    'border-flex-blue-500/40 bg-flex-blue-600 px-3 py-3.5 font-heading border-r text-[13px] font-medium tracking-[0.08em] text-white uppercase last:border-r-0',
+                    'border-flex-blue-500/40 bg-flex-blue-600 font-heading border-r px-3 py-3.5 text-[13px] font-medium tracking-[0.08em] text-white uppercase last:border-r-0',
                     dia === hoje && 'bg-flex-blue-700'
                   )}
                 >
                   {dia}
                   {dia === hoje ? (
-                    <span className="mt-0.5 block font-mono text-[9px] tracking-[0.16em] opacity-85">hoje</span>
+                    <span className="mt-0.5 block font-mono text-[9px] tracking-[0.16em] opacity-85">
+                      hoje
+                    </span>
                   ) : null}
                 </th>
               ))}
@@ -85,14 +92,17 @@ export function HorariosDesktop({ colunas, horas, horarios, resumoFuncionamento 
                             {hora}
                           </span>
                           <span
-                            className={cn('block font-semibold', ehHoje ? 'text-flex-blue-800' : 'text-foreground')}
+                            className={cn(
+                              'block font-semibold',
+                              ehHoje ? 'text-flex-blue-800' : 'text-foreground'
+                            )}
                           >
                             {aula.aula}
                           </span>
                         </>
                       ) : (
                         <span className="text-border" aria-hidden="true">
-                          —
+                          ·
                         </span>
                       )}
                     </td>

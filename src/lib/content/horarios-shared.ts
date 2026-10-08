@@ -1,7 +1,7 @@
 /**
  * Tipos e funções puras da grade de horários — sem `node:fs` e, de
  * propósito, sem `zod` — importável por Client Component (ex:
- * `horarios-mobile.tsx`, `hero-board.tsx`). Toda leitura de arquivo fica
+ * `horarios-mobile.tsx`, `hoje-strip.tsx`). Toda leitura de arquivo fica
  * isolada em `horarios.ts` (server-only); o Turbopack recusa bundlar
  * `node:fs` num Client Component mesmo que o import use só um símbolo puro
  * do mesmo módulo — por isso a separação existe.

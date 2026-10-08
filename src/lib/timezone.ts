@@ -14,7 +14,7 @@ import type { Dia } from '@/lib/content/horarios-shared';
  * é só timezone, é o dia inteiro ficando desatualizado. A correção real tem
  * duas partes: (1) fuso explícito América/São Paulo (este módulo) e (2)
  * mover o cálculo de "hoje" pra rodar no cliente, depois de montar — mesmo
- * padrão já usado em HeroBoard/StatusChip/HorariosMobile (ver comentário em
+ * padrão já usado em HojeStrip/StatusChip/HorariosMobile (ver comentário em
  * cada um), nunca no corpo de um Server Component estático.
  */
 export const TIMEZONE_OFICIAL = 'America/Sao_Paulo';
@@ -58,7 +58,7 @@ export function numeroDoDiaEmSaoPaulo(instant: Date): number {
 }
 
 /** Minutos desde a meia-noite de um instante, em São Paulo — pra lógica de
- * "aberto agora"/"aula rolando agora" (calcularStatus, HeroBoard). */
+ * "aberto agora"/"aula rolando agora" (calcularStatus, HojeStrip). */
 export function minutosDoDiaEmSaoPaulo(instant: Date): number {
   const partes = new Intl.DateTimeFormat('en-US', {
     timeZone: TIMEZONE_OFICIAL,
@@ -73,7 +73,7 @@ export function minutosDoDiaEmSaoPaulo(instant: Date): number {
 }
 
 /** Dia + minutos do dia em São Paulo, num só instante — conveniência pra
- * quem precisa dos dois (HeroBoard). */
+ * quem precisa dos dois (HojeStrip). */
 export function agoraEmSaoPaulo(instant: Date = new Date()): { dia: Dia; minutos: number } {
   return { dia: diaDaSemanaEmSaoPaulo(instant), minutos: minutosDoDiaEmSaoPaulo(instant) };
 }
@@ -111,7 +111,14 @@ export function fimDoDiaEmSaoPaulo(dataISO: string): Date {
     hour12: false,
   }).formatToParts(chute);
   const get = (tipo: string) => Number(partes.find((p) => p.type === tipo)?.value ?? '0');
-  const chuteComoSP = Date.UTC(get('year'), get('month') - 1, get('day'), get('hour') % 24, get('minute'), get('second'));
+  const chuteComoSP = Date.UTC(
+    get('year'),
+    get('month') - 1,
+    get('day'),
+    get('hour') % 24,
+    get('minute'),
+    get('second')
+  );
 
   const diferenca = chuteComoSP - desejadoSemMs;
   return new Date(desejadoSemMs - diferenca + 999);

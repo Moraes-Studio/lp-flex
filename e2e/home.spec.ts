@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { expect, test } from '@playwright/test';
 
 test.describe('Home — layout geral', () => {
@@ -25,22 +27,36 @@ test.describe('Home — layout geral', () => {
     // antes de checar o comportamento normal do botão.
     await page.getByRole('button', { name: 'Aceitar todos' }).click();
 
-    const float = page.getByRole('link', { name: 'Falar no WhatsApp' }).last();
+    const float = page.getByRole('link', { name: 'Quero treinar agora' }).last();
     await expect(float).toBeVisible();
     await page.evaluate(() => window.scrollTo(0, 2000));
     await expect(float).toBeVisible();
   });
 
-  test('condição da campanha ativa aparece no card do plano em promoção, com CTA', async ({
+  test('condição da campanha aparece só até terminaEm (fim do dia em São Paulo)', async ({
     page,
   }) => {
-    // A campanha não tem mais faixa própria — a condição (SDD.md §9) aparece
+    // A campanha não tem faixa própria — a condição (SDD.md §9) aparece
     // dentro do card do plano que participa dela (content/planos.json,
-    // campanhaAtiva:true), substituindo o preço normal enquanto durar.
+    // campanhaAtiva:true), substituindo o preço normal enquanto durar. O
+    // teste segue a data real do conteúdo, em vez de supor campanha no ar.
+    const campanha = JSON.parse(
+      readFileSync(path.join(process.cwd(), 'content', 'campaign.json'), 'utf-8')
+    ) as { active: boolean; titulo: string; terminaEm: string };
+    const hojeSaoPaulo = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
+    const noAr = campanha.active && hojeSaoPaulo <= campanha.terminaEm;
+
     await page.goto('/');
     await page.locator('#planos').scrollIntoViewIfNeeded();
-    await expect(page.getByText('Primeiro mês por R$ 9,90')).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Quero essa condição' })).toBeVisible();
+    const condicao = page.getByText(campanha.titulo);
+    const cta = page.getByRole('link', { name: 'Quero essa condição' });
+    if (noAr) {
+      await expect(condicao).toBeVisible();
+      await expect(cta).toBeVisible();
+    } else {
+      await expect(condicao).toHaveCount(0);
+      await expect(cta).toHaveCount(0);
+    }
   });
 });
 
@@ -88,4 +104,18 @@ test.describe('Privacidade', () => {
     await expect(page).toHaveURL(/\/privacidade$/, { timeout: 20000 });
     await expect(page.getByRole('heading', { name: 'Política de Privacidade' })).toBeVisible();
   });
+});
+
+test.describe('Rodapé', () => {
+  for (const largura of [1440, 1920]) {
+    test(`alinha à esquerda com o conteúdo das seções (${largura}px)`, async ({ page }) => {
+      await page.setViewportSize({ width: largura, height: 900 });
+      await page.goto('/');
+      const titulo = (await page.locator('#contato h2').boundingBox())!;
+      const logo = (await page.locator('footer img').first().boundingBox())!;
+      const copyright = (await page.locator('footer').getByText(/Todos os direitos/).boundingBox())!;
+      expect(Math.abs(logo.x - titulo.x)).toBeLessThanOrEqual(2);
+      expect(Math.abs(copyright.x - titulo.x)).toBeLessThanOrEqual(2);
+    });
+  }
 });

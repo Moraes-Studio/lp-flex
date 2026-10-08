@@ -9,33 +9,32 @@ import { CookieConsent } from '@/components/shared/cookie-consent';
 import { AnchorScrollHandler } from '@/components/shared/anchor-scroll-handler';
 import './globals.css';
 
+// Só o subset `latin`: ele já cobre todo o português (ã, ç, é, õ…). O
+// `latin-ext` dobrava os arquivos pré-carregados (14 → 7) sem nenhum
+// caractere em uso, e as fontes competiam com o logo e a foto do hero no LCP mobile.
 const oswald = Oswald({
   variable: '--font-oswald',
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   weight: ['500', '600', '700'],
 });
 
 const barlow = Barlow({
   variable: '--font-barlow',
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   weight: ['400', '500', '600'],
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
   variable: '--font-ibm-plex-mono',
-  subsets: ['latin', 'latin-ext'],
+  subsets: ['latin'],
   weight: ['400', '500', '600'],
 });
 
-// Título e description finais da homepage — cada afirmação conferida contra
-// o conteúdo real antes de usar (SEO, rodada final): "Vila Helena, Santo
-// André, desde 1992" (siteConfig), "professor em sala" (diferencial real,
-// SDD.md §7), "Pilates, Yoga, Zumba, Jump[ Funcional], Fit Dance" (todas em
-// content/modalidades.json — "e mais" cobre as outras 6: Step Funcional,
-// GAP, Ritbox, Flex Training, Cross Training). Nada inventado.
+// Título final da homepage — cada afirmação conferida contra o conteúdo real
+// (SEO, rodada final). A description fica em `siteConfig.descricaoSeo`, que o
+// JSON-LD também usa.
 const title = 'Academia Flex | Musculação e Aulas em Santo André';
-const description =
-  'Academia em Vila Helena, Santo André, desde 1992. Musculação com professor em sala e aulas de Pilates, Yoga, Zumba, Jump, Fit Dance e mais.';
+const description = siteConfig.descricaoSeo;
 // URL canônica absoluta da home. Um só cálculo, reusado em `alternates.canonical`
 // E `openGraph.url` (nunca duas fontes divergentes pra "a URL canônica").
 // Nota: o próprio Next.js normaliza a barra final pra fora ao renderizar
@@ -55,7 +54,16 @@ export const metadata: Metadata = {
     template: `%s — ${siteConfig.name}`,
   },
   description,
-  keywords: ['academia', 'Santo André', 'Vila Helena', 'musculação', 'aulas coletivas', 'pilates', 'yoga', 'zumba'],
+  keywords: [
+    'academia',
+    'Santo André',
+    'Vila Helena',
+    'musculação',
+    'aulas coletivas',
+    'pilates',
+    'yoga',
+    'zumba',
+  ],
   alternates: { canonical: canonicalUrl },
   openGraph: {
     type: 'website',

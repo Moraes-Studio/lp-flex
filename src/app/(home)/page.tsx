@@ -1,6 +1,7 @@
 import { getModalidades } from '@/lib/content/modalidades';
 import { getFuncionamento } from '@/lib/content/funcionamento';
 import { gerarJsonLdNegocio } from '@/lib/structured-data';
+import { FaixaFoto } from '@/components/shared/faixa-foto';
 import { Marquee } from '@/components/shared/marquee';
 import { Hero } from './_components/hero';
 import { Planos } from './_components/planos';
@@ -9,6 +10,11 @@ import { Horarios } from './_components/horarios';
 import { Professores } from './_components/professores';
 import { Sobre } from './_components/sobre';
 import { Contato } from './_components/contato';
+
+// A home é estática, então `new Date()` (campanha com `terminaEm`, Planos)
+// rodaria só no build: campanha vencida ficaria no ar até o próximo deploy.
+// Regerar de hora em hora tira a campanha do ar no máximo 1h após o fim.
+export const revalidate = 3600;
 
 export default function Home() {
   const modalidades = getModalidades();
@@ -30,6 +36,7 @@ export default function Home() {
       <Marquee items={modalidades.map((m) => m.nome)} tone="dark" />
       <Planos />
       <Modalidades />
+      <FaixaFoto funcionamento={funcionamento} />
       <Horarios />
       <Professores />
       <Sobre />

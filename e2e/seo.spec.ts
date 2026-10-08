@@ -1,4 +1,17 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { expect, test } from '@playwright/test';
+
+/** A URL que o site usa nas tags (NEXT_PUBLIC_SITE_URL, a mesma que o `next`
+ * carrega do .env.local), não a origem do Playwright: com E2E_PORT diferente
+ * de 3000 as duas divergem e o teste falhava sem bug nenhum no site. */
+function siteUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  const env = readFileSync(path.join(process.cwd(), '.env.local'), 'utf-8');
+  const valor = env.match(/^NEXT_PUBLIC_SITE_URL=(.*)$/m)?.[1]?.trim();
+  if (!valor) throw new Error('NEXT_PUBLIC_SITE_URL ausente do .env.local');
+  return valor.replace(/\/$/, '');
+}
 
 /**
  * SEO técnico da homepage final. Lê atributos direto do <head> renderizado
@@ -20,7 +33,9 @@ test.describe('SEO — metadata da homepage', () => {
     );
   });
 
-  test('canonical existe, é absoluto e aponta pra própria origem (sem duplicidade)', async ({ page, baseURL }) => {
+  test('canonical existe, é absoluto e aponta pra própria origem (sem duplicidade)', async ({
+    page,
+  }) => {
     await page.goto('/');
     const canonical = page.locator('link[rel="canonical"]');
     await expect(canonical).toHaveCount(1);
@@ -28,7 +43,7 @@ test.describe('SEO — metadata da homepage', () => {
     // O Next normaliza a barra final pra fora ao renderizar a tag (mesma URL
     // pra qualquer crawler) — o que importa pra "sem duplicidade" é existir
     // só ESTE valor, consistente com og:url abaixo.
-    expect(href).toBe(baseURL);
+    expect(href).toBe(siteUrl());
   });
 
   test('robots permite indexação (sem noindex acidental)', async ({ page }) => {
@@ -39,18 +54,21 @@ test.describe('SEO — metadata da homepage', () => {
     expect(content).toContain('follow');
   });
 
-  test('Open Graph completo pro compartilhamento (WhatsApp/Facebook)', async ({ page, baseURL }) => {
+  test('Open Graph completo pro compartilhamento (WhatsApp/Facebook)', async ({ page }) => {
     await page.goto('/');
-    const og = async (property: string) => page.locator(`meta[property="${property}"]`).getAttribute('content');
+    const og = async (property: string) =>
+      page.locator(`meta[property="${property}"]`).getAttribute('content');
 
     expect(await og('og:type')).toBe('website');
     expect(await og('og:locale')).toBe('pt_BR');
     expect(await og('og:site_name')).toBe('Academia Flex');
     expect(await og('og:title')).toBe('Academia Flex | Musculação e Aulas em Santo André');
     expect(await og('og:description')).toContain('Vila Helena, Santo André');
-    expect(await og('og:url')).toBe(baseURL);
+    expect(await og('og:url')).toBe(siteUrl());
     // og:url e canonical sempre iguais — uma única URL de verdade pra página.
-    expect(await og('og:url')).toBe(await page.locator('link[rel="canonical"]').getAttribute('href'));
+    expect(await og('og:url')).toBe(
+      await page.locator('link[rel="canonical"]').getAttribute('href')
+    );
 
     const image = await og('og:image');
     expect(image).toBeTruthy();
@@ -62,10 +80,13 @@ test.describe('SEO — metadata da homepage', () => {
 
   test('Twitter/X card configurado, reaproveitando a OG image', async ({ page }) => {
     await page.goto('/');
-    const twitter = async (name: string) => page.locator(`meta[name="${name}"]`).getAttribute('content');
+    const twitter = async (name: string) =>
+      page.locator(`meta[name="${name}"]`).getAttribute('content');
 
     expect(await twitter('twitter:card')).toBe('summary_large_image');
-    expect(await twitter('twitter:title')).toBe('Academia Flex | Musculação e Aulas em Santo André');
+    expect(await twitter('twitter:title')).toBe(
+      'Academia Flex | Musculação e Aulas em Santo André'
+    );
     expect(await twitter('twitter:description')).toContain('Vila Helena, Santo André');
     const twitterImage = await twitter('twitter:image');
     const ogImage = await page.locator('meta[property="og:image"]').getAttribute('content');
@@ -81,7 +102,7 @@ test.describe('SEO — metadata da homepage', () => {
     const jsonLd = JSON.parse(raw!);
 
     expect(jsonLd['@context']).toBe('https://schema.org');
-    expect(jsonLd['@type']).toBe('SportsActivityLocation');
+    expect(jsonLd['@type']).toBe('ExerciseGym');
     expect(jsonLd.name).toBe('Academia Flex');
     expect(jsonLd.address.addressLocality).toBe('Santo André');
     expect(jsonLd.address.addressRegion).toBe('SP');
@@ -93,7 +114,10 @@ test.describe('SEO — metadata da homepage', () => {
     expect(jsonLd).not.toHaveProperty('geo');
   });
 
-  test('og:image responde 200, com content-type de imagem, sem exigir autenticação', async ({ page, request }) => {
+  test('og:image responde 200, com content-type de imagem, sem exigir autenticação', async ({
+    page,
+    request,
+  }) => {
     await page.goto('/');
     const imageUrl = await page.locator('meta[property="og:image"]').getAttribute('content');
     const response = await request.get(imageUrl!);
@@ -103,22 +127,21 @@ test.describe('SEO — metadata da homepage', () => {
 });
 
 test.describe('SEO — rotas técnicas', () => {
-  test('/robots.txt existe, permite a homepage e aponta pro sitemap', async ({ request, baseURL }) => {
+  test('/robots.txt existe, permite a homepage e aponta pro sitemap', async ({ request }) => {
     const response = await request.get('/robots.txt');
     expect(response.status()).toBe(200);
     const body = await response.text();
     expect(body).toMatch(/Allow:\s*\//);
-    expect(body).toContain(`${baseURL}/sitemap.xml`);
+    expect(body).toContain(`${siteUrl()}/sitemap.xml`);
   });
 
   test('/sitemap.xml existe e só lista URLs reais (sem anchors, sem páginas inexistentes)', async ({
     request,
-    baseURL,
   }) => {
     const response = await request.get('/sitemap.xml');
     expect(response.status()).toBe(200);
     const body = await response.text();
-    expect(body).toContain(`<loc>${baseURL}</loc>`);
+    expect(body).toContain(`<loc>${siteUrl()}</loc>`);
     // Página real que existe de verdade (não é uma âncora da home).
     expect(body).toContain('/privacidade</loc>');
     // Nunca uma URL de âncora nem uma rota que não existe como página própria.

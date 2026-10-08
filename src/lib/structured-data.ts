@@ -1,4 +1,5 @@
-import { siteConfig } from '@/config/site';
+import { mapsUrl, siteConfig } from '@/config/site';
+import { mediaConfig } from '@/config/media';
 import type { DiaFuncionamento } from '@/lib/content/funcionamento-shared';
 
 /** Schema.org só aceita o nome em inglês do dia da semana (string curta,
@@ -14,9 +15,10 @@ const DIA_CURTO_PARA_SCHEMA_ORG: Record<string, string> = {
 };
 
 /**
- * JSON-LD do negócio (schema.org) — SportsActivityLocation, o tipo mais
- * específico que ainda descreve corretamente uma academia de bairro com
- * endereço físico e grade de horários (é um LocalBusiness/Place na prática).
+ * JSON-LD do negócio (schema.org) — ExerciseGym, o subtipo de
+ * SportsActivityLocation específico de academia (LocalBusiness/Place na
+ * prática). `image` são as fotos reais (fachada primeiro, é o que o Google
+ * mostra no painel local), nunca o gráfico de compartilhamento.
  *
  * Só campos confirmados no projeto entram aqui — nada de
  * telefone/avaliação/geolocalização/faixa de preço inventados (RULES.md
@@ -41,12 +43,15 @@ export function gerarJsonLdNegocio(funcionamento: DiaFuncionamento[]) {
 
   return {
     '@context': 'https://schema.org',
-    '@type': 'SportsActivityLocation',
+    '@type': 'ExerciseGym',
     name: siteConfig.name,
     url: siteConfig.url,
     logo: `${siteConfig.url}/logo.png`,
-    image: `${siteConfig.url}/opengraph-image`,
-    description: siteConfig.tagline,
+    image: [mediaConfig.sobreGaleria[0].src, ...mediaConfig.heroFotos.map((foto) => foto.src)].map(
+      (src) => `${siteConfig.url}${src}`
+    ),
+    description: siteConfig.descricaoSeo,
+    hasMap: mapsUrl(),
     address: {
       '@type': 'PostalAddress',
       streetAddress: endereco.street,
