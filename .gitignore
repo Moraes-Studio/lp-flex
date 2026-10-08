@@ -41,3 +41,6 @@ next-env.d.ts
 # fotos originais (≈62 MB) — só as versões otimizadas de public/fotos/ vão pro repo
 # (gerar com: node scripts/otimizar-fotos.mjs)
 /public/0*_*/
+
+# skills locais de referência (não versionar — ver PR de agent skills)
+.claude/skills/awesome-design/
