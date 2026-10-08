@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Eyebrow } from '@/components/shared/eyebrow';
@@ -36,6 +37,10 @@ function Swatch({ label, className }: { label: string; className: string }) {
 }
 
 export default function DesignSystemPage() {
+  // Ferramenta de dev: no build de produção (Vercel, inclusive preview) vira
+  // 404 em vez de ficar aberta só com noindex.
+  if (process.env.NODE_ENV === 'production') notFound();
+
   return (
     <main className="mx-auto max-w-5xl space-y-20 px-6 py-16">
       <header className="flex items-center gap-4">
