@@ -11,9 +11,10 @@ import { CtaArrow } from '@/components/shared/cta-arrow';
  * brilho ou vidro) e o texto alinhado à esquerda na mesma margem do logo
  * (`px-[6%]`), assentado na metade de baixo.
  *
- * - Puxado pra baixo do header sticky com margem negativa de `--header-h`
- *   (globals.css, a mesma altura que o header usa) e o mesmo valor de padding-top: a foto começa no topo da
- *   viewport e o header fica transparente por cima (header-shell.tsx).
+ * - Puxado pra baixo do header sticky pela margem negativa de `--header-h`
+ *   no `<main>` da home (page.tsx; globals.css define a altura) e o mesmo
+ *   valor de padding-top aqui: a foto começa no topo da viewport e o header
+ *   fica transparente por cima (header-shell.tsx).
  * - Um único botão, "Ver planos". O WhatsApp acima da dobra é só o do
  *   header ("Quero treinar agora").
  * - Opacidade da camada medida nas 3 fotos (pixel mais claro sob o texto):
@@ -29,7 +30,7 @@ export function Hero() {
   return (
     <section
       data-hero-imersivo
-      className="bg-flex-blue-950 relative isolate -mt-(--header-h) flex min-h-[100dvh] flex-col"
+      className="bg-flex-blue-950 relative isolate flex min-h-[100dvh] flex-col"
     >
       <div className="absolute inset-0 -z-10">
         <HeroRotator fotos={mediaConfig.heroFotos} />
@@ -57,7 +58,7 @@ export function Hero() {
            * `pt-[0.14em]`: o til de "Ã" passa do topo da caixa e o clip-path
            * do `heading-reveal` cortava o acento. */}
           <h1
-            className="enter heading-reveal pt-[0.14em] text-[clamp(48px,min(8.4vw,13.5dvh),124px)] leading-[1.08] font-bold tracking-[0.005em] text-balance text-white md:text-wrap"
+            className="enter heading-reveal pt-[0.14em] text-[clamp(44px,min(7.4vw,12dvh),108px)] leading-[1.08] font-bold tracking-[0.005em] text-balance text-white md:text-wrap"
             style={{ '--enter-delay': '70ms' } as React.CSSProperties}
           >
             Musculação <br className="hidden md:block" />e aulas com{' '}
@@ -68,8 +69,7 @@ export function Hero() {
             className="enter mt-6 max-w-[520px] text-[17px] leading-[1.55] font-normal text-white/90 normal-case md:mt-8 md:text-[19px] lg:max-w-[560px] lg:text-[20px]"
             style={{ '--enter-delay': '140ms' } as React.CSSProperties}
           >
-            Professor de Educação Física presente na sala em todo o horário, orientando a execução e
-            tirando dúvidas.
+            Professor de Educação Física presente na sala, orientando a execução e tirando dúvidas.
           </p>
 
           <div

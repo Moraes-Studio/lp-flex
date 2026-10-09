@@ -22,7 +22,11 @@ export default function Home() {
   const jsonLd = gerarJsonLdNegocio(funcionamento);
 
   return (
-    <main>
+    // Margem negativa no `<main>`, não no hero: numa navegação client-side
+    // (ex: logo a partir de /privacidade) o Next rola até o topo do `<main>`.
+    // Com a margem só no hero, o `<main>` começava 121px abaixo e a home
+    // abria rolada, com o eyebrow do hero por baixo do logo.
+    <main className="-mt-(--header-h)">
       {/* JSON-LD (schema.org SportsActivityLocation) — SEO local, disponível
        * no HTML inicial sem depender de JS/interação (crawlers leem isto
        * direto). `JSON.stringify` + escapar "<" evita que um valor de
@@ -33,7 +37,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       />
       <Hero />
-      <Marquee items={modalidades.map((m) => m.nome)} tone="dark" />
+      <Marquee items={modalidades.map((m) => m.nome)} tone="dark" durationSeconds={45} />
       <Planos />
       <Modalidades />
       <FaixaFoto funcionamento={funcionamento} />

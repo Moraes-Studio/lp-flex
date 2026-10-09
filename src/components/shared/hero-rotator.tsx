@@ -13,6 +13,8 @@ interface HeroRotatorProps {
 /**
  * Fotos do hero em crossfade lento (o "site vivo" pedido pelo cliente, sem
  * setas nem bolinhas: o visitante não precisa controlar, é ambientação).
+ * Sem zoom (feedback de 2026-10-08): o fundo se mexendo enquanto a pessoa lê
+ * o título atrapalhava. Cada foto fica parada e só troca no crossfade.
  * Iteração imersiva: preenche o hero em tela cheia (sizes 100vw); o hero
  * aplica por cima só uma camada de cor sólida, nada de placa/legenda.
  * - Só a primeira foto é prioridade de carregamento (é o LCP). As outras ficam
@@ -25,10 +27,8 @@ interface HeroRotatorProps {
  *   outras nem são baixadas.
  * - Pausa com a aba oculta, pra não acumular trocas em segundo plano.
  */
-export function HeroRotator({ fotos, intervaloMs = 6000 }: HeroRotatorProps) {
+export function HeroRotator({ fotos, intervaloMs = 9000 }: HeroRotatorProps) {
   const [ativo, setAtivo] = React.useState(0);
-  // Slide que acabou de sair: mantém o zoom até o fim do fade, sem salto de escala.
-  const [anterior, setAnterior] = React.useState<number | null>(null);
   const ativoRef = React.useRef(0);
   const [montarTodas, setMontarTodas] = React.useState(false);
 
@@ -51,7 +51,6 @@ export function HeroRotator({ fotos, intervaloMs = 6000 }: HeroRotatorProps) {
     const iniciar = () => {
       window.clearInterval(id);
       id = window.setInterval(() => {
-        setAnterior(ativoRef.current);
         ativoRef.current = (ativoRef.current + 1) % fotos.length;
         setAtivo(ativoRef.current);
       }, intervaloMs);
@@ -92,7 +91,7 @@ export function HeroRotator({ fotos, intervaloMs = 6000 }: HeroRotatorProps) {
               sizes="100vw"
               preload={i === 0}
               fetchPriority={i === 0 ? 'high' : 'auto'}
-              className={cn('object-cover', (i === ativo || i === anterior) && 'hero-zoom')}
+              className="object-cover"
             />
           ) : null}
         </div>

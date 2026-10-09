@@ -37,7 +37,13 @@ export function HeaderShell({ children }: { children: React.ReactNode }) {
       { rootMargin: `-${alturaHeader} 0px 0px 0px` }
     );
     observer.observe(hero);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      // Esquece o modo ao sair: sem isto, voltando pra home o primeiro
+      // render usava o modo da visita anterior (sólido, se a pessoa tinha
+      // rolado) e o header aparecia sólido no topo até o observer responder.
+      setObservado(null);
+    };
   }, [pathname]);
 
   const modo: Modo =

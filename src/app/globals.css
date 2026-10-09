@@ -303,21 +303,6 @@
   }
 }
 
-/* Hero (rodada 2026-10-07): zoom lento na foto ativa do HeroRotator.
- * Só transform. A regra global de prefers-reduced-motion (fim do arquivo)
- * zera a duração, e o HeroRotator nem troca de foto nesse caso. */
-@keyframes hero-zoom {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.06);
-  }
-}
-.hero-zoom {
-  animation: hero-zoom 7s ease-out both;
-}
-
 /* Card de consentimento de cookies (ver cookie-consent.tsx): 100% overlay,
  * `position: fixed`, nunca reserva espaço na página — sem padding/margin
  * no body, sem tocar document flow/height. (Uma versão anterior usava
@@ -405,9 +390,6 @@ body:has(#cookie-consent) #whatsapp-float {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  .hero-zoom {
-    animation: none;
   }
 }
 

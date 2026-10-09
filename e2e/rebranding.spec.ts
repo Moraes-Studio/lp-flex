@@ -76,7 +76,7 @@ test.describe('Header e rótulos', () => {
     await expect(header).toHaveAttribute('data-modo', 'transparente');
   });
 
-  test('CTA do header: branco sobre o hero, azul institucional no modo sólido', async ({
+  test('CTA do header: contornado sobre o hero, azul institucional no modo sólido', async ({
     page,
     isMobile,
   }) => {
@@ -87,10 +87,31 @@ test.describe('Header e rótulos', () => {
     const cta = header.getByRole('link', { name: 'Quero treinar agora' });
     const fundo = () => cta.evaluate((el) => getComputedStyle(el).backgroundColor);
     await expect(header).toHaveAttribute('data-modo', 'transparente');
-    await expect.poll(fundo).toBe('rgb(255, 255, 255)');
+    // Contornado e translúcido: não pode ter o mesmo peso do "Ver planos" (branco cheio).
+    await expect.poll(fundo).not.toBe('rgb(255, 255, 255)');
+    await expect
+      .poll(() => cta.evaluate((el) => getComputedStyle(el).color))
+      .toBe('rgb(255, 255, 255)');
     await page.evaluate(() => window.scrollTo(0, 1200));
     await expect(header).toHaveAttribute('data-modo', 'solido');
     await expect.poll(fundo).toBe('rgb(11, 77, 162)');
+  });
+
+  test('voltando pra home pelo logo, abre no topo com header transparente', async ({ page }) => {
+    await page.goto('/');
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    const header = page.locator('header').first();
+    await expect(header).toHaveAttribute('data-modo', 'solido');
+    // Navegação client-side (rodapé e depois logo), como a pessoa faz; um
+    // `goto` recarregaria a página e não reproduziria a rolagem do Next.
+    await page.locator('footer a[href="/privacidade"]').first().click();
+    await page.waitForURL('**/privacidade');
+    await page.getByRole('link', { name: /página inicial/ }).click();
+    await page.waitForURL((url) => url.pathname === '/');
+    await expect(header).toHaveAttribute('data-modo', 'transparente');
+    // O Next rola até o topo do <main>; ele precisa começar em 0, senão a
+    // home abre 121px abaixo e o eyebrow do hero fica por baixo do logo.
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   });
 
   test('em /privacidade o header é sempre sólido', async ({ page }) => {
@@ -109,7 +130,7 @@ test.describe('Hero', () => {
     await page.goto('/');
     const rotator = page.getByTestId('hero-rotator');
     await expect(rotator).toHaveAttribute('data-ativo', '0');
-    await expect(rotator).toHaveAttribute('data-ativo', '1', { timeout: 9000 });
+    await expect(rotator).toHaveAttribute('data-ativo', '1', { timeout: 13000 });
   });
 
   test.describe('com movimento reduzido', () => {

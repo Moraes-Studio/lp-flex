@@ -8,7 +8,6 @@ import { MobileMenu } from '@/components/layout/mobile-menu';
 import { StatusChip } from '@/components/layout/status-chip';
 import { HeaderShell } from '@/components/layout/header-shell';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
-import { CtaArrow } from '@/components/shared/cta-arrow';
 
 /**
  * Header único (a barra azul do topo com "desde 1992 · Vila Helena" saiu na
@@ -19,7 +18,7 @@ import { CtaArrow } from '@/components/shared/cta-arrow';
  * Iteração imersiva: a casca (`HeaderShell`, client) fica transparente sobre
  * o hero em tela cheia e sólida no resto. Este conteúdo continua no servidor;
  * só as cores mudam, via `group-data-[modo=transparente]/header:*`. O chip
- * tem fundo claro próprio e o CTA segue azul nos dois modos.
+ * tem fundo claro próprio; o CTA é azul no modo sólido e contornado sobre a foto.
  */
 export function Header() {
   const funcionamento = getFuncionamento();
@@ -54,11 +53,14 @@ export function Header() {
         <StatusChip funcionamento={funcionamento} className="hidden xl:inline-flex" />
         {/* Mesmo botão nos dois modos; só as classes trocam. Sobre a foto
          * (modo transparente) o azul quase some contra a camada azul-escura
-         * (1.1 a 1.9:1), então vira o estilo `onDark`: branco, texto azul. */}
+         * (1.1 a 1.9:1). Ele vira contornado (idioma `secondaryOnDark`), e não
+         * branco cheio: o "Ver planos" do hero já é branco cheio, e dois
+         * botões brancos lado a lado tinham o mesmo peso (feedback 2026-10-08).
+         * Sem a seta: o ícone do WhatsApp já diz que abre outro app. */}
         <Button
           asChild
           size="sm"
-          className="group group-data-[modo=transparente]/header:text-flex-blue-700 group-data-[modo=transparente]/header:hover:bg-flex-ice group-data-[modo=transparente]/header:focus-visible:ring-offset-flex-blue-950 hidden transition-[transform,background-color,border-color,color,box-shadow] group-data-[modo=transparente]/header:bg-white group-data-[modo=transparente]/header:shadow-none group-data-[modo=transparente]/header:focus-visible:ring-white md:inline-flex"
+          className="group group-data-[modo=transparente]/header:focus-visible:ring-offset-flex-blue-950 hidden border border-transparent transition-[transform,background-color,border-color,color,box-shadow] group-data-[modo=transparente]/header:border-white/45 group-data-[modo=transparente]/header:bg-white/12 group-data-[modo=transparente]/header:text-white group-data-[modo=transparente]/header:shadow-none group-data-[modo=transparente]/header:hover:border-white/70 group-data-[modo=transparente]/header:hover:bg-white/22 group-data-[modo=transparente]/header:focus-visible:ring-white md:inline-flex"
         >
           <a
             href={whatsappUrl('Olá! Quero treinar na Academia Flex.')}
@@ -67,7 +69,6 @@ export function Header() {
           >
             <WhatsappGlyph className="h-4 w-4" />
             Quero treinar agora
-            <CtaArrow variant="up-right" />
           </a>
         </Button>
         <MobileMenu />
