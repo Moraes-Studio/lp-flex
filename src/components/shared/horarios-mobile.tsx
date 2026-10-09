@@ -1,7 +1,12 @@
 'use client';
 
 import * as React from 'react';
-import { DIA_NOME_COMPLETO, paraMinutos, type AulaSlot, type Dia } from '@/lib/content/horarios-shared';
+import {
+  DIA_NOME_COMPLETO,
+  paraMinutos,
+  type AulaSlot,
+  type Dia,
+} from '@/lib/content/horarios-shared';
 import { diaDaSemanaEmSaoPaulo } from '@/lib/timezone';
 import { cn } from '@/lib/utils';
 
@@ -24,7 +29,10 @@ export function HorariosMobile({ slots, diasComAula }: { slots: AulaSlot[]; dias
   }, []);
 
   const doDia = selecionado
-    ? slots.filter((s) => s.day === selecionado).slice().sort((a, b) => paraMinutos(a.time) - paraMinutos(b.time))
+    ? slots
+        .filter((s) => s.day === selecionado)
+        .slice()
+        .sort((a, b) => paraMinutos(a.time) - paraMinutos(b.time))
     : [];
 
   return (
@@ -65,9 +73,9 @@ export function HorariosMobile({ slots, diasComAula }: { slots: AulaSlot[]; dias
         })}
       </div>
 
-      <div className="border-border overflow-hidden rounded-2xl border bg-white">
+      <div className="bg-flex-graphite-surface overflow-hidden rounded-2xl border border-white/15">
         {doDia.length === 0 ? (
-          <p className="text-muted-foreground px-5 py-6 text-sm">
+          <p className="px-5 py-6 text-sm text-white/70">
             Sem aulas coletivas neste dia. A musculação funciona no horário normal.
           </p>
         ) : (
@@ -76,15 +84,18 @@ export function HorariosMobile({ slots, diasComAula }: { slots: AulaSlot[]; dias
             return (
               <div
                 key={`${slot.day}-${slot.time}-${slot.aula}`}
-                className="border-border grid grid-cols-[64px_1fr] items-center gap-3 border-b px-5 py-3 last:border-b-0"
+                className="grid grid-cols-[64px_1fr] items-center gap-3 border-b border-white/15 px-5 py-3 last:border-b-0"
               >
-                <time className="text-flex-blue-600 font-mono text-[13px] font-medium">
+                <time className="text-flex-blue-300 font-mono text-[13px] font-medium">
                   {slot.time}
                 </time>
-                <span className="text-[15px] font-semibold">
+                <span className="text-[15px] font-bold text-white">
                   {slot.aula}
                   {rodando ? (
-                    <span className="sr-only"> — hoje ({DIA_NOME_COMPLETO[selecionado ?? slot.day]})</span>
+                    <span className="sr-only">
+                      {' '}
+                      — hoje ({DIA_NOME_COMPLETO[selecionado ?? slot.day]})
+                    </span>
                   ) : null}
                 </span>
               </div>

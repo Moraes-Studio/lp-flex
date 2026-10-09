@@ -9,7 +9,6 @@ interface HorariosDesktopProps {
   colunas: Dia[];
   horas: string[];
   horarios: AulaSlot[];
-  resumoFuncionamento: string;
 }
 
 /**
@@ -23,12 +22,7 @@ interface HorariosDesktopProps {
  * cliente. Antes de montar (`hoje === null`), a tabela renderiza sem nenhum
  * destaque — igual ao que o servidor já mandou, sem mismatch de hidratação.
  */
-export function HorariosDesktop({
-  colunas,
-  horas,
-  horarios,
-  resumoFuncionamento,
-}: HorariosDesktopProps) {
+export function HorariosDesktop({ colunas, horas, horarios }: HorariosDesktopProps) {
   const [hoje, setHoje] = React.useState<Dia | null>(null);
 
   React.useEffect(() => {
@@ -40,7 +34,7 @@ export function HorariosDesktop({
 
   return (
     <div className="hidden lg:block">
-      <div className="border-border overflow-x-auto rounded-2xl border bg-white">
+      <div className="bg-flex-graphite-surface overflow-x-auto rounded-2xl border border-white/15">
         <table className="w-full min-w-[720px] border-collapse">
           <thead>
             <tr>
@@ -65,7 +59,7 @@ export function HorariosDesktop({
           </thead>
           <tbody>
             {horas.map((hora, i) => (
-              <tr key={hora} className={i % 2 === 1 ? 'bg-background-alt' : undefined}>
+              <tr key={hora} className={i % 2 === 1 ? 'bg-white/[0.035]' : undefined}>
                 {colunas.map((dia) => {
                   const aula = buscar(dia, hora);
                   const ehHoje = dia === hoje;
@@ -73,12 +67,12 @@ export function HorariosDesktop({
                     <td
                       key={dia}
                       className={cn(
-                        // border-flex-blue-600/10 em vez de border-border: linhas de
-                        // grade com um fio de azul institucional (identidade), não
-                        // cinza neutro — parte do que tirava a "cara de planilha".
-                        'border-flex-blue-600/10 border-r border-b px-3 py-3 text-center align-middle text-[13.5px] last:border-r-0',
+                        // Tabela escura sobre o grafite (feedback 2026-10-08: a
+                        // tabela branca destoava da seção). Fio branco a 15%: a
+                        // 10% azul de antes quase não se via.
+                        'border-r border-b border-white/15 px-3 py-3 text-center align-middle text-[14.5px] last:border-r-0',
                         // Coluna de hoje: wash azul + borda esquerda fina.
-                        ehHoje && 'border-l-flex-blue-600/35 bg-flex-blue-100/40 border-l'
+                        ehHoje && 'border-l-flex-blue-400/50 bg-flex-blue-600/20 border-l'
                       )}
                     >
                       {aula ? (
@@ -86,22 +80,22 @@ export function HorariosDesktop({
                           <span
                             className={cn(
                               'block font-mono text-[12px] tabular-nums',
-                              ehHoje ? 'text-flex-blue-700' : 'text-flex-blue-600'
+                              ehHoje ? 'text-flex-blue-200' : 'text-flex-blue-300'
                             )}
                           >
                             {hora}
                           </span>
                           <span
                             className={cn(
-                              'block font-semibold',
-                              ehHoje ? 'text-flex-blue-800' : 'text-foreground'
+                              'block font-bold',
+                              ehHoje ? 'text-white' : 'text-white/90'
                             )}
                           >
                             {aula.aula}
                           </span>
                         </>
                       ) : (
-                        <span className="text-border" aria-hidden="true">
+                        <span className="text-white/25" aria-hidden="true">
                           ·
                         </span>
                       )}
@@ -113,9 +107,6 @@ export function HorariosDesktop({
           </tbody>
         </table>
       </div>
-      <p className="mt-3.5 font-mono text-[11.5px] tracking-[0.06em] text-white/55 uppercase">
-        {resumoFuncionamento}
-      </p>
     </div>
   );
 }

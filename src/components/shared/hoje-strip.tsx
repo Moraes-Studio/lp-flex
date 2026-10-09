@@ -7,7 +7,7 @@ import {
   type AulaSlot,
   type Dia,
 } from '@/lib/content/horarios-shared';
-import { agoraEmSaoPaulo } from '@/lib/timezone';
+import { agoraEmSaoPaulo, TIMEZONE_OFICIAL } from '@/lib/timezone';
 import { cn } from '@/lib/utils';
 
 /**
@@ -16,12 +16,24 @@ import { cn } from '@/lib/utils';
  * nada sobreposto). Sempre no fuso de São Paulo (`@/lib/timezone`), só
  * depois de montar no cliente: a home é estática, um `new Date()` no
  * servidor congelaria o dia no build.
+ * Mostra o dia e a data ("Quinta · 08/10"), não só o dia da semana.
  */
+const formatoData = new Intl.DateTimeFormat('pt-BR', {
+  timeZone: TIMEZONE_OFICIAL,
+  day: '2-digit',
+  month: '2-digit',
+});
+
 export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
-  const [estado, setEstado] = React.useState<{ dia: Dia; minutos: number } | null>(null);
+  const [estado, setEstado] = React.useState<{ dia: Dia; minutos: number; data: string } | null>(
+    null
+  );
 
   React.useEffect(() => {
-    const atualizar = () => setEstado(agoraEmSaoPaulo());
+    const atualizar = () => {
+      const agora = new Date();
+      setEstado({ ...agoraEmSaoPaulo(agora), data: formatoData.format(agora) });
+    };
     atualizar();
     const id = window.setInterval(atualizar, 60_000);
     return () => window.clearInterval(id);
@@ -49,12 +61,12 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
   return (
     <div
       data-testid="hoje-strip"
-      className="mb-10 grid gap-4 border-y border-white/12 py-5 md:grid-cols-[160px_1fr] md:items-center md:gap-8"
+      className="mb-10 grid gap-4 border-y border-white/12 py-5 md:grid-cols-[240px_1fr] md:items-center md:gap-8"
     >
       <p className="flex items-baseline gap-2.5 text-white">
         <strong className="font-heading text-[22px] tracking-[0.02em] uppercase">Hoje</strong>
-        <span className="text-flex-blue-300 font-mono text-[11px] tracking-[0.14em] uppercase">
-          {estado ? DIA_NOME_COMPLETO[estado.dia] : ''}
+        <span className="text-flex-blue-300 font-mono text-[12.5px] tracking-[0.12em] whitespace-nowrap uppercase">
+          {estado ? `${DIA_NOME_COMPLETO[estado.dia]} · ${estado.data}` : ''}
         </span>
       </p>
 
@@ -65,7 +77,7 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
               <time dateTime={slot.time} className="font-mono text-[13px] tabular-nums">
                 {slot.time}
               </time>
-              <span className="text-[15px]">{slot.aula}</span>
+              <span className="text-[15px] font-bold">{slot.aula}</span>
             </li>
           ))}
         </ul>
@@ -94,9 +106,7 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
                     >
                       {slot.time}
                     </time>
-                    <span className={cn('text-[15px]', rodando && 'font-semibold')}>
-                      {slot.aula}
-                    </span>
+                    <span className="text-[15px] font-bold">{slot.aula}</span>
                     {rodando ? (
                       <span className="bg-flex-blue-600 rounded-pill px-2 py-0.5 font-mono text-[9.5px] tracking-[0.14em] text-white uppercase">
                         agora
