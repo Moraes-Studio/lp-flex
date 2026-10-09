@@ -20,7 +20,7 @@ export function Modalidades() {
   return (
     <section id="modalidades" className="bg-flex-blue-900 px-[6%] py-20 text-white md:py-28">
       <div className="mx-auto max-w-[1180px]">
-        <SectionHeading tone="dark" title="O que você treina aqui." />
+        <SectionHeading tone="dark" title="O que você vai treinar aqui." />
 
         <div className="grid gap-10 lg:grid-cols-[5fr_7fr] lg:gap-12">
           <Reveal>
@@ -51,7 +51,14 @@ export function Modalidades() {
             />
             <h3 className="mt-6 text-[clamp(24px,2.2vw,30px)] text-white">Aulas coletivas</h3>
             <p className="mt-2 text-[16px] text-white/75 normal-case">
-              {aulas.length} aulas no mesmo plano. Confira os dias na grade de horários.
+              {aulas.length} aulas no mesmo plano. Confira os dias na{' '}
+              <a
+                href="#horarios"
+                className="text-flex-blue-300 decoration-flex-blue-300/50 hover:decoration-flex-blue-300 font-medium underline underline-offset-4 transition-colors"
+              >
+                grade de horários
+              </a>
+              .
             </p>
             <ul className="mt-5 flex flex-wrap gap-2.5">
               {aulas.map((aula) => (

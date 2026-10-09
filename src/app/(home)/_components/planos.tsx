@@ -27,8 +27,9 @@ export function Planos() {
         <SectionHeading
           title={
             <>
-              Musculação e todas as <br className="hidden sm:block" />
-              modalidades inclusas.
+              {/* Não abre com "Musculação": o H1 do hero, logo acima, já começa assim. */}
+              Todas as modalidades <br className="hidden sm:block" />
+              no mesmo plano.
             </>
           }
         />
