@@ -23,6 +23,9 @@ interface PhotoCarouselProps {
  * - Fim/início detectados por IntersectionObserver no primeiro/último slide
  *   (nada de listener de scroll).
  * - Sem autoplay e sem contador "03 / 08". Legenda abaixo da foto.
+ * - Feedback 2026-10-08: a foto seguinte aparece pela metade (antes era só
+ *   uma fresta e não ficava claro que dava pra arrastar), e as setas ficam
+ *   acima das fotos, onde o olho já está, não embaixo.
  */
 export function PhotoCarousel({ fotos, rotulo, tone = 'light' }: PhotoCarouselProps) {
   const escuro = tone === 'dark';
@@ -102,6 +105,30 @@ export function PhotoCarousel({ fotos, rotulo, tone = 'light' }: PhotoCarouselPr
 
   return (
     <div ref={raiz}>
+      <div className="mb-4 flex justify-end gap-2.5">
+        <button
+          type="button"
+          aria-label="Foto anterior"
+          onClick={() => {
+            if (!noInicio) mover(-1);
+          }}
+          aria-disabled={noInicio}
+          className={botao}
+        >
+          <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          aria-label="Próxima foto"
+          onClick={() => {
+            if (!noFim) mover(1);
+          }}
+          aria-disabled={noFim}
+          className={botao}
+        >
+          <ChevronRight className="h-5 w-5" aria-hidden="true" />
+        </button>
+      </div>
       <div
         ref={trilho}
         role="region"
@@ -126,7 +153,7 @@ export function PhotoCarousel({ fotos, rotulo, tone = 'light' }: PhotoCarouselPr
             role="group"
             aria-roledescription="slide"
             aria-label={`${i + 1} de ${fotos.length}`}
-            className="w-[82%] shrink-0 snap-start sm:w-[48%] lg:w-[31.5%]"
+            className="w-[76%] shrink-0 snap-start sm:w-[62%] lg:w-[38.5%]"
           >
             <figure>
               <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
@@ -135,7 +162,7 @@ export function PhotoCarousel({ fotos, rotulo, tone = 'light' }: PhotoCarouselPr
                   alt={foto.alt}
                   fill
                   loading={carregarTudo ? 'eager' : 'lazy'}
-                  sizes="(min-width: 1024px) 32vw, (min-width: 640px) 48vw, 82vw"
+                  sizes="(min-width: 1024px) 39vw, (min-width: 640px) 62vw, 76vw"
                   className="object-cover"
                 />
               </div>
@@ -152,31 +179,6 @@ export function PhotoCarousel({ fotos, rotulo, tone = 'light' }: PhotoCarouselPr
             </figure>
           </div>
         ))}
-      </div>
-
-      <div className="mt-5 flex gap-2.5">
-        <button
-          type="button"
-          aria-label="Foto anterior"
-          onClick={() => {
-            if (!noInicio) mover(-1);
-          }}
-          aria-disabled={noInicio}
-          className={botao}
-        >
-          <ChevronLeft className="h-5 w-5" aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          aria-label="Próxima foto"
-          onClick={() => {
-            if (!noFim) mover(1);
-          }}
-          aria-disabled={noFim}
-          className={botao}
-        >
-          <ChevronRight className="h-5 w-5" aria-hidden="true" />
-        </button>
       </div>
     </div>
   );

@@ -72,7 +72,9 @@ export function Contato() {
           </div>
 
           <div className="border-border shadow-panel flex flex-col overflow-hidden rounded-2xl border bg-white">
-            <div className="bg-flex-blue-600 flex items-center gap-2 px-5 py-3.5 text-white">
+            {/* Cores invertidas (feedback 2026-10-08): o rótulo fica neutro e o
+             * azul vai pra ação principal, "Abrir no Google Maps". */}
+            <div className="border-border text-flex-blue-700 flex items-center gap-2 border-b px-5 py-3.5">
               <MapPin className="h-4 w-4" aria-hidden="true" />
               <span className="font-mono text-[11px] tracking-[0.16em] uppercase">Como chegar</span>
             </div>
@@ -89,11 +91,11 @@ export function Contato() {
               href={abrirNoMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="border-border hover:bg-background-alt group flex items-center justify-between gap-2 border-t px-5 py-3.5 text-sm font-medium transition-colors"
+              className="bg-flex-blue-600 hover:bg-flex-blue-700 focus-visible:ring-flex-blue-600 group flex items-center justify-between gap-2 px-5 py-3.5 text-sm font-bold text-white transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               Abrir no Google Maps
               <ArrowUpRight
-                className="text-flex-blue-600 h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                 aria-hidden="true"
               />
             </a>
