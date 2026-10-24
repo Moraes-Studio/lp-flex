@@ -127,3 +127,22 @@ Auditoria do build de produção (Lighthouse local, mobile 84–88 / desktop 98�
 - [x] `seo.spec` compara com `NEXT_PUBLIC_SITE_URL`, não com a porta do Playwright (as 12 falhas "pré-existentes" com `E2E_PORT=3100` sumiram).
 - [x] Rodapé alinhado à grade das seções; Sobre mostra "aulas coletivas inclusas" (mesma conta de Modalidades).
 - [ ] Fora do código: Search Console (enviar sitemap), Google Meu Negócio com o mesmo endereço do site, Lighthouse mobile na URL real.
+
+## Rodada 2026-10-24 — mais fotos da estrutura, revisão de texto e acabamento
+
+Pedido do cliente: poucas fotos no site, equipamentos mais modernos pouco representados e faltavam ambientes inteiros. Acervo novo analisado: 375 fotos em `FLEX-20261007T123945Z-1-001/FLEX` (todas vistas em folhas de contato; nenhuma inadequada para publicação; muitas quase repetidas por ângulo; 130 (35%) escuras, luminância média < 45/255).
+
+- [x] Fotos do espaço num lugar só: o carrossel do Sobre saiu e Modalidades ("O que você vai treinar aqui") virou um mosaico por ambiente (`EspacoMosaico`): Musculação (bloco grande, 5 fotos), Pesos livres, Sala de cardio, Salão de aulas, ~600px no desktop. Tocar num bloco abre um visualizador em tela cheia (13 fotos no total), setas sempre visíveis, arrastar, ← → e Esc; na última foto segue para o ambiente seguinte. Nada sobreposto às fotos. Fonte única em `mediaConfig.ambientes`. O Sobre ficou só com título e números (saiu o parágrafo que repetia "no mesmo plano", já dito em Planos e Modalidades); a fachada foi pro Contato, ao lado do mapa. Versões descartadas pelo usuário: galeria longa no Sobre (~2.500px no celular) e mosaico no Sobre repetindo as fotos de Modalidades.
+- [x] Modalidades (musculação) e faixa de horário com fotos mais amplas e claras; arquivos renomeados para não servir a versão antiga de cache.
+- [x] Tratamento moderado em 7 fotos escuras (`clarear` em `scripts/otimizar-fotos.mjs`: curva de gama + saturação 4%); originais intactos, fora do git.
+- [x] Política de privacidade: data fixa da última mudança do texto (antes `new Date()`, dizia "atualizada hoje" a cada build).
+- [x] Travessões removidos de título de aba, OG alt, imagem de compartilhamento e privacidade; rodapé sem ". ·".
+- [x] "hoje" no cabeçalho da grade de 9px para 11px e selo "agora" de 9,5px para 11px (detector impeccable); `::selection` na cor da marca.
+- [x] Grade de Horários (desktop) com colunas de largura igual (`table-fixed`); antes TER/QUI ficavam mais estreitas que os outros dias.
+- [x] Faixa HOJE: a lista do dia ficava colada no topo da altura reservada (a do dia mais cheio) e desalinhada do título em dias com poucas aulas; agora centralizada no desktop, sem perder a reserva anti-CLS.
+- [ ] **Validar com o cliente** (não alterado, ambíguo sem a resposta dele):
+  - "Mapeamento R$ 50,00 à parte." O que é o mapeamento (avaliação física? bioimpedância?) e se é opcional.
+  - "ou 4x de R$ 238,50" / "ou 6x de R$ 258,00": o parcelamento é do valor total do plano (6 × 159 = 954; 12 × 129 = 1.548)? Hoje dá para ler como 4 parcelas por mês.
+  - Rótulo "professores confirmados" no Sobre: "confirmados" é termo interno; a conta só inclui quem tem nome real (10), e a equipe tem mais vagas. Sugestão: "professores na equipe" só se o número for o total real.
+  - Placa "ELA" na área dos racks amarelos (fotos IMG_2756/2759): é um espaço exclusivo feminino? Se for, vale citar (público-alvo mulheres 40+).
+  - Privacidade cita "fontes hospedadas pelo Google"; as fontes são servidas pelo próprio site (`next/font`). Revisão jurídica antes de mudar o texto.

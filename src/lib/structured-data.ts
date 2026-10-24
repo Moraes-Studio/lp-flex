@@ -47,9 +47,12 @@ export function gerarJsonLdNegocio(funcionamento: DiaFuncionamento[]) {
     name: siteConfig.name,
     url: siteConfig.url,
     logo: `${siteConfig.url}/logo.png`,
-    image: [mediaConfig.sobreGaleria[0].src, ...mediaConfig.heroFotos.map((foto) => foto.src)].map(
-      (src) => `${siteConfig.url}${src}`
-    ),
+    // Fachada, vista ampla de cada ambiente e as fotos do hero.
+    image: [
+      mediaConfig.fachada,
+      ...mediaConfig.ambientes.flatMap((ambiente) => ambiente.fotos.slice(0, 1)),
+      ...mediaConfig.heroFotos,
+    ].map((foto) => `${siteConfig.url}${foto.src}`),
     description: siteConfig.descricaoSeo,
     hasMap: mapsUrl(),
     address: {

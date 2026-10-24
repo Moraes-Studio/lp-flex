@@ -82,7 +82,9 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
           ))}
         </ul>
 
-        <div className="col-start-1 row-start-1">
+        {/* Centralizada na altura reservada: num dia com 1 aula, a lista
+         * colada no topo ficava acima do "Hoje" e sobrava um vão embaixo. */}
+        <div className="col-start-1 row-start-1 md:self-center">
           {estado && doDia.length === 0 ? (
             <p className="text-sm text-white/70">
               Sem aulas coletivas hoje. A musculação funciona no horário normal, com professor na
@@ -108,7 +110,7 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
                     </time>
                     <span className="text-[15px] font-bold">{slot.aula}</span>
                     {rodando ? (
-                      <span className="bg-flex-blue-600 rounded-pill px-2 py-0.5 font-mono text-[9.5px] tracking-[0.14em] text-white uppercase">
+                      <span className="bg-flex-blue-600 rounded-pill px-2 py-0.5 font-mono text-[11px] tracking-[0.12em] text-white uppercase">
                         agora
                       </span>
                     ) : null}

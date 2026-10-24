@@ -3,35 +3,35 @@ import Link from 'next/link';
 import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  // string simples aqui vira "Política de Privacidade — Academia Flex" via
-  // o template do layout raiz — não repetir o nome do site aqui.
+  // string simples aqui vira "Política de Privacidade | Academia Flex" via
+  // o template do layout raiz: não repetir o nome do site aqui.
   title: 'Política de Privacidade',
-  description: `Política de privacidade da ${siteConfig.name}, ${siteConfig.address.city} — ${siteConfig.address.state}.`,
+  description: `Política de privacidade da ${siteConfig.name}, ${siteConfig.address.city}, ${siteConfig.address.state}.`,
   alternates: { canonical: '/privacidade' },
 };
 
+/** Data da última mudança no texto da política (commit do banner de cookies,
+ * 2026-08-27). Antes era `new Date()`: a página dizia "atualizada hoje" a
+ * cada build, o que não é verdade. Mudou o texto, muda esta data. */
+const ATUALIZADA_EM = '27 de agosto de 2026';
+
 export default function PrivacidadePage() {
-  const endereco = `${siteConfig.address.street}, ${siteConfig.address.city} — ${siteConfig.address.state}, ${siteConfig.address.zip}`;
+  const endereco = `${siteConfig.address.street}, ${siteConfig.address.city}, ${siteConfig.address.state}, ${siteConfig.address.zip}`;
   const controlador = `${siteConfig.razaoSocial ?? siteConfig.name}, inscrita no CNPJ ${siteConfig.cnpj}, com endereço em ${endereco}`;
-  const hoje = new Date().toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  });
 
   return (
     <main className="px-[6%] py-14 md:py-20">
       <div className="mx-auto max-w-[720px]">
         <p className="text-flex-blue-600 mb-2 font-mono text-[11px] tracking-[0.14em] uppercase">
-          Atualizada em {hoje}
+          Atualizada em {ATUALIZADA_EM}
         </p>
         <h1 className="text-[clamp(30px,5vw,44px)] leading-[1.05]">Política de Privacidade</h1>
 
-        <div className="text-muted-foreground mt-10 space-y-8 text-[15.5px] normal-case [&_h2]:font-heading [&_h2]:text-flex-blue-700 [&_h2]:mt-0 [&_h2]:mb-2 [&_h2]:text-[19px] [&_h2]:normal-case [&_h2]:tracking-normal [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5">
+        <div className="text-muted-foreground [&_h2]:font-heading [&_h2]:text-flex-blue-700 mt-10 space-y-8 text-[15.5px] normal-case [&_h2]:mt-0 [&_h2]:mb-2 [&_h2]:text-[19px] [&_h2]:tracking-normal [&_h2]:normal-case [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5">
           <p>
-            Esta política explica como a {siteConfig.name} trata os dados pessoais de quem entra
-            em contato pelo site, pelo WhatsApp ou presencialmente, conforme a Lei Geral de
-            Proteção de Dados (Lei 13.709/2018).
+            Esta política explica como a {siteConfig.name} trata os dados pessoais de quem entra em
+            contato pelo site, pelo WhatsApp ou presencialmente, conforme a Lei Geral de Proteção de
+            Dados (Lei 13.709/2018).
           </p>
 
           <section>
@@ -52,9 +52,9 @@ export default function PrivacidadePage() {
                 coletamos os dados necessários ao contrato e à sua segurança durante o treino.
               </li>
               <li>
-                <strong className="text-foreground">Dados de navegação:</strong> o site usa fontes
-                e mapa hospedados pelo Google, que podem registrar seu endereço IP ao carregar
-                esses recursos.
+                <strong className="text-foreground">Dados de navegação:</strong> o site usa fontes e
+                mapa hospedados pelo Google, que podem registrar seu endereço IP ao carregar esses
+                recursos.
               </li>
             </ul>
           </section>
@@ -74,8 +74,8 @@ export default function PrivacidadePage() {
           <section>
             <h2>Com quem compartilhamos</h2>
             <p>
-              Compartilhamos dados apenas com prestadores necessários à operação — hospedagem do
-              site, WhatsApp (Meta Platforms) e sistema de gestão de alunos — e com autoridades
+              Compartilhamos dados apenas com prestadores necessários à operação (hospedagem do
+              site, WhatsApp da Meta Platforms e sistema de gestão de alunos) e com autoridades
               públicas quando houver exigência legal.
             </p>
           </section>
@@ -92,9 +92,9 @@ export default function PrivacidadePage() {
           <section>
             <h2>Seus direitos</h2>
             <p>
-              Você pode solicitar a confirmação de tratamento, o acesso, a correção, a
-              anonimização, a portabilidade ou a exclusão dos seus dados, além de revogar
-              consentimento. Para isso, use o contato abaixo.
+              Você pode solicitar a confirmação de tratamento, o acesso, a correção, a anonimização,
+              a portabilidade ou a exclusão dos seus dados, além de revogar consentimento. Para
+              isso, use o contato abaixo.
             </p>
           </section>
 

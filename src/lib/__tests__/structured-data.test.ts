@@ -26,7 +26,7 @@ describe('gerarJsonLdNegocio', () => {
     for (const url of jsonLd.image) {
       expect(url).toMatch(/^https?:\/\/.+\/fotos\/.+\.jpg$/);
     }
-    expect(jsonLd.image).toContain(`${siteConfig.url}/fotos/sobre-fachada.jpg`);
+    expect(jsonLd.image).toContain(`${siteConfig.url}/fotos/espaco-fachada.jpg`);
   });
 
   it('descrição é a mesma da meta description (uma fonte só)', () => {

@@ -158,3 +158,12 @@ Depois de ver a versão anterior, o usuário comparou com SmartFit/Bluefit e ped
 3. **Header transparente sobre o hero:** links e logo sobre a foto; ao sair do hero vira branco sólido. Em páginas sem hero imersivo (ex.: `/privacidade`) é sempre sólido.
 4. **Página com mais contraste (pivô do tema claro de agosto):** Modalidades em azul profundo com texto branco; nova faixa de foto em largura total (cardio com vista) com "05:00 às 23:00 / segunda a quinta" lido de `content/funcionamento.json`, com parallax leve via CSS (desligado em movimento reduzido); Sobre em azul Flex com texto branco; Planos, Professores e Contato claros; títulos de seção maiores (~72px no desktop). `CLAUDE.md` ganha nota do novo pivô.
 5. Continua valendo: sem gradiente/brilho/vidro, sem foto de pessoa gerada por IA, contraste AA (título sobre foto medido nas 3 fotos), ≤3 eyebrows, movimento reduzido respeitado, touch sem hover.
+
+## Iteração 3 — galeria por ambiente (2026-10-24)
+
+Desvio da seção "Sobre" acima, por reclamação do cliente: poucas fotos, equipamentos modernos pouco vistos e nenhum ambiente inteiro. O carrossel mostrava 2,5 fotos de 7 e escondia o resto atrás das setas.
+
+- O carrossel (`PhotoCarousel`) foi removido e as fotos do espaço passaram a morar num lugar só: Modalidades vira um mosaico (`EspacoMosaico`) com 4 ambientes de treino (Musculação no bloco grande, Pesos livres, Sala de cardio, Salão de aulas), nome abaixo de cada foto. Tocar num bloco abre um visualizador em tela cheia (Radix Dialog, fundo sólido) com as fotos do ambiente; setas sempre visíveis, arrastar, teclado e Esc; da última foto segue para o ambiente seguinte. As 2 fotos fixas de Modalidades saíram (eram os mesmos espaços). O Sobre fica sem foto (título e números) e a fachada vai para o Contato, ao lado do mapa. Dados em `mediaConfig.ambientes` (13 fotos) e `mediaConfig.fachada`.
+- Continua valendo: nada sobreposto às fotos, foto em coluna com `--radius-xl`, sem seção nova (o mosaico fica dentro de `#modalidades`, SDD §4), nenhuma imagem gerada.
+- Os testes E2E do carrossel foram trocados pelos do mosaico (4 blocos e 13 fotos acessíveis, Sobre sem fotos, fachada no Contato com legenda abaixo, colunas iguais na grade, nome abaixo da foto, visualizador por toque com setas sem hover, teclado e foco de volta ao fechar, fotos carregadas com alt, sem scroll horizontal).
+- Tratamento de exposição nas fotos escuras: `clarear` em `scripts/otimizar-fotos.mjs`. Detalhes e pendências do cliente em `docs/tasks.md` (rodada 2026-10-24).

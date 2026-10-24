@@ -2,65 +2,60 @@ import { getModalidades, separarModalidades } from '@/lib/content/modalidades';
 import { mediaConfig } from '@/config/media';
 import { SectionHeading } from '@/components/shared/section-heading';
 import { ModalidadeIcon } from '@/components/shared/modalidade-icon';
-import { Photo } from '@/components/shared/photo';
+import { EspacoMosaico } from '@/components/shared/espaco-mosaico';
 import { Reveal } from '@/components/shared/reveal';
 
 /**
  * Modalidades (rodada 2026-10-07): em vez de 11 linhas numeradas com
- * hairline (o padrão de lista mais genérico), dois blocos com foto real:
- * a musculação e o salão onde acontecem as aulas coletivas. Cada aula
- * mantém o próprio ícone (nunca reaproveitado entre modalidades, RULES).
- * Sem eyebrow (máximo 3 na home).
+ * hairline (o padrão de lista mais genérico), a seção mostra o espaço real.
+ * Cada aula mantém o próprio ícone (nunca reaproveitado entre modalidades,
+ * RULES). Sem eyebrow (máximo 3 na home).
  * Iteração imersiva: fundo azul profundo (flex-blue-900) pra dar contraste
  * de ritmo entre Planos (branco) e Horários (grafite).
+ * Rodada 2026-10-24: as duas fotos (musculação e salão) deram lugar ao
+ * mosaico dos ambientes, que antes ficava no Sobre e repetia essas mesmas
+ * fotos e o mesmo texto. As fotos da academia agora moram num lugar só.
+ * O bloco "Musculação" abaixo do mosaico saiu (o nome já está no bloco
+ * grande); a frase dele virou a descrição da seção.
  */
 export function Modalidades() {
-  const { musculacao, aulas } = separarModalidades(getModalidades());
+  const { aulas } = separarModalidades(getModalidades());
 
   return (
     <section id="modalidades" className="bg-flex-blue-900 px-[6%] py-20 text-white md:py-28">
       <div className="mx-auto max-w-[1180px]">
-        <SectionHeading tone="dark" title="O que você vai treinar aqui." />
+        <SectionHeading
+          tone="dark"
+          title="O que você vai treinar aqui."
+          description="Aparelhos, pesos livres e área de cardio, abertos em todo o horário de funcionamento."
+        />
 
-        <div className="grid gap-10 lg:grid-cols-[5fr_7fr] lg:gap-12">
-          <Reveal>
-            <Photo
-              src={mediaConfig.modalidades.musculacao.src}
-              alt={mediaConfig.modalidades.musculacao.alt}
-              label="musculação"
-              ratio="square"
-              className="rounded-xl"
-              sizes="(min-width: 1024px) 40vw, 100vw"
-            />
-            <h3 className="mt-6 text-[clamp(24px,2.2vw,30px)] text-white">
-              {musculacao?.nome ?? 'Musculação'}
-            </h3>
-            <p className="mt-2 max-w-[420px] text-[16px] text-white/75 normal-case">
-              Aparelhos, pesos livres e área de cardio, abertos em todo o horário de funcionamento.
-            </p>
-          </Reveal>
+        <Reveal>
+          <EspacoMosaico ambientes={mediaConfig.ambientes} />
+        </Reveal>
 
-          <Reveal delayMs={60}>
-            <Photo
-              src={mediaConfig.modalidades.aulas.src}
-              alt={mediaConfig.modalidades.aulas.alt}
-              label="salão de aulas"
-              ratio="wide"
-              className="rounded-xl"
-              sizes="(min-width: 1024px) 58vw, 100vw"
-            />
-            <h3 className="mt-6 text-[clamp(24px,2.2vw,30px)] text-white">Aulas coletivas</h3>
-            <p className="mt-2 text-[16px] text-white/75 normal-case">
-              {aulas.length} aulas no mesmo plano. Confira os dias na{' '}
-              <a
-                href="#horarios"
-                className="text-flex-blue-300 decoration-flex-blue-300/50 hover:decoration-flex-blue-300 font-medium underline underline-offset-4 transition-colors"
-              >
-                grade de horários
-              </a>
-              .
-            </p>
-            <ul className="mt-5 flex flex-wrap gap-2.5">
+        <div className="mt-14 border-t border-white/15 pt-10 md:mt-16">
+          {/* Desktop: título e texto à esquerda, etiquetas à direita (sozinho
+           * embaixo do mosaico, o bloco em coluna única deixava as etiquetas
+           * espremidas de um lado). */}
+          <Reveal
+            delayMs={60}
+            className="lg:grid lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:items-start lg:gap-x-12"
+          >
+            <div>
+              <h3 className="text-[clamp(24px,2.2vw,30px)] text-white">Aulas coletivas</h3>
+              <p className="mt-2 max-w-[360px] text-[16px] text-white/75 normal-case">
+                {aulas.length} aulas no mesmo plano. Confira os dias na{' '}
+                <a
+                  href="#horarios"
+                  className="text-flex-blue-300 decoration-flex-blue-300/50 hover:decoration-flex-blue-300 font-medium underline underline-offset-4 transition-colors"
+                >
+                  grade de horários
+                </a>
+                .
+              </p>
+            </div>
+            <ul className="mt-5 flex flex-wrap gap-2.5 lg:mt-1">
               {aulas.map((aula) => (
                 <li
                   key={aula.nome}

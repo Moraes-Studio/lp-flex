@@ -1,6 +1,8 @@
+import Image from 'next/image';
 import { ArrowUpRight, MapPin } from 'lucide-react';
 import { agruparFuncionamento, getFuncionamento } from '@/lib/content/funcionamento';
 import { mapsUrl, siteConfig, whatsappUrl } from '@/config/site';
+import { mediaConfig } from '@/config/media';
 import { SectionHeading } from '@/components/shared/section-heading';
 import { Button } from '@/components/ui/button';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
@@ -27,9 +29,11 @@ export function Contato() {
          * horários, largo demais pro conteúdo (dia + hora), sobrando vão
          * horizontal solto entre os dois. 420px é o suficiente pro texto
          * mais longo ("Domingo e feriados" + "09:30 – 12:30") sem sobra.
+         * lg:items-stretch (rodada 2026-10-24): com a foto da fachada a coluna
+         * da esquerda ficou mais alta; o mapa (flex-1) estica até ela. Antes era
          * lg:items-start: cada coluna só ocupa a altura que o próprio
          * conteúdo pede (sem stretch esticando o card do mapa). */}
-        <div className="grid gap-10 lg:grid-cols-[420px_minmax(0,1fr)] lg:items-start lg:gap-x-24">
+        <div className="grid gap-10 lg:grid-cols-[420px_minmax(0,1fr)] lg:items-stretch lg:gap-x-24">
           {/* Mesma anatomia conceitual das duas colunas — header / conteúdo
            * / ação — pra alinhar de verdade com a coluna do mapa: o "header"
            * aqui usa a MESMA altura estrutural do header colorido ao lado
@@ -69,6 +73,24 @@ export function Contato() {
                 <CtaArrow variant="up-right" />
               </a>
             </Button>
+
+            {/* Fachada (rodada 2026-10-24, saiu do mosaico de Modalidades): aqui
+             * ela tem função, mostra o prédio que a pessoa vai procurar na
+             * rua. Legenda abaixo, nada sobre a foto. */}
+            <figure className="mt-10">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
+                <Image
+                  src={mediaConfig.fachada.src}
+                  alt={mediaConfig.fachada.alt}
+                  fill
+                  sizes="(min-width: 1024px) 420px, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="text-muted-foreground mt-2.5 text-[13.5px] normal-case">
+                {siteConfig.address.street}
+              </figcaption>
+            </figure>
           </div>
 
           <div className="border-border shadow-panel flex flex-col overflow-hidden rounded-2xl border bg-white">

@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   applicationName: siteConfig.name,
   title: {
     default: title,
-    template: `%s — ${siteConfig.name}`,
+    template: `%s | ${siteConfig.name}`,
   },
   description,
   keywords: [

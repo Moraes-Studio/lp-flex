@@ -29,6 +29,31 @@ test.describe('Contato: horário de funcionamento agrupado', () => {
   });
 });
 
+test.describe('Contato: fachada', () => {
+  test('foto da fachada com o endereço abaixo, nada por cima', async ({ page }) => {
+    await page.goto('/');
+    const figura = page.locator('#contato figure');
+    await figura.scrollIntoViewIfNeeded();
+    await expect(figura.locator('img')).toHaveAttribute('alt', /Fachada/);
+    const img = await figura.locator('img').boundingBox();
+    const legenda = await figura.locator('figcaption').boundingBox();
+    expect(img && legenda && legenda.y >= img.y + img.height - 1).toBe(true);
+  });
+});
+
+test.describe('Horários: grade da semana', () => {
+  test('todas as colunas da grade com a mesma largura (desktop)', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'a tabela só aparece no desktop');
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    const larguras = await page
+      .locator('#horarios table thead th')
+      .evaluateAll((ths) => ths.map((th) => Math.round(th.getBoundingClientRect().width)));
+    expect(larguras.length).toBeGreaterThan(1);
+    expect(Math.max(...larguras) - Math.min(...larguras)).toBeLessThanOrEqual(1);
+  });
+});
+
 test.describe('Horários: faixa HOJE', () => {
   test('a faixa HOJE fica em #horarios e não existe mais no hero', async ({ page }) => {
     await page.goto('/');
@@ -215,92 +240,113 @@ test.describe('Hero', () => {
 });
 
 test.describe('Modalidades', () => {
-  test('dois blocos com foto e todas as aulas como etiquetas', async ({ page }) => {
+  test('mosaico dos ambientes e todas as aulas como etiquetas', async ({ page }) => {
     await page.goto('/');
     const secao = page.locator('#modalidades');
     await secao.scrollIntoViewIfNeeded();
-    await expect(secao.locator('img')).toHaveCount(2);
+    await expect(secao.getByTestId('espaco-mosaico')).toBeVisible();
     await expect(secao.getByTestId('aula-coletiva')).toHaveCount(10);
-    await expect(secao.getByRole('heading', { name: 'Musculação' })).toBeVisible();
     await expect(secao.getByRole('heading', { name: 'Aulas coletivas' })).toBeVisible();
+  });
+
+  test('fotos do espaço só em Modalidades: o Sobre não repete nenhuma', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#sobre img')).toHaveCount(0);
   });
 });
 
-test.describe('Sobre: carrossel', () => {
-  test('setas visíveis sem hover e navegação por toque/clique', async ({ page }) => {
+test.describe('Mosaico do espaço (Modalidades) e números do Sobre', () => {
+  test('4 ambientes à vista, com as 13 fotos acessíveis e nome abaixo da foto', async ({
+    page,
+  }) => {
     await page.goto('/');
     await aceitarCookies(page);
-    const sobre = page.locator('#sobre');
-    await sobre.scrollIntoViewIfNeeded();
-
-    const anterior = sobre.getByRole('button', { name: 'Foto anterior' });
-    const proxima = sobre.getByRole('button', { name: 'Próxima foto' });
-    await expect(anterior).toBeVisible();
-    await expect(proxima).toBeVisible();
-    await expect(anterior).toHaveAttribute('aria-disabled', 'true');
-    await expect(proxima).toHaveAttribute('aria-disabled', 'false');
-
-    const trilho = sobre.getByRole('region', { name: 'Fotos da Academia Flex' });
-    const antes = await trilho.evaluate((el) => el.scrollLeft);
-    await proxima.click();
-    await expect.poll(() => trilho.evaluate((el) => el.scrollLeft)).toBeGreaterThan(antes);
-    await expect(anterior).toHaveAttribute('aria-disabled', 'false');
+    const mosaico = page.getByTestId('espaco-mosaico');
+    await mosaico.scrollIntoViewIfNeeded();
+    const blocos = mosaico.getByRole('button');
+    await expect(blocos).toHaveCount(4);
+    const rotulos = await blocos.evaluateAll((els) =>
+      els.map((el) => el.getAttribute('aria-label') ?? '')
+    );
+    const total = rotulos.reduce(
+      (soma, r) => soma + Number(r.match(/Ver as (\d+) fotos/)?.[1] ?? 0),
+      0
+    );
+    expect(total).toBe(13);
+    // Nada sobreposto às fotos: o texto do bloco começa abaixo da imagem.
+    for (const bloco of await blocos.all()) {
+      const img = await bloco.locator('img').boundingBox();
+      const nome = await bloco.locator('span.font-heading').boundingBox();
+      expect(img && nome && nome.y >= img.y + img.height - 1).toBe(true);
+    }
   });
 
-  test('teclado: seta para a direita avança', async ({ page, isMobile }) => {
+  test('toque abre o visualizador, setas visíveis e "próxima" segue para o ambiente seguinte', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await aceitarCookies(page);
+    const bloco = page.getByRole('button', { name: /Ver as 3 fotos de Sala de cardio/ });
+    await bloco.scrollIntoViewIfNeeded();
+    await bloco.click();
+    const visualizador = page.getByTestId('espaco-visualizador');
+    await expect(visualizador.getByRole('heading', { name: 'Sala de cardio' })).toBeVisible();
+    const proxima = visualizador.getByRole('button', { name: 'Próxima foto' });
+    const anterior = visualizador.getByRole('button', { name: 'Foto anterior' });
+    await expect(proxima).toBeVisible();
+    await expect(anterior).toBeVisible();
+    const contador = visualizador.locator('[aria-live]');
+    await expect(contador).toHaveText('1 de 3');
+    await proxima.click();
+    await expect(contador).toHaveText('2 de 3');
+    await proxima.click();
+    await proxima.click();
+    await expect(visualizador.getByRole('heading', { name: 'Salão de aulas' })).toBeVisible();
+    await expect(contador).toHaveText('1 de 2');
+    const transborda = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1
+    );
+    expect(transborda).toBe(false);
+  });
+
+  test('teclado: setas navegam, Esc fecha e o foco volta ao bloco', async ({ page, isMobile }) => {
     test.skip(isMobile, 'teclado só no desktop');
     await page.goto('/');
     await aceitarCookies(page);
-    const trilho = page.locator('#sobre').getByRole('region', { name: 'Fotos da Academia Flex' });
-    await trilho.scrollIntoViewIfNeeded();
-    await trilho.focus();
+    const bloco = page.getByRole('button', { name: /Ver as 5 fotos de Musculação/ });
+    await bloco.scrollIntoViewIfNeeded();
+    await bloco.focus();
+    await page.keyboard.press('Enter');
+    const visualizador = page.getByTestId('espaco-visualizador');
+    const contador = visualizador.locator('[aria-live]');
+    await expect(contador).toHaveText('1 de 5');
     await page.keyboard.press('ArrowRight');
-    await expect.poll(() => trilho.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+    await expect(contador).toHaveText('2 de 5');
+    await page.keyboard.press('ArrowLeft');
+    await expect(contador).toHaveText('1 de 5');
+    await page.keyboard.press('Escape');
+    await expect(visualizador).toHaveCount(0);
+    await expect(bloco).toBeFocused();
   });
 
-  test('legenda fica abaixo da foto, nunca por cima', async ({ page }) => {
-    await page.goto('/');
-    const primeiro = page.locator('#sobre figure').first();
-    await primeiro.scrollIntoViewIfNeeded();
-    const img = await primeiro.locator('img').boundingBox();
-    const legenda = await primeiro.locator('figcaption').boundingBox();
-    expect(img && legenda && legenda.y >= img.y + img.height - 1).toBe(true);
-  });
-
-  test('slide do carrossel não põe role em <figure> com legenda (ARIA in HTML)', async ({
-    page,
-  }) => {
-    // axe-core ≥ 4.13 (o do Lighthouse) reprova role="group" em <figure> com
-    // <figcaption>; o papel de slide fica num wrapper, a figure dentro.
-    await page.goto('/');
-    const slides = page.locator('#sobre [aria-roledescription="slide"]');
-    await expect(slides).toHaveCount(7);
-    const tags = await slides.evaluateAll((els) => els.map((el) => el.tagName));
-    expect(tags.every((tag) => tag !== 'FIGURE')).toBe(true);
-    await expect(page.locator('#sobre figure[role]')).toHaveCount(0);
-  });
-
-  test('todas as fotos carregam, inclusive a última, após percorrer o carrossel', async ({
-    page,
-  }) => {
+  test('fotos do visualizador carregam e têm alt descritivo', async ({ page }) => {
     await page.goto('/');
     await aceitarCookies(page);
-    const sobre = page.locator('#sobre');
-    await sobre.scrollIntoViewIfNeeded();
-    const proxima = sobre.getByRole('button', { name: 'Próxima foto' });
-    for (let i = 0; i < 20; i++) {
-      if ((await proxima.getAttribute('aria-disabled')) === 'true') break;
-      // dispatchEvent: o botão pode ainda estar "instável" (reveal/scroll da
-      // página) e o clique do Playwright esperaria até o timeout.
-      await proxima.dispatchEvent('click');
-      await page.waitForTimeout(250);
-    }
-    await expect(proxima).toHaveAttribute('aria-disabled', 'true');
+    const bloco = page.getByRole('button', { name: /Ver as 5 fotos de Musculação/ });
+    await bloco.scrollIntoViewIfNeeded();
+    await bloco.click();
+    const fotos = page.getByTestId('espaco-visualizador').locator('img');
+    await expect(fotos).toHaveCount(5);
     await expect
       .poll(() =>
-        page
-          .locator('#sobre figure img')
-          .evaluateAll((imgs) => imgs.every((img) => (img as HTMLImageElement).naturalWidth > 0))
+        fotos.evaluateAll((imgs) =>
+          imgs.every(
+            (img) =>
+              (img as HTMLImageElement).complete &&
+              (img as HTMLImageElement).naturalWidth > 0 &&
+              (img.getAttribute('alt') ?? '').length > 10
+          )
+        )
       )
       .toBe(true);
   });
@@ -329,7 +375,7 @@ test.describe('Sem scroll horizontal', () => {
       await page.setViewportSize({ width: largura, height: 900 });
       await page.goto('/');
       await page.waitForLoadState('load');
-      await expect(page.locator('#sobre figure').first()).toBeVisible();
+      await expect(page.getByTestId('espaco-mosaico').locator('img').first()).toBeAttached();
       const transborda = await page.evaluate(
         () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1
       );
@@ -372,11 +418,14 @@ test.describe('Seções: contraste e escala (iteração imersiva)', () => {
     }
   });
 
-  test('setas do carrossel legíveis no azul (ícone branco)', async ({ page }) => {
+  test('nomes dos ambientes em branco sobre o azul de Modalidades', async ({ page }) => {
     await page.goto('/');
-    const proxima = page.locator('#sobre').getByRole('button', { name: 'Próxima foto' });
-    await expect(proxima).toBeVisible();
-    expect(await proxima.evaluate((el) => getComputedStyle(el).color)).toBe('rgb(255, 255, 255)');
+    const cor = await page
+      .getByTestId('espaco-mosaico')
+      .locator('span.font-heading')
+      .first()
+      .evaluate((el) => getComputedStyle(el).color);
+    expect(cor).toBe('rgb(255, 255, 255)');
   });
 
   test('títulos grandes e com no máximo 3 linhas em 1440', async ({ page, isMobile }) => {

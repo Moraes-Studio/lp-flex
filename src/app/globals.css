@@ -371,6 +371,12 @@ body:has(#cookie-consent) #whatsapp-float {
   html {
     @apply scroll-smooth font-sans;
   }
+  /* Seleção de texto no azul da marca, em vez do azul padrão do navegador
+   * (que some sobre as seções azuis). */
+  ::selection {
+    background-color: var(--flex-blue-600);
+    color: #fff;
+  }
   h1,
   h2,
   h3,

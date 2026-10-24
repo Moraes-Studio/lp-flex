@@ -93,8 +93,7 @@ export function HorariosMobile({ slots, diasComAula }: { slots: AulaSlot[]; dias
                   {slot.aula}
                   {rodando ? (
                     <span className="sr-only">
-                      {' '}
-                      — hoje ({DIA_NOME_COMPLETO[selecionado ?? slot.day]})
+                      {`, hoje (${DIA_NOME_COMPLETO[selecionado ?? slot.day]})`}
                     </span>
                   ) : null}
                 </span>

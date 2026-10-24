@@ -6,7 +6,7 @@ import { siteConfig } from '@/config/site';
 export const runtime = 'nodejs';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
-export const alt = `${siteConfig.name} — Vila Helena, Santo André`;
+export const alt = `${siteConfig.name}, Vila Helena, Santo André`;
 
 /**
  * Gráfico de marca gerado em runtime (Satori) — logo oficial real
@@ -47,7 +47,7 @@ export default function OpengraphImage() {
               {siteConfig.name}
             </div>
             <div style={{ display: 'flex', fontSize: 26, opacity: 0.85, marginTop: 6, letterSpacing: 1 }}>
-              Vila Helena · {siteConfig.address.city} — {siteConfig.address.state}
+              Vila Helena · {siteConfig.address.city}, {siteConfig.address.state}
             </div>
           </div>
         </div>

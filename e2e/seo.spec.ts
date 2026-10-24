@@ -75,7 +75,7 @@ test.describe('SEO — metadata da homepage', () => {
     expect(image).toMatch(/^https?:\/\//); // og:image sempre absoluto
     expect(await og('og:image:width')).toBe('1200');
     expect(await og('og:image:height')).toBe('630');
-    expect(await og('og:image:alt')).toBe('Academia Flex — Vila Helena, Santo André');
+    expect(await og('og:image:alt')).toBe('Academia Flex, Vila Helena, Santo André');
   });
 
   test('Twitter/X card configurado, reaproveitando a OG image', async ({ page }) => {

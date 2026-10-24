@@ -1,9 +1,7 @@
 import { siteConfig } from '@/config/site';
-import { mediaConfig } from '@/config/media';
 import { getModalidades, separarModalidades } from '@/lib/content/modalidades';
 import { contarConfirmados, getProfessores } from '@/lib/content/professores';
 import { CountUp } from '@/components/shared/count-up';
-import { PhotoCarousel } from '@/components/shared/photo-carousel';
 import { Reveal } from '@/components/shared/reveal';
 import { cn } from '@/lib/utils';
 
@@ -15,6 +13,10 @@ import { cn } from '@/lib/utils';
  * eyebrow e sem o bloco azul com o "1992" gigante.
  * Iteração imersiva: a seção inteira vira azul (flex-blue-700), com os
  * números grandes em branco (não é o "1992" decorativo: são dados reais).
+ * Rodada 2026-10-24: sem fotos. O carrossel virou o mosaico de ambientes
+ * em Modalidades (as fotos ficam num lugar só), e saiu o parágrafo que
+ * repetia "musculação e aulas no mesmo plano", já dito em Planos e em
+ * Modalidades. Ficam o título e os números.
  */
 export function Sobre() {
   const anos = new Date().getFullYear() - siteConfig.foundedYear;
@@ -36,10 +38,6 @@ export function Sobre() {
             Academia completa,{' '}
             <span className="whitespace-nowrap">desde {siteConfig.foundedYear}.</span>
           </h2>
-          <p className="mt-6 max-w-[560px] text-[17px] text-pretty text-white/80 normal-case">
-            Musculação e as {aulas.length} aulas coletivas no mesmo plano, na Vila Helena desde{' '}
-            {siteConfig.foundedYear}.
-          </p>
         </Reveal>
 
         <dl className="mt-12 grid max-w-[880px] grid-cols-3 divide-x divide-white/15 border-t border-white/15 pt-8 md:mt-14">
@@ -57,14 +55,6 @@ export function Sobre() {
             </div>
           ))}
         </dl>
-
-        <div className="mt-12 md:mt-14">
-          <PhotoCarousel
-            fotos={mediaConfig.sobreGaleria}
-            rotulo="Fotos da Academia Flex"
-            tone="dark"
-          />
-        </div>
       </div>
     </section>
   );

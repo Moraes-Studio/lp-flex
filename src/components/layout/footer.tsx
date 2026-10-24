@@ -110,7 +110,7 @@ export function Footer() {
               </div>
 
               <p className="mt-2.5 text-xs text-white/60">
-                {siteConfig.tagline} · CNPJ {siteConfig.cnpj}
+                {siteConfig.tagline} CNPJ {siteConfig.cnpj}
               </p>
 
               <p className="mt-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-white/60">

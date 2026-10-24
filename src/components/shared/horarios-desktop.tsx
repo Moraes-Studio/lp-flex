@@ -35,7 +35,10 @@ export function HorariosDesktop({ colunas, horas, horarios }: HorariosDesktopPro
   return (
     <div className="hidden lg:block">
       <div className="bg-flex-graphite-surface overflow-x-auto rounded-2xl border border-white/15">
-        <table className="w-full min-w-[720px] border-collapse">
+        {/* table-fixed: colunas de largura igual. No modo automático cada dia
+         * ganhava a largura do nome de aula mais longo ("Jump Funcional"),
+         * e TER/QUI ficavam visivelmente mais estreitas. */}
+        <table className="w-full min-w-[720px] table-fixed border-collapse">
           <thead>
             <tr>
               {colunas.map((dia) => (
@@ -49,7 +52,7 @@ export function HorariosDesktop({ colunas, horas, horarios }: HorariosDesktopPro
                 >
                   {dia}
                   {dia === hoje ? (
-                    <span className="mt-0.5 block font-mono text-[9px] tracking-[0.16em] opacity-85">
+                    <span className="mt-0.5 block font-mono text-[11px] tracking-[0.12em] opacity-90">
                       hoje
                     </span>
                   ) : null}
