@@ -19,6 +19,14 @@ name: CI
 permissions:
   contents: read
 
+# Actions de terceiros fixadas por SHA de commit (tag pode ser movida por
+# quem controla o repo da action; SHA não). A versão fica no comentário e o
+# Dependabot (.github/dependabot.yml) abre PR quando sai versão nova.
+# `persist-credentials: false` no checkout: nenhum job faz push, então o
+# token não precisa ficar disponível pros passos seguintes. Runner fixo em
+# ubuntu-24.04 pra não migrar sozinho quando `ubuntu-latest` virar 26 —
+# atualizar aqui de propósito, junto com `playwright install --with-deps`.
+
 env:
   # Sandbox/teste — idênticos ao `.env.test` do repo local (RULES.md:
   # "`.env.test` guarda só credenciais de sandbox... nunca uma chave que
@@ -33,12 +41,14 @@ env:
 
 jobs:
   lint-typecheck-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 22
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
           cache: npm
       - run: npm ci
       - uses: ./.github/actions/setup-env-test
@@ -53,17 +63,16 @@ jobs:
       - run: npm run test
       - run: npm run build
       # Só dependências de produção (`--omit=dev`): o que vai pro site.
-      # Ferramentas de dev (shadcn CLI, eslint-config-next) puxam
-      # `braces <=3.0.3` (GHSA-vfj7-8cjw-p6xm, DoS com glob malicioso), sem
-      # versão corrigida publicada até 2026-10-08 — com o audit completo o CI
-      # ficaria vermelho sem ação possível. Essas ferramentas só rodam com
-      # padrões escritos por nós, nunca com entrada de usuário.
+      # Ferramentas de dev rodam só com entrada nossa e às vezes ficam dias
+      # sem versão corrigida (ex.: `braces` em out/2026) — com o audit
+      # completo o CI ficaria vermelho sem ação possível. Em 2026-10-26 o
+      # audit completo estava zerado; conferir local com `npm audit`.
       - name: npm audit (falha em vulnerabilidade alta/crítica de produção)
         run: npm audit --omit=dev --audit-level=high
 
   e2e:
     needs: lint-typecheck-test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         # `browser` é o motor real que cada projeto do playwright.config.ts
@@ -77,10 +86,12 @@ jobs:
           - project: 'Mobile Safari'
             browser: webkit
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 22
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
           cache: npm
       - run: npm ci
       - uses: ./.github/actions/setup-env-test
@@ -94,7 +105,7 @@ jobs:
       - run: npx playwright test --project="${{ matrix.project }}"
         env:
           CI: true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: failure()
         with:
           name: playwright-report-${{ strategy.job-index }}
@@ -117,12 +128,14 @@ jobs:
     # 94 em 2026-10-08 por TBT de 180ms, todo ele hidratação do React/Next
     # (nenhum chunk do site acima de 78ms) no runner compartilhado.
     needs: lint-typecheck-test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 22
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
           cache: npm
       - run: npm ci
       - uses: ./.github/actions/setup-env-test
@@ -133,7 +146,7 @@ jobs:
           nextfit-api-key: ${{ env.NEXTFIT_API_KEY }}
           payment-gateway-client-secret: ${{ env.PAYMENT_GATEWAY_CLIENT_SECRET }}
       - run: npm run build
-      - uses: treosh/lighthouse-ci-action@v12
+      - uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # 12.6.2
         with:
           configPath: ./.lighthouserc.json
           uploadArtifacts: true

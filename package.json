@@ -20,8 +20,8 @@
     "lucide-react": "^1.25.0",
     "next": "16.4.3",
     "radix-ui": "^1.6.2",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
+    "react": "19.2.9",
+    "react-dom": "19.2.9",
     "react-hook-form": "^7.81.0",
     "server-only": "^0.0.1",
     "tailwind-merge": "^3.6.0",
@@ -34,7 +34,7 @@
     "@playwright/cli": "^0.1.22",
     "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.0.3",
@@ -46,6 +46,6 @@
     "shadcn": "^4.21.4",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.1.10"
+    "vitest": "^5.0.5"
   }
 }
