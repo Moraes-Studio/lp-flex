@@ -62,34 +62,30 @@ export const mediaConfig: {
           alt: 'Aparelho articulado com anilhas ao lado dos janelões da sala de musculação',
         },
         {
-          src: '/fotos/espaco-articulado-anilhas.jpg',
-          alt: 'Aparelho articulado de carga livre com apoio de peito laranja',
-        },
-        {
           src: '/fotos/espaco-articulado-amarelo.jpg',
           alt: 'Área de musculação com aparelhos articulados de alavanca amarela e bancos reguláveis',
         },
         {
-          src: '/fotos/espaco-articulado-verde.jpg',
-          alt: 'Aparelho articulado de alavancas verdes com anilhas, ao lado de bancos reguláveis',
+          src: '/fotos/espaco-articulados-kikos.jpg',
+          alt: 'Aparelho articulado de alavancas verdes entre bancos e máquinas de musculação, com janelões ao fundo',
         },
       ],
     },
     {
       nome: 'Pesos livres',
-      descricao: 'Halteres, barras, anilhas e racks.',
+      descricao: 'Halteres, barras, anilhas e bancos.',
       fotos: [
         {
-          src: '/fotos/espaco-halteres.jpg',
-          alt: 'Suportes com halteres, barras e anilhas organizados junto à parede azul',
+          src: '/fotos/espaco-pesos-livres.jpg',
+          alt: 'Área de pesos livres com suportes de halteres e barras, bancos reguláveis e janelas ao fundo',
         },
         {
-          src: '/fotos/espaco-racks.jpg',
-          alt: 'Racks amarelos com barra montada diante do espelho',
+          src: '/fotos/espaco-halteres-fileira.jpg',
+          alt: 'Fileira de halteres no suporte, com a área de musculação ao fundo',
         },
         {
-          src: '/fotos/espaco-carga-livre.jpg',
-          alt: 'Máquina com anilhas e outros aparelhos de carga livre sobre piso emborrachado',
+          src: '/fotos/espaco-banco-articulado.jpg',
+          alt: 'Banco com aparelho articulado de carga de anilhas sobre piso de madeira, junto à janela',
         },
       ],
     },

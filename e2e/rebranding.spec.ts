@@ -256,7 +256,7 @@ test.describe('Modalidades', () => {
 });
 
 test.describe('Mosaico do espaço (Modalidades) e números do Sobre', () => {
-  test('4 ambientes à vista, com as 13 fotos acessíveis e nome abaixo da foto', async ({
+  test('4 ambientes à vista, com as 12 fotos acessíveis e nome abaixo da foto', async ({
     page,
   }) => {
     await page.goto('/');
@@ -272,7 +272,7 @@ test.describe('Mosaico do espaço (Modalidades) e números do Sobre', () => {
       (soma, r) => soma + Number(r.match(/Ver as (\d+) fotos/)?.[1] ?? 0),
       0
     );
-    expect(total).toBe(13);
+    expect(total).toBe(12);
     // Nada sobreposto às fotos: o texto do bloco começa abaixo da imagem.
     for (const bloco of await blocos.all()) {
       const img = await bloco.locator('img').boundingBox();
@@ -313,17 +313,17 @@ test.describe('Mosaico do espaço (Modalidades) e números do Sobre', () => {
     test.skip(isMobile, 'teclado só no desktop');
     await page.goto('/');
     await aceitarCookies(page);
-    const bloco = page.getByRole('button', { name: /Ver as 5 fotos de Musculação/ });
+    const bloco = page.getByRole('button', { name: /Ver as 4 fotos de Musculação/ });
     await bloco.scrollIntoViewIfNeeded();
     await bloco.focus();
     await page.keyboard.press('Enter');
     const visualizador = page.getByTestId('espaco-visualizador');
     const contador = visualizador.locator('[aria-live]');
-    await expect(contador).toHaveText('1 de 5');
+    await expect(contador).toHaveText('1 de 4');
     await page.keyboard.press('ArrowRight');
-    await expect(contador).toHaveText('2 de 5');
+    await expect(contador).toHaveText('2 de 4');
     await page.keyboard.press('ArrowLeft');
-    await expect(contador).toHaveText('1 de 5');
+    await expect(contador).toHaveText('1 de 4');
     await page.keyboard.press('Escape');
     await expect(visualizador).toHaveCount(0);
     await expect(bloco).toBeFocused();
@@ -332,11 +332,11 @@ test.describe('Mosaico do espaço (Modalidades) e números do Sobre', () => {
   test('fotos do visualizador carregam e têm alt descritivo', async ({ page }) => {
     await page.goto('/');
     await aceitarCookies(page);
-    const bloco = page.getByRole('button', { name: /Ver as 5 fotos de Musculação/ });
+    const bloco = page.getByRole('button', { name: /Ver as 4 fotos de Musculação/ });
     await bloco.scrollIntoViewIfNeeded();
     await bloco.click();
     const fotos = page.getByTestId('espaco-visualizador').locator('img');
-    await expect(fotos).toHaveCount(5);
+    await expect(fotos).toHaveCount(4);
     await expect
       .poll(() =>
         fotos.evaluateAll((imgs) =>
