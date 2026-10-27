@@ -21,11 +21,6 @@ test.describe('Home — layout geral', () => {
 
   test('botão flutuante de WhatsApp aparece em qualquer scroll', async ({ page }) => {
     await page.goto('/');
-    // No mobile o WhatsApp fica intencionalmente oculto enquanto o banner de
-    // cookies está aberto (evita empilhar dois elementos flutuantes no mesmo
-    // canto numa tela pequena — ver cookie-consent.tsx) — decide a condição
-    // antes de checar o comportamento normal do botão.
-    await page.getByRole('button', { name: 'Aceitar todos' }).click();
 
     const float = page.getByRole('link', { name: 'Quero treinar agora' }).last();
     await expect(float).toBeVisible();

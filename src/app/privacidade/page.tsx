@@ -10,10 +10,11 @@ export const metadata: Metadata = {
   alternates: { canonical: '/privacidade' },
 };
 
-/** Data da última mudança no texto da política (commit do banner de cookies,
- * 2026-08-27). Antes era `new Date()`: a página dizia "atualizada hoje" a
- * cada build, o que não é verdade. Mudou o texto, muda esta data. */
-const ATUALIZADA_EM = '27 de agosto de 2026';
+/** Data da última mudança no texto da política (mapa do Google passou a
+ * carregar só com clique e o banner de cookies saiu, 2026-10-26). Antes era
+ * `new Date()`: a página dizia "atualizada hoje" a cada build, o que não é
+ * verdade. Mudou o texto, muda esta data. */
+const ATUALIZADA_EM = '26 de outubro de 2026';
 
 export default function PrivacidadePage() {
   const endereco = `${siteConfig.address.street}, ${siteConfig.address.city}, ${siteConfig.address.state}, ${siteConfig.address.zip}`;
@@ -22,7 +23,7 @@ export default function PrivacidadePage() {
   return (
     <main className="px-[6%] py-14 md:py-20">
       <div className="mx-auto max-w-[720px]">
-        <p className="text-flex-blue-600 mb-2 font-mono text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-flex-blue-600 mb-2 font-mono text-[12px] tracking-[0.14em] uppercase">
           Atualizada em {ATUALIZADA_EM}
         </p>
         <h1 className="text-[clamp(30px,5vw,44px)] leading-[1.05]">Política de Privacidade</h1>
@@ -40,7 +41,7 @@ export default function PrivacidadePage() {
           </section>
 
           <section>
-            <h2>Que dados coletamos</h2>
+            <h2>Quais dados coletamos</h2>
             <ul>
               <li>
                 <strong className="text-foreground">Dados que você nos envia:</strong> nome,
@@ -52,9 +53,9 @@ export default function PrivacidadePage() {
                 coletamos os dados necessários ao contrato e à sua segurança durante o treino.
               </li>
               <li>
-                <strong className="text-foreground">Dados de navegação:</strong> o site usa fontes e
-                mapa hospedados pelo Google, que podem registrar seu endereço IP ao carregar esses
-                recursos.
+                <strong className="text-foreground">Dados de navegação:</strong> o mapa da seção
+                Contato é do Google e só carrega se você clicar em &quot;Mostrar mapa&quot;. A
+                partir daí, o Google pode registrar seu endereço IP.
               </li>
             </ul>
           </section>
@@ -98,15 +99,15 @@ export default function PrivacidadePage() {
             </p>
           </section>
 
-          {/* scroll-mt: link "Personalizar preferências" do banner de cookies
+          {/* scroll-mt: âncora #cookies (link direto para esta seção)
            * aponta pra cá (/privacidade#cookies) — sem isso o header sticky
            * cobre o topo da seção ao pular direto pra ela. */}
           <section id="cookies" className="scroll-mt-28">
             <h2>Cookies</h2>
             <p>
-              Este site não usa cookies próprios de rastreamento ou publicidade. Recursos
-              incorporados do Google (fontes e mapa) podem definir cookies próprios ao serem
-              carregados.
+              Este site não usa cookies de rastreamento ou publicidade. O mapa do Google só é
+              carregado se você clicar em &quot;Mostrar mapa&quot; na seção Contato; a partir daí,
+              valem os cookies e a política de privacidade do próprio Google.
             </p>
           </section>
 
@@ -114,7 +115,10 @@ export default function PrivacidadePage() {
             <h2>Contato</h2>
             <p>
               Fale com a gente na recepção da academia ou pelo{' '}
-              <a href="#contato" className="text-flex-blue-600 hover:underline">
+              <a
+                href="#contato"
+                className="text-flex-blue-700 underline underline-offset-2 hover:decoration-2"
+              >
                 WhatsApp
               </a>
               .
