@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { navigation } from '@/config/navigation';
 import { siteConfig, whatsappUrl } from '@/config/site';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
+import { Estrelas } from '@/components/shared/estrelas';
+import { formatarNota, getReputacao } from '@/lib/content/reputacao';
 
 /** lucide-react não inclui logos de marca (removidos da lib) — traço simples
  * próprio, mesmo peso visual dos ícones do resto do site (strokeWidth 1.75). */
@@ -43,53 +45,23 @@ const linkFocus =
  * copyright embaixo. Duas colunas reais (marca/dados/endereço à esquerda —
  * principal; navegação à direita — secundária), sem título grande tipo
  * "NAVEGAÇÃO" acima da lista de links (já tentado e revertido antes, destoa
- * do resto do rodapé). O "FLEX" gigante é decoração de fundo, fora do fluxo
- * — não é uma 3ª coluna (ver comentário na `<span>` abaixo).
+ * do resto do rodapé). Sem o "FLEX" gigante de fundo (removido em
+ * 2026-10-26: decoração sem informação, que repetia a marca já mostrada ao
+ * lado e exigia posicionamento frágil pra não esbarrar no texto).
  */
 export function Footer() {
   const ano = new Date().getFullYear();
+  const { google } = getReputacao();
   const endereco = `${siteConfig.address.street}, ${siteConfig.address.city}, ${siteConfig.address.state}`;
 
   return (
-    // `isolate` (não só `relative`): cria stacking context próprio pro
-    // footer — sem isso, o `-z-10` do watermark "escapa" pro stacking
-    // context raiz da página (position:relative sozinho, sem z-index
-    // explícito, não cria stacking context) e acaba pintando ATRÁS do
-    // próprio fundo azul do footer, ficando 100% invisível.
-    <footer className="bg-flex-blue-700 relative isolate text-white">
+    <footer className="bg-flex-blue-700 text-white">
       {/* py-8 (era py-10) — lapidação final: densidade um pouco maior sem
-       * apertar. overflow-hidden contém o watermark (nunca cruza a linha
-       * divisória logo abaixo, nem cria scroll horizontal). Gutter px-[6%]
+       * apertar. Gutter px-[6%]
        * por fora do contêiner de 1180px, igual às seções: por dentro, o
        * rodapé ficava ~100px mais recuado que o resto da página. */}
       <div className="px-[6%]">
-        <div className="relative mx-auto max-w-[1180px] overflow-hidden py-8">
-          {/* Watermark — decoração de fundo pura, fora do fluxo do grid (não é
-           * mais uma coluna reservada: tentativas anteriores reservavam um
-           * `flex-1` vazio só pra caber o texto, o que fazia o layout de cima
-           * ter 3 "colunas" e o watermark ditar a geometria — exatamente o que
-           * o briefing desta rodada pede pra não fazer), opacidade bem baixa
-           * (mesmo branco já usado em todo o resto do rodapé, sem cor nova),
-           * atrás de tudo (`-z-10`). `hidden sm:block`: numa coluna estreita de
-           * mobile um grafismo desse tamanho atrapalha mais do que ajuda, então
-           * some (autorizado pelo briefing).
-           * Reposicionado depois de achado real: `right-[-1%]` deixava ficava
-           * direto atrás da navegação (Planos/Modalidades/.../Contato) — lia
-           * como "texto atrás do menu", não textura de fundo. `left-[65%]`
-           * (medido nos dois breakpoints pedidos, 1440 e 1920 — o vão entre o
-           * fim do bloco de endereço e o início do menu não fica exatamente no
-           * mesmo % nos dois, então o valor é o meio-termo com folga limpa nos
-           * dois) + tamanho reduzido (170px→112px, sem precisar de um segundo
-           * degrau responsivo — o vão não cresce com a viewport, então o
-           * grafismo também não deveria) mantém as letras dentro do vão vazio,
-           * sem cruzar nem o texto da esquerda nem o menu. Opacidade 7%→4.5%. */}
-          <span
-            aria-hidden="true"
-            className="font-heading pointer-events-none absolute top-1/2 left-[65%] -z-10 hidden -translate-x-1/2 -translate-y-1/2 text-[112px] leading-none font-semibold tracking-tight text-white/[0.045] select-none sm:block"
-          >
-            FLEX
-          </span>
-
+        <div className="mx-auto max-w-[1180px] py-8">
           {/* Só 2 colunas de conteúdo real — esquerda (principal) × navegação
            * (secundária, à direita). justify-between, sem coluna do meio. */}
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between sm:gap-12">
@@ -109,11 +81,11 @@ export function Footer() {
                 <span className="font-heading text-sm tracking-wide">{siteConfig.name}</span>
               </div>
 
-              <p className="mt-2.5 text-xs text-white/60">
+              <p className="mt-2.5 text-[13px] text-white/60">
                 {siteConfig.tagline} CNPJ {siteConfig.cnpj}
               </p>
 
-              <p className="mt-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-white/60">
+              <p className="mt-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-white/60">
                 <span>{endereco}</span>
                 <span className="text-white/30">·</span>
                 <a
@@ -150,10 +122,30 @@ export function Footer() {
                   </>
                 ) : null}
               </p>
+
+              {/* Selo da nota no Google (prova social local). Sem o logo do
+               * Google: as diretrizes de marca dele restringem o uso do logo;
+               * o nome em texto e as estrelas passam a mesma informação. */}
+              <a
+                href={google.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`mt-5 inline-flex items-center gap-3 rounded-lg border border-white/15 bg-white/[0.06] px-3.5 py-2.5 transition-colors hover:bg-white/10 ${linkFocus}`}
+              >
+                <span className="font-heading text-[26px] leading-none text-white tabular-nums">
+                  {formatarNota(google.nota)}
+                </span>
+                <span className="flex flex-col gap-1">
+                  <Estrelas nota={google.nota} tamanho={13} />
+                  <span className="text-[12.5px] text-white/75">
+                    {google.avaliacoes.toLocaleString('pt-BR')} avaliações no Google
+                  </span>
+                </span>
+              </a>
             </div>
 
             <nav
-              className="flex flex-col gap-2 text-xs text-white/70 sm:shrink-0"
+              className="flex flex-col gap-2 text-[13px] text-white/70 sm:shrink-0"
               aria-label="Navegação do rodapé"
             >
               {navigation.map((item) => (
@@ -177,7 +169,7 @@ export function Footer() {
          * "Desenvolvido por" pra uma terceira linha. py-4 (era py-5) —
          * lapidação de densidade; pb-24 no mobile é funcional (não estético:
          * respiro pro botão flutuante do WhatsApp), preservado como está. */}
-        <div className="mx-auto flex max-w-[1180px] items-start justify-between gap-x-6 gap-y-1 py-4 pb-24 text-xs text-white/60 sm:items-center sm:pb-4">
+        <div className="mx-auto flex max-w-[1180px] items-start justify-between gap-x-6 gap-y-1 py-4 pb-24 text-[13px] text-white/60 sm:items-center sm:pb-4">
           <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
             <span>
               © {ano} {siteConfig.name}. Todos os direitos reservados.

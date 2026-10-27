@@ -44,7 +44,7 @@
   /* Tom de grafite levemente mais claro que --flex-graphite — não é cor
      nova, é o mesmo grafite com uma pitada de luz, só pra dar uma diferença
      sutil de superfície (topo levemente mais claro que a base) em painéis
-     flutuantes escuros, ex: cookie-consent.tsx. */
+     flutuantes escuros. */
   --color-flex-graphite-surface: var(--flex-graphite-surface);
 
   /* Acento de campanha — token isolado, só pode ser usado por banner/badge/faixa/selo de campanha.
@@ -53,6 +53,7 @@
 
   --color-warning: var(--warning);
   --color-success: var(--success);
+  --color-rating: var(--rating);
   --color-info: var(--info);
 
   --color-ring: var(--ring);
@@ -85,7 +86,7 @@
   --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-card-hover: 0 24px 48px -24px rgba(11, 77, 162, 0.32);
   --shadow-panel: 0 18px 44px -30px rgba(11, 77, 162, 0.55);
-  /* Sombra própria pra overlay flutuante (cookie-consent.tsx) — não
+  /* Sombra própria pra overlay flutuante — não
      reaproveita shadow-panel de propósito: painéis de card ficam embutidos
      na página (sempre sobre fundo claro), o overlay é fixed por cima de
      QUALQUER fundo (branco, grafite, azul do rodapé), precisa de mais
@@ -157,6 +158,9 @@
   --warning: #b45309;
   --destructive: #dc2626;
   --success: #15803d;
+  /* Amarelo das estrelas de avaliação (nota do Google): só nas estrelas,
+   * nunca em botão, link ou texto. */
+  --rating: #f5b301;
   --info: #0369a1;
 
   /* acento de campanha sazonal — isolado (token próprio, nunca --primary/
@@ -303,67 +307,16 @@
   }
 }
 
-/* Card de consentimento de cookies (ver cookie-consent.tsx): 100% overlay,
- * `position: fixed`, nunca reserva espaço na página — sem padding/margin
- * no body, sem tocar document flow/height. (Uma versão anterior usava
- * `body:has(#cookie-consent) { padding-bottom: ... }` e isso empurrava o
- * fim da página pra baixo, sobrando uma faixa vazia depois do rodapé —
- * removido de propósito, não reintroduzir.)
- *
- * O único ajuste real é o WhatsApp (também fixed) convivendo com o banner,
- * que agora fica no mesmo canto (inferior direito) no desktop:
- * - mobile: WhatsApp some temporariamente enquanto o banner está aberto —
- *   com os dois no mesmo canto e a tela pequena, empilhar os dois adicionaria
- *   obstrução em vez de resolver; a decisão é rápida, ele volta em seguida.
- * - desktop (sm+): banner e WhatsApp têm espaço de sobra — o WhatsApp só
- *   sobe pra ficar acima do card, com respiro de ~18px.
- * Nenhum dos dois casos altera document flow: só posição/visibilidade de
- * elementos já `fixed`. */
-/* As 4 propriedades (transform/bottom/opacity/visibility) do WhatsApp
- * precisam de timing coordenado entre os dois estados (visibility com
- * delay diferente ao entrar vs. sair — trocando de visível pra escondido
- * ela só aplica depois do fade, na volta é instantânea, senão o link fica
- * focável-mas-invisível por um instante), então ficam juntas aqui em vez
- * de espalhadas em utilities do Tailwind no componente. */
-#whatsapp-float {
-  transition:
-    transform 0.3s ease,
-    bottom 0.3s ease,
-    opacity 0.25s ease,
-    visibility 0s linear 0s;
-}
-body:has(#cookie-consent) #whatsapp-float {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition:
-    transform 0.3s ease,
-    bottom 0.3s ease,
-    opacity 0.2s ease,
-    visibility 0s linear 0.2s;
-}
-@media (min-width: 640px) {
-  body:has(#cookie-consent) #whatsapp-float {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    /* Medido de verdade (banner real, largura 400px, conteúdo atual):
-       ≈241px de altura + 24px de offset da viewport (bottom-6) + ~25px de
-       respiro. Não é JS medindo em runtime — é um valor fixo com folga,
-       conferido visualmente; reajustar aqui se o conteúdo do banner mudar
-       o bastante pra afetar sua altura. */
-    bottom: 290px;
-    transition:
-      transform 0.3s ease,
-      bottom 0.25s ease,
-      opacity 0.2s ease,
-      visibility 0s linear 0s;
-  }
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  /* O Tailwind v4 tirou o `cursor: pointer` padrão dos botões; sem isto o
+   * mosaico de Modalidades, o "Mostrar mapa" e as setas do visualizador não
+   * mostravam a mãozinha e não pareciam clicáveis (rodada 2026-10-26). */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
   }
   body {
     @apply bg-background text-foreground;

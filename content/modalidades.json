@@ -1,13 +1,55 @@
 [
-  { "nome": "Musculação", "icone": "musculacao" },
-  { "nome": "Pilates", "icone": "pilates" },
-  { "nome": "Yoga", "icone": "yoga" },
-  { "nome": "Zumba", "icone": "zumba" },
-  { "nome": "Fit Dance", "icone": "fitdance" },
-  { "nome": "Jump Funcional", "icone": "jump-funcional" },
-  { "nome": "Step Funcional", "icone": "step-funcional" },
-  { "nome": "GAP", "icone": "gap" },
-  { "nome": "Ritbox", "icone": "ritbox" },
-  { "nome": "Flex Training", "icone": "flex-training" },
-  { "nome": "Cross Training", "icone": "cross-training" }
+  {
+    "nome": "Musculação",
+    "icone": "musculacao"
+  },
+  {
+    "nome": "Pilates",
+    "icone": "pilates",
+    "descricao": "Exercícios controlados para fortalecer o abdômen e melhorar a postura e a flexibilidade."
+  },
+  {
+    "nome": "Yoga",
+    "icone": "yoga",
+    "descricao": "Posturas, respiração e alongamento para flexibilidade, equilíbrio e relaxamento."
+  },
+  {
+    "nome": "Zumba",
+    "icone": "zumba",
+    "descricao": "Dança com ritmos latinos e músicas animadas, em coreografias fáceis de acompanhar."
+  },
+  {
+    "nome": "Fit Dance",
+    "icone": "fitdance",
+    "descricao": "Coreografias com músicas populares do momento, para treinar dançando."
+  },
+  {
+    "nome": "Jump Funcional",
+    "icone": "jump-funcional",
+    "descricao": "Exercícios em minicama elástica, com bastante cardio e menos impacto nas articulações."
+  },
+  {
+    "nome": "Step Funcional",
+    "icone": "step-funcional",
+    "descricao": "Sequências na plataforma de step com exercícios funcionais, para cardio e pernas."
+  },
+  {
+    "nome": "GAP",
+    "icone": "gap",
+    "descricao": "Exercícios localizados para glúteos, abdômen e pernas, no ritmo da música."
+  },
+  {
+    "nome": "Ritbox",
+    "icone": "ritbox",
+    "descricao": "Movimentos de luta, como socos e chutes, no ritmo da música, para cardio e coordenação."
+  },
+  {
+    "nome": "Flex Training",
+    "icone": "flex-training"
+  },
+  {
+    "nome": "Cross Training",
+    "icone": "cross-training",
+    "descricao": "Treino funcional intenso, em circuitos que combinam força e condicionamento."
+  }
 ]

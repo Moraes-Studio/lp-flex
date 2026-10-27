@@ -1,0 +1,8 @@
+{
+  "inclui": [
+    "Musculação",
+    "Todas as aulas coletivas",
+    "Professores na sala para orientar todos os alunos"
+  ],
+  "aParte": [{ "nome": "Mapeamento (bioimpedância)", "valor": 50 }]
+}

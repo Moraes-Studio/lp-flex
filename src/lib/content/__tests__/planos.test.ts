@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { calcularPrecoFinal, getPlanos, parsePlanos, type Plano } from '@/lib/content/planos';
+import {
+  calcularPrecoFinal,
+  getPlanos,
+  getPlanosInclusos,
+  parsePlanos,
+  parsePlanosInclusos,
+  type Plano,
+} from '@/lib/content/planos';
 
 const planoBase: Plano = {
   id: 'mensal',
@@ -92,5 +99,38 @@ describe('getPlanos (arquivo real)', () => {
   it('content/planos.json é válido', () => {
     expect(() => getPlanos()).not.toThrow();
     expect(getPlanos().length).toBeGreaterThan(0);
+  });
+});
+
+describe('parsePlanosInclusos', () => {
+  const valido = {
+    inclui: ['Musculação', 'Todas as aulas coletivas'],
+    aParte: [{ nome: 'Mapeamento (bioimpedância)', valor: 50 }],
+  };
+
+  it('aceita a lista do que todos os planos incluem e os serviços à parte', () => {
+    expect(parsePlanosInclusos(valido).inclui).toHaveLength(2);
+  });
+
+  it('rejeita lista "inclui" vazia (a faixa ficaria sem conteúdo)', () => {
+    expect(() => parsePlanosInclusos({ ...valido, inclui: [] })).toThrow();
+  });
+
+  it('rejeita valor de serviço à parte negativo ou zero (edge case)', () => {
+    expect(() =>
+      parsePlanosInclusos({ ...valido, aParte: [{ nome: 'Mapeamento', valor: 0 }] })
+    ).toThrow();
+  });
+
+  it('aceita sem serviços à parte (lista vazia é válida)', () => {
+    expect(parsePlanosInclusos({ ...valido, aParte: [] }).aParte).toEqual([]);
+  });
+});
+
+describe('getPlanosInclusos (arquivo real)', () => {
+  it('content/planos-inclusos.json é válido e cita o mapeamento à parte', () => {
+    const dados = getPlanosInclusos();
+    expect(dados.inclui.length).toBeGreaterThan(0);
+    expect(dados.aParte.some((s) => /mapeamento/i.test(s.nome))).toBe(true);
   });
 });

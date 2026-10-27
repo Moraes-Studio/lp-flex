@@ -5,6 +5,10 @@ import { z } from 'zod';
 export const modalidadeSchema = z.object({
   nome: z.string().min(1),
   icone: z.string().min(1),
+  /** Uma frase curta dizendo o que é a aula, pra quem não conhece (rodada
+   * 2026-10-26). Opcional: aula própria da Flex sem texto confirmado fica
+   * sem descrição em vez de ganhar uma inventada. */
+  descricao: z.string().min(1).max(120).optional(),
 });
 
 export type Modalidade = z.infer<typeof modalidadeSchema>;

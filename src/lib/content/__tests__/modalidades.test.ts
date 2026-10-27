@@ -55,3 +55,21 @@ describe('separarModalidades', () => {
     expect(aulas.map((a) => a.nome)).toEqual(['Zumba', 'Pilates']);
   });
 });
+
+describe('descricao das aulas', () => {
+  it('é opcional: aula sem descrição continua válida (ex.: aula própria ainda sem texto confirmado)', () => {
+    expect(parseModalidades([{ nome: 'Flex Training', icone: 'flex-training' }])).toHaveLength(1);
+  });
+
+  it('rejeita descrição longa demais para uma frase curta (edge case)', () => {
+    expect(() =>
+      parseModalidades([{ nome: 'GAP', icone: 'gap', descricao: 'x'.repeat(121) }])
+    ).toThrow();
+  });
+
+  it('arquivo real: toda descrição existente cabe numa frase curta', () => {
+    for (const m of getModalidades()) {
+      if (m.descricao) expect(m.descricao.length).toBeLessThanOrEqual(120);
+    }
+  });
+});

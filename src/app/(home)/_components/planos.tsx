@@ -1,12 +1,11 @@
 import { Check } from 'lucide-react';
-import { calcularPrecoFinal, getPlanos } from '@/lib/content/planos';
+import { calcularPrecoFinal, getPlanos, getPlanosInclusos } from '@/lib/content/planos';
 import { campanhaVisivel, getCampaign } from '@/lib/content/campaign';
 import { SectionHeading } from '@/components/shared/section-heading';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { whatsappUrl } from '@/config/site';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
-import { CtaArrow } from '@/components/shared/cta-arrow';
 import { Reveal } from '@/components/shared/reveal';
 import { cn } from '@/lib/utils';
 
@@ -15,6 +14,7 @@ const formatarPreco = (valor: number) =>
 
 export function Planos() {
   const planos = getPlanos();
+  const inclusos = getPlanosInclusos();
   const campanha = getCampaign();
   // campanha.active sozinho não checa a data de término (terminaEm) — usar
   // sempre campanhaVisivel aqui, senão o preço/selo promocional deste card
@@ -217,7 +217,6 @@ export function Planos() {
                     >
                       <WhatsappGlyph className="h-4 w-4" />
                       Quero essa condição
-                      <CtaArrow variant="up-right" />
                     </a>
                   </Button>
                 ) : (
@@ -245,7 +244,6 @@ export function Planos() {
                     >
                       <WhatsappGlyph className="h-4 w-4" />
                       Quero esse plano
-                      <CtaArrow variant="up-right" />
                     </a>
                   </Button>
                 )}
@@ -297,9 +295,28 @@ export function Planos() {
           })}
         </Reveal>
 
-        <p className="text-muted-foreground mt-6 text-sm normal-case">
-          Mapeamento R$ 50,00 à parte.
-        </p>
+        {/* O que vem em qualquer plano: igual nos três, então aparece uma vez,
+         * abaixo dos cards (repetir a mesma lista em cada card seria repetição).
+         * Serviços à parte logo em seguida, com o que são, não só o nome. */}
+        <div className="border-border mt-10 grid gap-4 border-t pt-6 md:grid-cols-[auto_1fr] md:items-baseline md:gap-10">
+          <h3 className="font-heading text-[15px] tracking-[0.06em]">Todos os planos incluem</h3>
+          <ul className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-x-8">
+            {inclusos.inclui.map((item) => (
+              <li
+                key={item}
+                className="flex items-start gap-2 text-[15px] leading-snug normal-case"
+              >
+                <Check className="text-flex-blue-600 mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        {inclusos.aParte.map((servico) => (
+          <p key={servico.nome} className="text-foreground/70 mt-4 text-[14px] normal-case">
+            {servico.nome}: R$ {formatarPreco(servico.valor)}, cobrado à parte em qualquer plano.
+          </p>
+        ))}
       </div>
     </section>
   );

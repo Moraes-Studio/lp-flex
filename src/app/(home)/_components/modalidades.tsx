@@ -55,15 +55,25 @@ export function Modalidades() {
                 .
               </p>
             </div>
-            <ul className="mt-5 flex flex-wrap gap-2.5 lg:mt-1">
+            {/* Rodada 2026-10-26: cada aula com uma frase dizendo o que é (quem
+             * não conhece GAP ou Ritbox não sabe se a aula é pra ela). Aula sem
+             * descrição confirmada aparece só com o nome. */}
+            <ul className="mt-6 grid gap-x-10 gap-y-5 sm:grid-cols-2 lg:mt-1">
               {aulas.map((aula) => (
-                <li
-                  key={aula.nome}
-                  data-testid="aula-coletiva"
-                  className="rounded-pill inline-flex items-center gap-2 border border-white/20 bg-white/10 px-3.5 py-2 text-[14px] font-medium text-white"
-                >
-                  <ModalidadeIcon icone={aula.icone} className="text-flex-blue-300 h-4 w-4" />
-                  {aula.nome}
+                <li key={aula.nome} data-testid="aula-coletiva" className="flex gap-3">
+                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10">
+                    <ModalidadeIcon icone={aula.icone} className="text-flex-blue-300 h-4 w-4" />
+                  </span>
+                  <div>
+                    <p className="text-[16px] leading-tight font-medium text-white normal-case">
+                      {aula.nome}
+                    </p>
+                    {aula.descricao ? (
+                      <p className="mt-1 text-[14px] leading-snug text-white/70 normal-case">
+                        {aula.descricao}
+                      </p>
+                    ) : null}
+                  </div>
                 </li>
               ))}
             </ul>

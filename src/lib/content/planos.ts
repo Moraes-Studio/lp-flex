@@ -71,6 +71,27 @@ export function getPlanos(): Plano[] {
   return parsePlanos(raw);
 }
 
+/** O que TODOS os planos incluem (igual nos três, então aparece uma vez só,
+ * abaixo dos cards, em vez de repetido em cada um) e os serviços cobrados à
+ * parte, como o mapeamento por bioimpedância. Copy sobre professores segue
+ * SDD.md §7 (orientação na sala, nunca acompanhamento individual). */
+export const planosInclusosSchema = z.object({
+  inclui: z.array(z.string().min(1)).min(1),
+  aParte: z.array(z.object({ nome: z.string().min(1), valor: z.number().positive() })),
+});
+
+export type PlanosInclusos = z.infer<typeof planosInclusosSchema>;
+
+export function parsePlanosInclusos(raw: unknown): PlanosInclusos {
+  return planosInclusosSchema.parse(raw);
+}
+
+export function getPlanosInclusos(): PlanosInclusos {
+  const filePath = path.join(process.cwd(), 'content', 'planos-inclusos.json');
+  const raw: unknown = JSON.parse(readFileSync(filePath, 'utf-8'));
+  return parsePlanosInclusos(raw);
+}
+
 /**
  * Preço final = precoBase * (1 - discountPct), calculado em runtime (RULES.md #2).
  * Nunca copiar esse cálculo em outro componente — importar e recalcular aqui.
