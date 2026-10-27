@@ -6,20 +6,13 @@ import { Reveal } from '@/components/shared/reveal';
 /** content/professores.json guarda vaga placeholder (nome genérico
  * "Professor 0X") pra cada modalidade sem profissional confirmado ainda —
  * necessário pra checagem de cobertura modalidade↔professor (SDD.md §5).
- * Só ganha lugar na home quem já tem perfil de verdade preenchido
- * (`temPerfilCompleto`). Esses "nome confirmado, perfil pendente" ainda
- * contam no stat "professores confirmados" do Hero — só não aparecem aqui. */
+ * Só ganha card quem cumpre o critério do cliente: nome no padrão +
+ * formulário preenchido + foto da sessão da equipe (`temPerfilCompleto`).
+ * Os demais nomes confirmados ainda contam no stat de professores — só não
+ * aparecem aqui. */
 export function Professores() {
   const professores = getProfessores();
-  const confirmados = professores.filter(temPerfilCompleto);
-  // V2 (direção de arte) — a seção era a fraqueza apontada: tudo com o mesmo
-  // peso, "flat", mesmo sem foto. Resposta: hierarquia, não caixa. O primeiro
-  // confirmado (ordem já existente do JSON, nenhum critério novo inventado)
-  // vira a "voz" da seção — a bio DELE (texto real, já existente) ganha
-  // tratamento de citação editorial grande; os outros continuam na lista,
-  // com a bio própria, só sem repetir a dele ali (evita duplicar o mesmo
-  // texto duas vezes na página).
-  const destaque = confirmados[0] ?? null;
+  const comCard = professores.filter(temPerfilCompleto);
 
   return (
     // bg-surface-200 — um degrau mais frio que Modalidades (V1.5 §1/§2):
@@ -28,96 +21,53 @@ export function Professores() {
       id="professores"
       className="bg-surface-200 border-border border-y px-[6%] py-16 md:py-20"
     >
-      <div className="mx-auto max-w-[1180px]">
-        <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-          {/* Coluna grande — a "voz" da equipe: heading maior (size="large",
-           * único lugar além de 1992 com esse peso) + uma frase real de um
-           * professor, tratada como citação editorial, não mais uma linha de
-           * bio igual às outras. */}
-          <div>
-            {/* Quebras explícitas: na escala large (80px) a coluna não comporta
-             * "presentes na sala." numa linha, e o navegador deixava "sala."
-             * sozinha. Três linhas intencionais em vez de uma órfã. */}
-            {/* Título revisado contra SDD §7 (portão 1, rodada 2026-10-07): o anterior, "Seu treino montado por um professor", ficava perto de "Seu professor"/acompanhamento individual. */}
-            <SectionHeading
-              className="mb-8 lg:mb-10"
-              size="large"
-              title={
-                <>
-                  Professores
-                  <br />
-                  presentes
-                  <br />
-                  na sala.
-                </>
-              }
-              description="Todos formados em Educação Física."
-            />
-            {destaque ? (
-              <Reveal className="border-flex-blue-600 max-w-[460px] border-l-2 pl-5">
-                <span
-                  aria-hidden="true"
-                  className="font-heading text-flex-blue-600/30 block text-[72px] leading-[0.4]"
-                >
-                  “
-                </span>
-                <p className="text-foreground -mt-1 text-[19px] leading-relaxed normal-case">
-                  {destaque.bio}
-                </p>
-                <p className="text-muted-foreground mt-4 font-mono text-[11.5px] tracking-[0.1em] uppercase">
-                  {destaque.nome} · {destaque.papel}
-                </p>
-              </Reveal>
-            ) : null}
-          </div>
+      <div className="mx-auto grid max-w-[1180px] gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+        {/* Quebras explícitas: na escala large (80px) a coluna não comporta
+         * "presentes na sala." numa linha, e o navegador deixava "sala."
+         * sozinha. Três linhas intencionais em vez de uma órfã. */}
+        {/* Título revisado contra SDD §7 (portão 1, rodada 2026-10-07): o anterior, "Seu treino montado por um professor", ficava perto de "Seu professor"/acompanhamento individual. */}
+        <SectionHeading
+          size="large"
+          title={
+            <>
+              Professores
+              <br />
+              presentes
+              <br />
+              na sala.
+            </>
+          }
+          description="Todos formados em Educação Física."
+        />
 
-          {/* Coluna do roster — lista, não grid de cards. 2 colunas até
-           * antes do lg (a página ainda tem largura de sobra pra isso),
-           * vira lista única de cima a baixo a partir do lg (dividindo
-           * espaço com a coluna da citação). */}
-          <Reveal className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-1 lg:gap-y-1">
-            {confirmados.map((professor) => {
-              const isDestaque = professor.id === destaque?.id;
-              return (
-                <article
-                  key={professor.id}
-                  className="group border-flex-blue-600/20 lg:hover:bg-surface-100/60 relative grid grid-cols-[26px_1fr] gap-x-3 border-t py-5 pl-3 transition-colors duration-200"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="bg-flex-blue-600 absolute top-0 left-0 h-full w-[2px] origin-top scale-y-0 transition-transform duration-200 group-hover:scale-y-100"
-                  />
-                  <span className="text-flex-blue-700 mt-0.5 font-mono text-[12px] tracking-[0.1em]">
-                    {professor.num}
-                  </span>
-                  <div>
-                    <Photo
-                      src={professor.fotoUrl}
-                      alt={professor.nome}
-                      label={`professor ${professor.nome}`}
-                      ratio="square"
-                      className="mb-3 w-16 rounded-xl"
-                    />
-                    <h3 className="text-[18px] leading-tight">{professor.nome}</h3>
-                    <p className="text-muted-foreground mt-1 font-mono text-[11px] tracking-[0.08em] uppercase">
-                      {professor.papel} · {professor.desde}
-                    </p>
-                    {!isDestaque ? (
-                      <p className="text-muted-foreground mt-2.5 max-w-[420px] text-[14px] leading-relaxed">
-                        {professor.bio}
-                      </p>
-                    ) : null}
-                    {professor.formacao ? (
-                      <p className="text-muted-foreground mt-2 max-w-[420px] text-[12.5px] normal-case">
-                        {professor.formacao}
-                      </p>
-                    ) : null}
-                  </div>
-                </article>
-              );
-            })}
-          </Reveal>
-        </div>
+        {/* Cards com a foto da sessão da equipe (mesmo fundo e luz em todas,
+         * por isso a grade fica uniforme). Nome e textos sempre abaixo da
+         * foto, nunca sobre ela (regra de fotos do projeto). Sem numeração:
+         * professores não são uma sequência. */}
+        <Reveal className="grid gap-x-6 gap-y-10 sm:grid-cols-2">
+          {comCard.map((professor) => (
+            <article key={professor.id}>
+              <Photo
+                src={professor.fotoUrl}
+                alt={`${professor.nome}, equipe de ${professor.papel.toLowerCase()} da Academia Flex`}
+                label={`professor ${professor.nome}`}
+                ratio="portrait"
+                sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 90vw"
+                className="rounded-2xl"
+              />
+              <h3 className="mt-4 text-[20px] leading-tight">{professor.nome}</h3>
+              <p className="text-flex-blue-700 mt-1 font-mono text-[12.5px] tracking-[0.08em] uppercase">
+                {professor.papel} · {professor.desde}
+              </p>
+              <p className="text-foreground/80 mt-3 text-[15px] leading-relaxed">{professor.bio}</p>
+              {professor.formacao ? (
+                <p className="text-muted-foreground mt-2.5 text-[14px] leading-snug normal-case">
+                  {professor.formacao}
+                </p>
+              ) : null}
+            </article>
+          ))}
+        </Reveal>
       </div>
     </section>
   );

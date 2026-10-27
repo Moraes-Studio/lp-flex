@@ -71,20 +71,32 @@ describe('contarConfirmados', () => {
 });
 
 describe('temPerfilCompleto', () => {
-  it('nome real + bio de verdade conta como perfil completo', () => {
-    expect(temPerfilCompleto({ nome: 'Vanessa Fukazawa', bio: 'Bio de verdade.' })).toBe(true);
+  const FOTO = '/fotos/equipe-vanessa.jpg';
+
+  it('nome real + bio de verdade + foto conta como perfil completo', () => {
+    expect(
+      temPerfilCompleto({ nome: 'Vanessa Fukazawa', bio: 'Bio de verdade.', fotoUrl: FOTO })
+    ).toBe(true);
   });
 
-  it('nome real mas bio ainda pendente NÃO conta como perfil completo', () => {
-    expect(temPerfilCompleto({ nome: 'Rafael', bio: BIO_PENDENTE })).toBe(false);
+  it('nome real + bio de verdade mas SEM foto NÃO conta como perfil completo (critério do cliente: foto + nome + formulário)', () => {
+    expect(
+      temPerfilCompleto({ nome: 'Gustavo Barboza', bio: 'Bio de verdade.', fotoUrl: null })
+    ).toBe(false);
   });
 
-  it('nome placeholder "Professor 0X" NÃO conta como perfil completo, mesmo com bio real (edge case)', () => {
-    expect(temPerfilCompleto({ nome: 'Professor 04', bio: 'Bio de verdade.' })).toBe(false);
+  it('nome real mas bio ainda pendente NÃO conta como perfil completo, mesmo com foto', () => {
+    expect(temPerfilCompleto({ nome: 'Rafael', bio: BIO_PENDENTE, fotoUrl: FOTO })).toBe(false);
+  });
+
+  it('nome placeholder "Professor 0X" NÃO conta como perfil completo, mesmo com bio real e foto (edge case)', () => {
+    expect(temPerfilCompleto({ nome: 'Professor 04', bio: 'Bio de verdade.', fotoUrl: FOTO })).toBe(
+      false
+    );
   });
 
   it('diverge de isProfessorConfirmado pro caso "nome real + bio pendente" — é exatamente essa diferença que existe pra não mostrar card feio (ver professores.tsx)', () => {
-    const professor = { nome: 'Rafael', bio: BIO_PENDENTE };
+    const professor = { nome: 'Rafael', bio: BIO_PENDENTE, fotoUrl: null };
     expect(isProfessorConfirmado(professor)).toBe(true);
     expect(temPerfilCompleto(professor)).toBe(false);
   });

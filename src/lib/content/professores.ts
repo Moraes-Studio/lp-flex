@@ -53,9 +53,12 @@ export const BIO_PENDENTE = 'Professor de Educação Física, perfil completo em
  * confirmado (só o nome, bio ainda genérica) conta no stat de "professores
  * confirmados" (via `contarConfirmados`) mas não deve virar card na seção
  * Professores, card sem bio de verdade e sem foto (7 iguais lado a lado)
- * ficou feio o bastante pro cliente pedir pra esconder. Card só aparece
- * quando o formulário de fato voltou preenchido (bio deixou de ser a
- * genérica `BIO_PENDENTE`). */
-export function temPerfilCompleto(professor: Pick<Professor, 'nome' | 'bio'>): boolean {
-  return isProfessorConfirmado(professor) && professor.bio !== BIO_PENDENTE;
+ * ficou feio o bastante pro cliente pedir pra esconder. Critério do cliente
+ * (2026-10-26) pra virar card: nome no padrão + formulário preenchido (bio
+ * deixou de ser a genérica `BIO_PENDENTE`) + foto real da sessão da equipe.
+ * Faltou qualquer um dos três, fica fora da seção — sem placeholder. */
+export function temPerfilCompleto(professor: Pick<Professor, 'nome' | 'bio' | 'fotoUrl'>): boolean {
+  return (
+    isProfessorConfirmado(professor) && professor.bio !== BIO_PENDENTE && Boolean(professor.fotoUrl)
+  );
 }
