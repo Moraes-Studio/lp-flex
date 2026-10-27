@@ -22,7 +22,13 @@ export function FaixaFoto({ funcionamento }: { funcionamento: DiaFuncionamento[]
   const foto = mediaConfig.faixaFoto;
 
   return (
-    <section aria-label="Horário de funcionamento" className="bg-flex-blue-950">
+    // id="funcionamento": o Contato aponta pra cá em vez de repetir a tabela
+    // de horário (rodada 2026-10-26, horário num lugar só).
+    <section
+      id="funcionamento"
+      aria-label="Horário de funcionamento"
+      className="bg-flex-blue-950 scroll-mt-20"
+    >
       <div className="relative isolate flex min-h-[60vh] items-center overflow-hidden md:min-h-[70vh]">
         <div className="absolute inset-0 -z-10" aria-hidden="true">
           <div data-faixa-parallax className="faixa-parallax absolute inset-0">
@@ -54,7 +60,7 @@ export function FaixaFoto({ funcionamento }: { funcionamento: DiaFuncionamento[]
                 key={g.rotuloLongo}
                 className="flex items-baseline justify-between gap-4 py-5 md:flex-col md:justify-start md:gap-1.5 md:px-8 md:py-8 md:first:pl-0"
               >
-                <dt className="text-flex-blue-200 font-mono text-[12px] tracking-[0.08em] uppercase">
+                <dt className="text-flex-blue-200 font-mono text-[13px] tracking-[0.08em] uppercase">
                   {g.rotuloLongo}
                 </dt>
                 <dd className="font-heading text-[clamp(22px,2.6vw,32px)] leading-none font-semibold tabular-nums">

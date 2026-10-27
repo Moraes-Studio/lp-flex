@@ -29,6 +29,8 @@ export const mediaConfig: {
   ambientes: Ambiente[];
   faixaFoto: Foto;
   fachada: Foto;
+  /** Segunda foto da fachada; alterna com `fachada` no Contato (2026-10-26). */
+  fachadaEntrada: Foto;
 } = {
   heroFotos: [
     {
@@ -125,6 +127,10 @@ export const mediaConfig: {
   fachada: {
     src: '/fotos/espaco-fachada.jpg',
     alt: 'Fachada do prédio da Academia Flex na Rua das Hortênsias, Vila Helena',
+  },
+  fachadaEntrada: {
+    src: '/fotos/espaco-fachada-entrada.jpg',
+    alt: 'Fachada da Academia Flex de perto: entrada de vidro com o letreiro azul e a recepção ao fundo',
   },
 };
 

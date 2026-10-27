@@ -1,28 +1,27 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
-/** O banner de cookies cobre o canto inferior no mobile; fechar antes de
- * interagir com elementos da página (mesmo padrão de home.spec.ts). */
-async function aceitarCookies(page: Page) {
-  const aceitar = page.getByRole('button', { name: 'Aceitar todos' });
-  if (await aceitar.isVisible().catch(() => false)) await aceitar.click();
-}
-
-test.describe('Contato: horário de funcionamento agrupado', () => {
-  test('mostra 4 grupos com hífen, sem travessão', async ({ page }) => {
+// Rodada 2026-10-26: o horário de funcionamento vive num lugar só (a faixa
+// grande, #funcionamento). Antes o Contato repetia a tabela inteira.
+test.describe('Contato: horário de funcionamento não se repete', () => {
+  test('Contato não tem a tabela de horário e o link leva à faixa', async ({ page }) => {
     await page.goto('/');
     const contato = page.locator('#contato');
     await contato.scrollIntoViewIfNeeded();
-    const linhas = contato.getByTestId('grupo-funcionamento');
-    await expect(linhas).toHaveCount(4);
-    await expect(linhas.first()).toContainText('Seg a Qui');
-    await expect(linhas.first()).toContainText('05:00-23:00');
+    await expect(contato.getByTestId('grupo-funcionamento')).toHaveCount(0);
+    await expect(contato).not.toContainText('05:00');
     await expect(contato).not.toContainText('–');
     await expect(contato).not.toContainText('—');
+
+    const link = contato.getByRole('link', { name: 'Ver horário de funcionamento' });
+    await expect(link).toHaveAttribute('href', '#funcionamento');
+    await expect(page.locator('#funcionamento')).toHaveAttribute(
+      'aria-label',
+      'Horário de funcionamento'
+    );
   });
 
   test('CTA do contato usa o rótulo único', async ({ page }) => {
     await page.goto('/');
-    await aceitarCookies(page);
     await expect(
       page.locator('#contato').getByRole('link', { name: 'Quero treinar agora' })
     ).toBeAttached();
@@ -34,8 +33,9 @@ test.describe('Contato: fachada', () => {
     await page.goto('/');
     const figura = page.locator('#contato figure');
     await figura.scrollIntoViewIfNeeded();
-    await expect(figura.locator('img')).toHaveAttribute('alt', /Fachada/);
-    const img = await figura.locator('img').boundingBox();
+    // duas fotos em troca lenta (2026-10-26): confere a primeira, a da fachada inteira
+    await expect(figura.locator('img').first()).toHaveAttribute('alt', /Fachada/);
+    const img = await figura.locator('img').first().boundingBox();
     const legenda = await figura.locator('figcaption').boundingBox();
     expect(img && legenda && legenda.y >= img.y + img.height - 1).toBe(true);
   });
@@ -260,7 +260,6 @@ test.describe('Mosaico do espaço (Modalidades) e números do Sobre', () => {
     page,
   }) => {
     await page.goto('/');
-    await aceitarCookies(page);
     const mosaico = page.getByTestId('espaco-mosaico');
     await mosaico.scrollIntoViewIfNeeded();
     const blocos = mosaico.getByRole('button');
@@ -268,10 +267,7 @@ test.describe('Mosaico do espaço (Modalidades) e números do Sobre', () => {
     const rotulos = await blocos.evaluateAll((els) =>
       els.map((el) => el.getAttribute('aria-label') ?? '')
     );
-    const total = rotulos.reduce(
-      (soma, r) => soma + Number(r.match(/Ver as (\d+) fotos/)?.[1] ?? 0),
-      0
-    );
+    const total = rotulos.reduce((soma, r) => soma + Number(r.match(/ (\d+) fotos/)?.[1] ?? 0), 0);
     expect(total).toBe(12);
     // Nada sobreposto às fotos: o texto do bloco começa abaixo da imagem.
     for (const bloco of await blocos.all()) {
@@ -285,8 +281,7 @@ test.describe('Mosaico do espaço (Modalidades) e números do Sobre', () => {
     page,
   }) => {
     await page.goto('/');
-    await aceitarCookies(page);
-    const bloco = page.getByRole('button', { name: /Ver as 3 fotos de Sala de cardio/ });
+    const bloco = page.getByRole('button', { name: /Sala de cardio 3 fotos/ });
     await bloco.scrollIntoViewIfNeeded();
     await bloco.click();
     const visualizador = page.getByTestId('espaco-visualizador');
@@ -312,8 +307,7 @@ test.describe('Mosaico do espaço (Modalidades) e números do Sobre', () => {
   test('teclado: setas navegam, Esc fecha e o foco volta ao bloco', async ({ page, isMobile }) => {
     test.skip(isMobile, 'teclado só no desktop');
     await page.goto('/');
-    await aceitarCookies(page);
-    const bloco = page.getByRole('button', { name: /Ver as 4 fotos de Musculação/ });
+    const bloco = page.getByRole('button', { name: /Musculação 4 fotos/ });
     await bloco.scrollIntoViewIfNeeded();
     await bloco.focus();
     await page.keyboard.press('Enter');
@@ -331,8 +325,7 @@ test.describe('Mosaico do espaço (Modalidades) e números do Sobre', () => {
 
   test('fotos do visualizador carregam e têm alt descritivo', async ({ page }) => {
     await page.goto('/');
-    await aceitarCookies(page);
-    const bloco = page.getByRole('button', { name: /Ver as 4 fotos de Musculação/ });
+    const bloco = page.getByRole('button', { name: /Musculação 4 fotos/ });
     await bloco.scrollIntoViewIfNeeded();
     await bloco.click();
     const fotos = page.getByTestId('espaco-visualizador').locator('img');
@@ -351,16 +344,12 @@ test.describe('Mosaico do espaço (Modalidades) e números do Sobre', () => {
       .toBe(true);
   });
 
-  test('contagem de aulas é a mesma no Sobre e em Modalidades', async ({ page }) => {
+  // Rodada 2026-10-26: a contagem de aulas fica só em Modalidades; o Sobre
+  // não repete o número (antes o teste exigia os dois iguais).
+  test('contagem de aulas aparece em Modalidades e não se repete no Sobre', async ({ page }) => {
     await page.goto('/');
-    const textoModalidades = await page
-      .locator('#modalidades')
-      .getByText(/\d+ aulas no mesmo plano/)
-      .textContent();
-    const n = textoModalidades!.match(/(\d+) aulas/)![1];
-    const stat = page.locator('#sobre dl').getByText('aulas coletivas inclusas');
-    await expect(stat).toBeAttached();
-    await expect(page.locator('#sobre dl')).toContainText(`aulas coletivas inclusas${n}`);
+    await expect(page.locator('#modalidades').getByText(/\d+ aulas no mesmo plano/)).toBeAttached();
+    await expect(page.locator('#sobre')).not.toContainText('aulas coletivas');
   });
 
   test('números saíram do hero e estão no Sobre', async ({ page }) => {
@@ -385,9 +374,12 @@ test.describe('Sem scroll horizontal', () => {
 });
 
 test.describe('Eyebrows', () => {
-  test('no máximo 3 na home', async ({ page }) => {
+  // Rodada 2026-10-26: rótulo acima de título só no hero (antes: até 3, com
+  // Horários e Contato, o que deixava as seções inconsistentes entre si).
+  test('só o do hero na home', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('main .eyebrow-line')).toHaveCount(3);
+    await expect(page.locator('main .eyebrow-line')).toHaveCount(1);
+    await expect(page.locator('main section:has(h1) .eyebrow-line')).toHaveCount(1);
   });
 
   test('título de Professores revisado (SDD §7)', async ({ page }) => {
@@ -477,7 +469,9 @@ test.describe('Faixa de foto com horário de funcionamento', () => {
       );
       return [
         ids.indexOf('modalidades'),
-        ids.indexOf('Horário de funcionamento'),
+        // a faixa ganhou id="funcionamento" (alvo do link do Contato), que tem
+        // precedência sobre o aria-label neste mapeamento
+        ids.indexOf('funcionamento'),
         ids.indexOf('horarios'),
       ];
     });
@@ -495,5 +489,57 @@ test.describe('Faixa de foto com horário de funcionamento', () => {
       .evaluate((el) => getComputedStyle(el).animationName);
     expect(nome).toBe('none');
     await ctx.close();
+  });
+});
+
+// Rodada 2026-10-26: o que todos os planos incluem aparece uma vez, abaixo dos
+// cards (é igual nos três), e o mapeamento diz o que é, não só o preço.
+test.describe('Planos: o que inclui', () => {
+  test('faixa única com o que todos os planos incluem e o mapeamento explicado', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const planos = page.locator('#planos');
+    await expect(planos.getByRole('heading', { name: 'Todos os planos incluem' })).toHaveCount(1);
+    await expect(planos).toContainText('Todas as aulas coletivas');
+    await expect(planos).toContainText('Professores na sala para orientar todos os alunos');
+    await expect(planos).toContainText(
+      'Mapeamento (bioimpedância): R$ 50,00, cobrado à parte em qualquer plano.'
+    );
+    // a lista não se repete dentro dos cards
+    await expect(planos.getByText('Todas as aulas coletivas')).toHaveCount(1);
+  });
+});
+
+// Rodada 2026-10-26: cada aula diz o que é, e a nota do Google aparece no
+// Sobre com link pras avaliações (prova social local).
+test.describe('Aulas explicadas e reputação no Google', () => {
+  test('aulas com descrição curta; aula sem texto confirmado fica só com o nome', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const aulas = page.locator('#modalidades').getByTestId('aula-coletiva');
+    // nome exato: "contém GAP" sem diferenciar maiúsculas casava com mais de uma aula
+    const aula = (nome: string) => aulas.filter({ has: page.getByText(nome, { exact: true }) });
+    await expect(aula('GAP')).toContainText('glúteos, abdômen e pernas');
+    await expect(aula('Ritbox')).toContainText('Movimentos de luta');
+    await expect(aula('Flex Training').locator('p')).toHaveCount(1);
+  });
+
+  test('nota do Google no Sobre, com link pras avaliações em nova aba', async ({ page }) => {
+    await page.goto('/');
+    const sobre = page.locator('#sobre');
+    await expect(sobre.locator('dl')).toContainText('4,5');
+    const link = sobre.getByRole('link', { name: /avaliações no Google/ });
+    await expect(link).toHaveAttribute('href', /^https:\/\/www\.google\.com\/maps\//);
+    await expect(link).toHaveAttribute('target', '_blank');
+  });
+
+  test('estrelas com a nota proporcional, no Sobre e no selo do rodapé', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#sobre').getByRole('img', { name: 'Nota 4,5 de 5' })).toBeAttached();
+    const selo = page.locator('footer').getByRole('link', { name: /avaliações no Google/ });
+    await expect(selo).toContainText('4,5');
+    await expect(selo.getByRole('img', { name: 'Nota 4,5 de 5' })).toBeAttached();
   });
 });

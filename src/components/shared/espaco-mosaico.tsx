@@ -63,7 +63,9 @@ export function EspacoMosaico({ ambientes }: { ambientes: Ambiente[] }) {
                   origem.current = e.currentTarget;
                   setAberto({ ambiente: i, foto: 0 });
                 }}
-                aria-label={`Ver as ${ambiente.fotos.length} fotos de ${ambiente.nome}`}
+                // nome acessível contém o texto visível na mesma sequência ("Musculação 4 fotos"):
+                // quem usa comando de voz fala o que vê (WCAG 2.5.3)
+                aria-label={`${ambiente.nome} ${ambiente.fotos.length} fotos, abrir galeria`}
                 className="group flex h-full w-full flex-col text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
               >
                 <span
@@ -99,7 +101,9 @@ export function EspacoMosaico({ ambientes }: { ambientes: Ambiente[] }) {
                     )}
                   >
                     {ambiente.nome}
-                  </span>
+                  </span>{' '}
+                  {/* espaço real entre nome e contagem: o texto lido vira "Musculação 4 fotos"
+                   * (não "Musculação4 fotos"); no flex ele não aparece na tela */}
                   <span className="text-flex-blue-200 inline-flex shrink-0 items-center gap-1 text-[13px] normal-case">
                     {ambiente.fotos.length} fotos
                     <ArrowUpRight

@@ -52,7 +52,7 @@ export function HorariosDesktop({ colunas, horas, horarios }: HorariosDesktopPro
                 >
                   {dia}
                   {dia === hoje ? (
-                    <span className="mt-0.5 block font-mono text-[11px] tracking-[0.12em] opacity-90">
+                    <span className="mt-0.5 block font-mono text-[12px] tracking-[0.12em] opacity-90">
                       hoje
                     </span>
                   ) : null}
@@ -82,7 +82,7 @@ export function HorariosDesktop({ colunas, horas, horarios }: HorariosDesktopPro
                         <>
                           <span
                             className={cn(
-                              'block font-mono text-[12px] tabular-nums',
+                              'block font-mono text-[13px] tabular-nums',
                               ehHoje ? 'text-flex-blue-200' : 'text-flex-blue-300'
                             )}
                           >

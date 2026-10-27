@@ -65,7 +65,7 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
     >
       <p className="flex items-baseline gap-2.5 text-white">
         <strong className="font-heading text-[22px] tracking-[0.02em] uppercase">Hoje</strong>
-        <span className="text-flex-blue-300 font-mono text-[12.5px] tracking-[0.12em] whitespace-nowrap uppercase">
+        <span className="text-flex-blue-300 font-mono text-[13px] tracking-[0.12em] whitespace-nowrap uppercase">
           {estado ? `${DIA_NOME_COMPLETO[estado.dia]} · ${estado.data}` : ''}
         </span>
       </p>
@@ -110,7 +110,7 @@ export function HojeStrip({ slots }: { slots: AulaSlot[] }) {
                     </time>
                     <span className="text-[15px] font-bold">{slot.aula}</span>
                     {rodando ? (
-                      <span className="bg-flex-blue-600 rounded-pill px-2 py-0.5 font-mono text-[11px] tracking-[0.12em] text-white uppercase">
+                      <span className="bg-flex-blue-600 rounded-pill px-2 py-0.5 font-mono text-[12px] tracking-[0.12em] text-white uppercase">
                         agora
                       </span>
                     ) : null}

@@ -38,6 +38,12 @@ const FOTOS = [
   ['04_salao_aulas/IMG_2568.jpg', 'espaco-salao-material'],
   // Contato
   ['01_fachada/IMG_2895.jpg', 'espaco-fachada'],
+  // segunda foto da fachada (entrada com o letreiro), alterna com a primeira no Contato
+  ['01_fachada/IMG_2903.jpg', 'espaco-fachada-entrada'],
+  // Professores (sessão da equipe): só quem tem foto + nome no padrão + formulário
+  // preenchido, critério do cliente (ver temPerfilCompleto em lib/content/professores.ts)
+  ['06_equipe/flavio.jpg', 'equipe-flavio'],
+  ['06_equipe/vanessa.jpg', 'equipe-vanessa'],
 ];
 
 await mkdir(DESTINO, { recursive: true });

@@ -24,7 +24,6 @@ export function Horarios() {
           className="mb-8"
           tone="dark"
           size="compact"
-          eyebrow="Grade de aulas coletivas"
           title="Horários"
           description="A grade completa da semana. No celular, escolha o dia."
         />

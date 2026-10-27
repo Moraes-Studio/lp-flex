@@ -50,7 +50,7 @@ export function HorariosMobile({ slots, diasComAula }: { slots: AulaSlot[]; dias
               aria-current={ehHoje ? 'date' : undefined}
               onClick={() => setSelecionado(dia)}
               className={cn(
-                'border-border rounded-pill inline-flex items-center gap-1.5 border px-4 py-2 font-mono text-[12px] tracking-[0.08em] uppercase transition-colors',
+                'border-border rounded-pill inline-flex items-center gap-1.5 border px-4 py-2 font-mono text-[13px] tracking-[0.08em] uppercase transition-colors',
                 selecionado === dia
                   ? 'bg-flex-blue-600 border-flex-blue-600 text-white'
                   : ehHoje

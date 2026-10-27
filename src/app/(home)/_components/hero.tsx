@@ -3,7 +3,6 @@ import { mediaConfig } from '@/config/media';
 import { Button } from '@/components/ui/button';
 import { Eyebrow } from '@/components/shared/eyebrow';
 import { HeroRotator } from '@/components/shared/hero-rotator';
-import { CtaArrow } from '@/components/shared/cta-arrow';
 
 /**
  * Hero imersivo (iteração pós-comparação com SmartFit/Bluefit): foto real em
@@ -20,6 +19,8 @@ import { CtaArrow } from '@/components/shared/cta-arrow';
  * - Opacidade da camada medida nas 3 fotos (pixel mais claro sob o texto):
  *   70% é o mínimo em que "em sala" (flex-blue-300) passa 3:1 nas 3 fotos
  *   (60% dá 2.6:1); o branco fica ≥ 7.3:1 até sobre lâmpada estourada.
+ *   O destaque em azul ficou de propósito (decisão de 2026-10-26): "em sala"
+ *   é o diferencial da Flex.
  *   O eyebrow é branco (não o azul-300 do `inverted`) pelo mesmo motivo:
  *   texto pequeno pede 4.5:1. A linha do eyebrow continua azul.
  *
@@ -81,10 +82,7 @@ export function Hero() {
               variant="onDark"
               className="group focus-visible:ring-offset-flex-blue-950 px-8 py-[18px] text-[15px] tracking-wide uppercase"
             >
-              <a href="#planos">
-                Ver planos
-                <CtaArrow variant="right" />
-              </a>
+              <a href="#planos">Ver planos</a>
             </Button>
           </div>
         </div>

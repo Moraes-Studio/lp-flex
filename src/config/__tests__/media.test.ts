@@ -8,6 +8,7 @@ const todas: Foto[] = [
   ...fotosDosAmbientes(),
   mediaConfig.faixaFoto,
   mediaConfig.fachada,
+  mediaConfig.fachadaEntrada,
 ];
 
 describe('mediaConfig', () => {

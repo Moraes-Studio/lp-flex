@@ -1,16 +1,13 @@
 import Image from 'next/image';
 import { ArrowUpRight, MapPin } from 'lucide-react';
-import { agruparFuncionamento, getFuncionamento } from '@/lib/content/funcionamento';
 import { mapsUrl, siteConfig, whatsappUrl } from '@/config/site';
 import { mediaConfig } from '@/config/media';
 import { SectionHeading } from '@/components/shared/section-heading';
 import { Button } from '@/components/ui/button';
 import { WhatsappGlyph } from '@/components/shared/whatsapp-glyph';
-import { CtaArrow } from '@/components/shared/cta-arrow';
+import { MapaContato } from '@/app/(home)/_components/mapa-contato';
 
 export function Contato() {
-  const funcionamento = getFuncionamento();
-  const grupos = agruparFuncionamento(funcionamento);
   const endereco = `${siteConfig.address.street}, ${siteConfig.address.city}, ${siteConfig.address.state}, ${siteConfig.address.zip}`;
   const mapaQuery = encodeURIComponent(endereco);
   const abrirNoMapsUrl = mapsUrl();
@@ -20,49 +17,18 @@ export function Contato() {
     // cheio do rodapé — ritmo de superfícies V1.5 §1/§2.
     <section id="contato" className="bg-surface-200 border-border border-y px-[6%] py-16 md:py-20">
       <div className="mx-auto max-w-[1180px]">
-        <SectionHeading eyebrow="Contato" title="Venha conhecer." />
+        {/* Sem eyebrow (rodada 2026-10-26): o único rótulo acima de título na
+         * home é o do hero. */}
+        <SectionHeading title="Venha conhecer." />
 
-        {/* Mapa maior + coluna de horários mais compacta (420px fixos, não
-         * fração) — V2: "mapa pode ocupar mais espaço, horários podem
-         * assumir aparência editorial", revisado depois de achado real:
-         * 0.85fr numa seção de até 1180px dava ~480px pra coluna de
-         * horários, largo demais pro conteúdo (dia + hora), sobrando vão
-         * horizontal solto entre os dois. 420px é o suficiente pro texto
-         * mais longo ("Domingo e feriados" + "09:30 – 12:30") sem sobra.
-         * lg:items-stretch (rodada 2026-10-24): com a foto da fachada a coluna
-         * da esquerda ficou mais alta; o mapa (flex-1) estica até ela. Antes era
-         * lg:items-start: cada coluna só ocupa a altura que o próprio
-         * conteúdo pede (sem stretch esticando o card do mapa). */}
+        {/* Coluna da esquerda: ação + fachada; mapa à direita. O horário de
+         * funcionamento não se repete aqui (rodada 2026-10-26): vive só na faixa
+         * grande (#funcionamento), e o link abaixo leva até ela.
+         * lg:items-stretch: o mapa (flex-1) estica até a altura da coluna da
+         * fachada. */}
         <div className="grid gap-10 lg:grid-cols-[420px_minmax(0,1fr)] lg:items-stretch lg:gap-x-24">
-          {/* Mesma anatomia conceitual das duas colunas — header / conteúdo
-           * / ação — pra alinhar de verdade com a coluna do mapa: o "header"
-           * aqui usa a MESMA altura estrutural do header colorido ao lado
-           * (idêntico py-3.5 + items-center), só sem fundo azul (não é
-           * necessário pra esse lado). É isso que faz "HORÁRIO DE
-           * FUNCIONAMENTO" e "COMO CHEGAR" começarem na mesma linha visual —
-           * antes um era texto cru (sem padding) e o outro uma barra colorida
-           * com padding, então mesmo com items-start no grid (topo do BOX
-           * igual) o texto de dentro começava em alturas diferentes. */}
           <div className="flex flex-col">
-            <div className="flex items-center py-3.5">
-              <h3 className="font-heading text-sm tracking-[0.1em]">Horário de funcionamento</h3>
-            </div>
-            <div>
-              {grupos.map((grupo) => (
-                <div
-                  key={grupo.rotulo}
-                  data-testid="grupo-funcionamento"
-                  className="border-border flex items-baseline justify-between gap-3 border-b py-3.5 normal-case last:border-b-0"
-                >
-                  <span className="text-[15.5px] font-medium">{grupo.rotulo}</span>
-                  <span className="text-flex-blue-700 font-mono text-[14px] tabular-nums">
-                    {grupo.horario}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <Button asChild className="group mt-7 w-full sm:w-auto">
+            <Button asChild className="w-full sm:w-auto">
               <a
                 href={whatsappUrl('Olá! Vim pelo site e quero saber mais sobre os planos.')}
                 target="_blank"
@@ -70,22 +36,35 @@ export function Contato() {
               >
                 <WhatsappGlyph className="h-4 w-4" />
                 Quero treinar agora
-                <CtaArrow variant="up-right" />
               </a>
             </Button>
+            <a
+              href="#funcionamento"
+              className="text-flex-blue-700 hover:text-flex-blue-600 focus-visible:ring-flex-blue-600 mt-4 self-start rounded-sm text-[14.5px] font-medium normal-case underline decoration-current/30 underline-offset-4 focus-visible:ring-2 focus-visible:outline-none"
+            >
+              Ver horário de funcionamento
+            </a>
 
             {/* Fachada (rodada 2026-10-24, saiu do mosaico de Modalidades): aqui
              * ela tem função, mostra o prédio que a pessoa vai procurar na
              * rua. Legenda abaixo, nada sobre a foto. */}
             <figure className="mt-10">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-                <Image
-                  src={mediaConfig.fachada.src}
-                  alt={mediaConfig.fachada.alt}
-                  fill
-                  sizes="(min-width: 1024px) 420px, 100vw"
-                  className="object-cover"
-                />
+              {/* Duas fotos da fachada lado a lado, estáticas (2026-10-27): em
+               * troca automática o salto entre o prédio inteiro e a entrada de
+               * perto ficava duro. Prédio à esquerda (o que a pessoa procura na
+               * rua), entrada com o letreiro à direita. Nada sobre as fotos. */}
+              <div className="grid grid-cols-2 gap-2.5">
+                {[mediaConfig.fachada, mediaConfig.fachadaEntrada].map((foto) => (
+                  <div key={foto.src} className="relative aspect-[3/4] overflow-hidden rounded-xl">
+                    <Image
+                      src={foto.src}
+                      alt={foto.alt}
+                      fill
+                      sizes="(min-width: 1024px) 210px, 50vw"
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
               </div>
               <figcaption className="text-muted-foreground mt-2.5 text-[13.5px] normal-case">
                 {siteConfig.address.street}
@@ -98,16 +77,10 @@ export function Contato() {
              * azul vai pra ação principal, "Abrir no Google Maps". */}
             <div className="border-border text-flex-blue-700 flex items-center gap-2 border-b px-5 py-3.5">
               <MapPin className="h-4 w-4" aria-hidden="true" />
-              <span className="font-mono text-[11px] tracking-[0.16em] uppercase">Como chegar</span>
+              <span className="font-mono text-[12px] tracking-[0.16em] uppercase">Como chegar</span>
             </div>
             <div className="bg-background-alt relative min-h-[340px] flex-1 lg:min-h-[400px]">
-              <iframe
-                title="Localização da Academia Flex"
-                src={`https://www.google.com/maps?q=${mapaQuery}&output=embed`}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0 h-full w-full border-0 [filter:grayscale(38%)_contrast(1.05)_saturate(1.1)]"
-              />
+              <MapaContato src={`https://www.google.com/maps?q=${mapaQuery}&output=embed`} />
             </div>
             <a
               href={abrirNoMapsUrl}
