@@ -48,13 +48,14 @@
     "fotoUrl": null
   },
   {
-    "id": "rose",
+    "id": "rosemary-ribeiro",
     "num": "06",
-    "nome": "Rose",
+    "nome": "Rosemary Ribeiro",
     "papel": "Pilates",
-    "desde": "na equipe",
-    "bio": "Professor de Educação Física, perfil completo em breve.",
-    "fotoUrl": null
+    "desde": "na equipe desde 2009",
+    "bio": "Disciplina, consciência corporal, força e mobilidade.",
+    "formacao": "Educação Física (FMU)",
+    "fotoUrl": "/fotos/equipe-rosemary.jpg"
   },
   {
     "id": "giovana",
@@ -120,12 +121,13 @@
     "fotoUrl": null
   },
   {
-    "id": "rafael",
+    "id": "rafael-soares",
     "num": "14",
-    "nome": "Rafael",
+    "nome": "Rafael Soares",
     "papel": "Musculação",
-    "desde": "na equipe",
-    "bio": "Professor de Educação Física, perfil completo em breve.",
+    "desde": "na equipe desde 2026",
+    "bio": "Sou apaixonado por atividade física e por ajudar pessoas a descobrirem seu potencial através do movimento. Nas minhas aulas, busco unir técnica, dedicação e motivação, sempre respeitando os limites de cada aluno e incentivando a evolução da turma. Acredito que cada conquista, por menor que seja, é um passo importante para uma vida mais ativa, saudável e confiante.",
+    "formacao": "Bacharel em Educação Física (UNIP)",
     "fotoUrl": null
   },
   {
