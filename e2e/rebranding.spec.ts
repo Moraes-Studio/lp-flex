@@ -514,16 +514,14 @@ test.describe('Planos: o que inclui', () => {
 // Rodada 2026-10-26: cada aula diz o que é, e a nota do Google aparece no
 // Sobre com link pras avaliações (prova social local).
 test.describe('Aulas explicadas e reputação no Google', () => {
-  test('aulas com descrição curta; aula sem texto confirmado fica só com o nome', async ({
-    page,
-  }) => {
+  test('aulas com descrição curta dizendo o que é cada uma', async ({ page }) => {
     await page.goto('/');
     const aulas = page.locator('#modalidades').getByTestId('aula-coletiva');
     // nome exato: "contém GAP" sem diferenciar maiúsculas casava com mais de uma aula
     const aula = (nome: string) => aulas.filter({ has: page.getByText(nome, { exact: true }) });
     await expect(aula('GAP')).toContainText('glúteos, abdômen e pernas');
-    await expect(aula('Ritbox')).toContainText('Movimentos de luta');
-    await expect(aula('Flex Training').locator('p')).toHaveCount(1);
+    await expect(aula('Ritbox')).toContainText('Treino funcional e coletivo');
+    await expect(aula('Flex Training')).toContainText('mobilidade e fortalecimento muscular');
   });
 
   test('nota do Google no Sobre, com link pras avaliações em nova aba', async ({ page }) => {

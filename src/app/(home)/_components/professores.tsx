@@ -46,7 +46,12 @@ export function Professores() {
          * professores não são uma sequência. */}
         <Reveal className="grid gap-x-6 gap-y-10 sm:grid-cols-2">
           {comCard.map((professor) => (
-            <article key={professor.id}>
+            // Total ímpar de cards: o último sozinho na linha fica centralizado
+            // na largura de um card, em vez de grudado na coluna esquerda.
+            <article
+              key={professor.id}
+              className="last:odd:sm:col-span-2 last:odd:sm:w-[calc(50%-12px)] last:odd:sm:justify-self-center"
+            >
               <Photo
                 src={professor.fotoUrl}
                 alt={`${professor.nome}, equipe de ${professor.papel.toLowerCase()} da Academia Flex`}
