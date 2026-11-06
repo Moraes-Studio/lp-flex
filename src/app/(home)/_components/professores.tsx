@@ -21,9 +21,8 @@ export function Professores() {
       id="professores"
       className="bg-surface-200 border-border border-y px-[6%] py-16 md:py-20"
     >
-      {/* Pedido do cliente (2026-11-06): título e cards empilhados em vez de
-       * lado a lado — com só 3 professores confirmados, a coluna do título
-       * sobrava vazia embaixo ao lado dos cards. */}
+      {/* Título em cima e cards embaixo, lado a lado no tamanho fixo de card
+       * (com o título ao lado, a coluna dele sobrava vazia embaixo). */}
       <div className="mx-auto grid max-w-[1180px] gap-10">
         {/* Quebras explícitas: na escala large (80px) a coluna não comporta
          * "presentes na sala." numa linha, e o navegador deixava "sala."
@@ -47,14 +46,10 @@ export function Professores() {
          * por isso a grade fica uniforme). Nome e textos sempre abaixo da
          * foto, nunca sobre ela (regra de fotos do projeto). Sem numeração:
          * professores não são uma sequência. */}
-        <Reveal className="grid gap-x-6 gap-y-10 sm:grid-cols-2">
+        {/* Abaixo de lg, card que sobra sozinho na linha fica centralizado. */}
+        <Reveal className="flex flex-wrap justify-center gap-x-6 gap-y-10 lg:justify-start">
           {comCard.map((professor) => (
-            // Total ímpar de cards: o último sozinho na linha fica centralizado
-            // na largura de um card, em vez de grudado na coluna esquerda.
-            <article
-              key={professor.id}
-              className="last:odd:sm:col-span-2 last:odd:sm:w-[calc(50%-12px)] last:odd:sm:justify-self-center"
-            >
+            <article key={professor.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[300px]">
               <Photo
                 src={professor.fotoUrl}
                 alt={`${professor.nome}, equipe de ${professor.papel.toLowerCase()} da Academia Flex`}
