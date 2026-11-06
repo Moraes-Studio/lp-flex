@@ -424,7 +424,7 @@ test.describe('Seções: contraste e escala (iteração imersiva)', () => {
     test.skip(isMobile, 'medição de escala no desktop');
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/');
-    for (const id of ['planos', 'modalidades', 'professores', 'sobre', 'contato']) {
+    for (const id of ['planos', 'modalidades', 'sobre', 'contato']) {
       const h2 = page.locator(`#${id} h2`).first();
       const { tamanho, linhas } = await h2.evaluate((el) => {
         const s = getComputedStyle(el);
@@ -437,10 +437,15 @@ test.describe('Seções: contraste e escala (iteração imersiva)', () => {
       expect(tamanho, id).toBeGreaterThanOrEqual(64);
       expect(linhas, id).toBeLessThanOrEqual(3);
     }
-    const horarios = await page
-      .locator('#horarios h2')
-      .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
-    expect(horarios).toBeGreaterThanOrEqual(44);
+    // Horários e Professores (pedido do cliente, 2026-11-06: título numa linha
+    // pra seção caber na tela) usam a escala compacta.
+    for (const id of ['horarios', 'professores']) {
+      const tamanho = await page
+        .locator(`#${id} h2`)
+        .first()
+        .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+      expect(tamanho, id).toBeGreaterThanOrEqual(44);
+    }
   });
 });
 

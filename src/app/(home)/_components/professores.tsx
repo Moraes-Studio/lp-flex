@@ -19,28 +19,13 @@ export function Professores() {
     // Horários (grafite) fica entre as duas, então não é repetição de tom.
     <section
       id="professores"
-      className="bg-surface-200 border-border border-y px-[6%] py-16 md:py-20"
+      className="bg-surface-200 border-border border-y px-[6%] py-16 md:py-12"
     >
       {/* Título em cima e cards embaixo, lado a lado no tamanho fixo de card
        * (com o título ao lado, a coluna dele sobrava vazia embaixo). */}
-      <div className="mx-auto grid max-w-[1180px] gap-10">
-        {/* Quebras explícitas: na escala large (80px) a coluna não comporta
-         * "presentes na sala." numa linha, e o navegador deixava "sala."
-         * sozinha. Três linhas intencionais em vez de uma órfã. */}
+      <div className="mx-auto grid max-w-[1180px] gap-6">
         {/* Título revisado contra SDD §7 (portão 1, rodada 2026-10-07): o anterior, "Seu treino montado por um professor", ficava perto de "Seu professor"/acompanhamento individual. */}
-        <SectionHeading
-          size="large"
-          title={
-            <>
-              Professores
-              <br />
-              presentes
-              <br />
-              na sala.
-            </>
-          }
-          description="Todos formados em Educação Física."
-        />
+        <SectionHeading size="compact" className="mb-0" title="Professores presentes na sala." />
 
         {/* Cards com a foto da sessão da equipe (mesmo fundo e luz em todas,
          * por isso a grade fica uniforme). Nome e textos sempre abaixo da
