@@ -31,20 +31,24 @@ export function Professores() {
          * por isso a grade fica uniforme). Nome e textos sempre abaixo da
          * foto, nunca sobre ela (regra de fotos do projeto). Sem numeração:
          * professores não são uma sequência. */}
-        {/* Abaixo de lg, card que sobra sozinho na linha fica centralizado. */}
-        <Reveal className="flex flex-wrap justify-center gap-x-6 gap-y-10 lg:justify-start">
+        {/* 4 por linha a partir de xl, 300px no lg, 2 por linha no tablet;
+         * card que sobra sozinho na linha fica centralizado. */}
+        <Reveal className="flex flex-wrap justify-center gap-x-6 gap-y-10 xl:justify-start">
           {comCard.map((professor) => (
-            <article key={professor.id} className="w-full sm:w-[calc(50%-12px)] lg:w-[300px]">
+            <article
+              key={professor.id}
+              className="w-full sm:w-[calc(50%-12px)] lg:w-[300px] xl:w-[calc(25%-18px)]"
+            >
               <Photo
                 src={professor.fotoUrl}
                 alt={`${professor.nome}, equipe de ${professor.papel.toLowerCase()} da Academia Flex`}
                 label={`professor ${professor.nome}`}
                 ratio="portrait"
-                sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 90vw"
+                sizes="(min-width: 1280px) 280px, (min-width: 1024px) 300px, (min-width: 640px) 45vw, 90vw"
                 className="rounded-2xl"
               />
               <h3 className="mt-4 text-[20px] leading-tight">{professor.nome}</h3>
-              <p className="text-flex-blue-700 mt-1 font-mono text-[12.5px] tracking-[0.08em] uppercase">
+              <p className="text-flex-blue-700 mt-1 font-mono text-[12px] tracking-[0.05em] uppercase">
                 {professor.papel} · {professor.desde}
               </p>
               <p className="text-foreground/80 mt-3 text-[15px] leading-relaxed">{professor.bio}</p>

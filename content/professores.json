@@ -39,13 +39,14 @@
     "fotoUrl": null
   },
   {
-    "id": "tom",
+    "id": "tom-agito",
     "num": "05",
-    "nome": "Tom",
-    "papel": "Zumba",
-    "desde": "na equipe",
-    "bio": "Professor de Educação Física, perfil completo em breve.",
-    "fotoUrl": null
+    "nome": "Tom Agito",
+    "papel": "Ritbox",
+    "desde": "na equipe desde 2013",
+    "bio": "Meu objetivo é extrair o máximo de cada aluno, com aulas dinâmicas e muito divertidas, seja no Ritbox ou na dança com a Zumba. Incentivo cada um a não desistir dos seus objetivos, com melhora na parte física e mental.",
+    "formacao": "Bacharel em Educação Física (UNIP SBC) · Instrutor de Zumba credenciado · Treinador de Ritbox credenciado · CREF 186489-G/SP",
+    "fotoUrl": "/fotos/equipe-tom.jpg"
   },
   {
     "id": "rosemary-ribeiro",
@@ -115,8 +116,8 @@
     "id": "professor-13",
     "num": "13",
     "nome": "Professor 13",
-    "papel": "Ritbox",
-    "desde": "na equipe desde 2021",
+    "papel": "Zumba",
+    "desde": "na equipe",
     "bio": "Professor de Educação Física, perfil completo em breve.",
     "fotoUrl": null
   },
