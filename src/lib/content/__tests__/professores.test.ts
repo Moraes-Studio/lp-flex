@@ -36,6 +36,18 @@ describe('parseProfessores', () => {
     delete semBio.bio;
     expect(() => parseProfessores([semBio])).toThrow();
   });
+
+  it('bio até 160 caracteres; acima disso rejeita', () => {
+    expect(parseProfessores([{ ...professorValido, bio: 'a'.repeat(160) }])).toHaveLength(1);
+    expect(() => parseProfessores([{ ...professorValido, bio: 'a'.repeat(161) }])).toThrow(/160/);
+  });
+
+  it('formação até 70 caracteres; acima disso rejeita', () => {
+    expect(parseProfessores([{ ...professorValido, formacao: 'a'.repeat(70) }])).toHaveLength(1);
+    expect(() => parseProfessores([{ ...professorValido, formacao: 'a'.repeat(71) }])).toThrow(
+      /70/
+    );
+  });
 });
 
 describe('getProfessores (arquivo real)', () => {

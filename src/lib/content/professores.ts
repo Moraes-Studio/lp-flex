@@ -8,9 +8,14 @@ export const professorSchema = z.object({
   nome: z.string().min(1),
   papel: z.string().min(1),
   desde: z.string().min(1),
-  bio: z.string().min(1),
-  /** Formação/titulação, opcional, do layout de referência do cliente. */
-  formacao: z.string().min(1).optional(),
+  /** Uma ou duas frases: bio longa desalinha a altura dos cards. */
+  bio: z.string().min(1).max(160, 'bio com no máximo 160 caracteres (uma ou duas frases)'),
+  /** Graduação (instituição) + no máximo um item, ex: pós ou CREF. */
+  formacao: z
+    .string()
+    .min(1)
+    .max(70, 'formação com no máximo 70 caracteres (graduação + um item)')
+    .optional(),
   fotoUrl: z.string().min(1).nullable(),
 });
 
