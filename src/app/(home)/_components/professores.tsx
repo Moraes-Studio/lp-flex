@@ -21,7 +21,10 @@ export function Professores() {
       id="professores"
       className="bg-surface-200 border-border border-y px-[6%] py-16 md:py-20"
     >
-      <div className="mx-auto grid max-w-[1180px] gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+      {/* Pedido do cliente (2026-11-06): título e cards empilhados em vez de
+       * lado a lado — com só 3 professores confirmados, a coluna do título
+       * sobrava vazia embaixo ao lado dos cards. */}
+      <div className="mx-auto grid max-w-[1180px] gap-10">
         {/* Quebras explícitas: na escala large (80px) a coluna não comporta
          * "presentes na sala." numa linha, e o navegador deixava "sala."
          * sozinha. Três linhas intencionais em vez de uma órfã. */}
