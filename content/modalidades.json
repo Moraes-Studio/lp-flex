@@ -41,11 +41,12 @@
   {
     "nome": "Ritbox",
     "icone": "ritbox",
-    "descricao": "Movimentos de luta, como socos e chutes, no ritmo da música, para cardio e coordenação."
+    "descricao": "Treino funcional e coletivo que combina cardio, pernas, glúteos e braços no ritmo da música."
   },
   {
     "nome": "Flex Training",
-    "icone": "flex-training"
+    "icone": "flex-training",
+    "descricao": "Exercícios de mobilidade e fortalecimento muscular, para mais amplitude de movimento com controle."
   },
   {
     "nome": "Cross Training",
